@@ -488,6 +488,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .profile-row.danger strong { color: #c0445a; }
 .profile-row.danger .profile-row-icon { background: color-mix(in srgb, #c0445a 10%, var(--surface2)); }
 
+/* Feedback row — explicit colours, no inline color-mix() */
+.profile-row.feedback {
+  border-left: 3px solid var(--serotonin);
+  background: #253830; /* serotonin 5% over surface — hardcoded for max compat */
+}
+.profile-row.feedback:hover { background: #2c4038; }
+.profile-row.feedback .profile-row-icon { background: #2e4f42; }
+.profile-row.feedback strong { color: var(--serotonin); }
+
 /* Premium card */
 .premium-card {
   background: var(--surface); border: 1px solid var(--border);
@@ -1212,10 +1221,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <!-- Feedback section -->
         <div class="profile-section-label">Beta Feedback</div>
         <div class="profile-rows">
-          <div class="profile-row" style="border-left: 3px solid var(--serotonin); background: color-mix(in srgb, var(--serotonin) 5%, var(--surface));" onclick="window.open('https://forms.gle/oYkxx8B898Ur4JtV9', '_blank')">
-            <div class="profile-row-icon" style="background: color-mix(in srgb, var(--serotonin) 15%, var(--surface2));">💬</div>
+          <div class="profile-row feedback" onclick="window.open('https://forms.gle/oYkxx8B898Ur4JtV9', '_blank')">
+            <div class="profile-row-icon">💬</div>
             <div class="profile-row-body">
-              <strong style="color: var(--serotonin);">Share Your Feedback</strong>
+              <strong>Share Your Feedback</strong>
               <span>Help shape NeuroHabit — takes 2 min</span>
             </div>
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
