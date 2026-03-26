@@ -2,7 +2,8 @@
   "name": "NeuroHabit",
   "short_name": "NeuroHabit",
   "description": "Neuroscience-based daily habit tracker",
-  "start_url": "/index.html",
+  "start_url": "/neurohabit/index.html",
+  "scope": "/neurohabit/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#1c1a17",
@@ -10,23 +11,43 @@
   "categories": ["health", "lifestyle", "productivity"],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%231c1a17'/><text y='130' x='96' text-anchor='middle' font-size='110'>🧠</text></svg>",
+      "src": "/neurohabit/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%231c1a17'/><text y='360' x='256' text-anchor='middle' font-size='300'>🧠</text></svg>",
+      "src": "/neurohabit/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/neurohabit/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/neurohabit/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "/neurohabit/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "NeuroHabit habit tracker"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Today's Habits",
-      "url": "/index.html",
+      "url": "/neurohabit/index.html",
       "description": "Open today's habit tracker"
     }
   ]
