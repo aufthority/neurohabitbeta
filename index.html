@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by The Aufthority">
-<link rel="manifest" href="/neurohabit/manifest.json">
+<link rel="manifest" href="/neurohabitbeta/manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231c1a17'/><text y='128' x='90' text-anchor='middle' font-size='100'>🧠</text></svg>">
 <title>NeuroHabit</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -3363,7 +3363,7 @@ function confirmNewDay() {
    PWA installability criteria on this page load
    ═══════════════════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/neurohabit/sw.js', { scope: '/neurohabit/' })
+  navigator.serviceWorker.register('/neurohabitbeta/sw.js', { scope: '/neurohabitbeta/' })
     .then(r => console.log('[SW] registered', r.scope))
     .catch(e => console.warn('[SW] registration failed', e));
 }
