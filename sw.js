@@ -7,12 +7,11 @@
 const CACHE_NAME = 'neurohabit-v17';
 
 const PRECACHE = [
-  '/neurohabitbeta/manifest.json',
-  '/neurohabitbeta/icon-192.png',
-  '/neurohabitbeta/icon-512.png',
+  '/nh-tracker-alpha/manifest.json',
+  '/nh-tracker-alpha/icon-192.png',
+  '/nh-tracker-alpha/icon-512.png',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js',
-  'https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js',
   'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap',
 ];
 
@@ -39,9 +38,9 @@ self.addEventListener('fetch', event => {
   const url = event.request.url;
 
   /* index.html — ALWAYS network-first, never serve from cache */
-  if (url.includes('/neurohabitbeta/index.html') || url.endsWith('/neurohabitbeta/') || url.endsWith('/neurohabitbeta')) {
+  if (url.includes('/nh-tracker-alpha/index.html') || url.endsWith('/nh-tracker-alpha/') || url.endsWith('/nh-tracker-alpha')) {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/neurohabitbeta/index.html'))
+      fetch(event.request).catch(() => caches.match('/nh-tracker-alpha/index.html'))
     );
     return;
   }
@@ -64,7 +63,7 @@ self.addEventListener('fetch', event => {
   /* Navigate requests — network-first */
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/neurohabitbeta/index.html'))
+      fetch(event.request).catch(() => caches.match('/nh-tracker-alpha/index.html'))
     );
     return;
   }
