@@ -1061,7 +1061,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
-     AVATAR — First onboarding screen (habits auto-configured from avatar)
+     AVATAR STEP — shown after habit selection
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-avatar" style="display:none">
   <div class="onboard-inner">
@@ -1089,6 +1089,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       Continue with Google
     </button>
   </div>
+  <div id="loginVersionBadge" style="margin-top:20px;font-size:10px;color:var(--muted);letter-spacing:0.3px">v1.0.0 (19)</div>
 
 </div>
 
@@ -1443,7 +1444,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="profile-app-footer">
           <div>NeuroHabit</div>
           <div>By The Aufthority</div>
-          <div style="margin-top:4px;font-size:10px">Version 1.0 · neurohabit.app</div>
+          <div style="margin-top:4px;font-size:10px" id="appVersionFooter">v1.0.0 (19) · neurohabit.app</div>
         </div>
 
       </div>
@@ -1929,6 +1930,14 @@ const HABITS = {
 /* ═══════════════════════════════════════════════════════════
    STORAGE & STATE
    ═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   APP VERSION — update APP_BUILD to match sw.js cache version
+   Format: MAJOR.MINOR.PATCH (BUILD)
+   ═══════════════════════════════════════════════════════════ */
+const APP_VERSION = '1.0.0';
+const APP_BUILD   = 19;
+const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
+
 const SK  = 'nh_pwa_state';
 const STK = 'nh_pwa_streak';
 const WK  = 'nh_pwa_week';
@@ -3779,7 +3788,8 @@ function renderWeek() {
   const monOff = dow === 0 ? -6 : 1 - dow;
   const labels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const score  = Math.round(heroScore());
-  weekData[today] = score; sv(WK, weekData);
+  /* Only write today's score — never overwrite a past day's stored score */
+  if (score > 0 || !(weekData[today] > 0)) { weekData[today] = score; sv(WK, weekData); }
 
   grid.innerHTML = Array.from({ length: 7 }, (_, i) => {
     const d   = new Date(now); d.setDate(now.getDate() + monOff + i);
@@ -3797,7 +3807,7 @@ function renderWeek() {
    ═══════════════════════════════════════════════════════════ */
 function checkStreak() {
   const score = Math.round(heroScore());
-  weekData[today] = score; sv(WK, weekData);
+  if (score > 0 || !(weekData[today] > 0)) { weekData[today] = score; sv(WK, weekData); }
 
   if (score >= 50 && streak.lastDate !== today) {
     const yest = new Date(); yest.setDate(yest.getDate() - 1);
@@ -4104,11 +4114,10 @@ function showOnboarding() {
 }
 
 function showAvatarOnboarding() {
-  /* New primary onboarding: avatar first, habits auto-configured from mapping */
+  /* Primary onboarding: avatar first, habits auto-configured from mapping */
   var avScreen = document.getElementById('screen-avatar');
   avScreen.style.display = 'flex';
   avScreen.classList.add('screen-active');
-  /* Draw brain in avatar step header */
   var brainEl = document.getElementById('avatarStepBrain');
   if (brainEl) {
     var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -4455,6 +4464,9 @@ function renderProfile() {
   const { done: _fd, total: _ft } = countFoundationals();
   document.getElementById('statGrade').textContent = _fd + ' / ' + _ft + ' done';
   renderProfileAvatar();
+  /* Update version string from constant */
+  var vEl = document.getElementById('appVersionFooter');
+  if (vEl) vEl.textContent = APP_VERSION_STRING + ' · neurohabit.app';
 }
 
 function editProfile() {
@@ -4502,7 +4514,7 @@ function launchApp() {
   appLaunched = true;
   document.getElementById('screen-login').classList.remove('screen-active');
   document.getElementById('screen-login').style.display = 'none';
-  // New flow: avatar first → habits pre-configured from avatar mapping
+  // New flow: avatar first — habits auto-configured from avatar mapping
   if (!userHabitConfig) {
     showAvatarOnboarding();
     return;
@@ -4519,19 +4531,23 @@ function showMainApp() {
   document.getElementById('bottomNav').style.display = 'flex';
   initApp();
 
-  /* EG-01: Midnight rollover — reload app when user returns after date change */
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-      const currentDay = new Date().toISOString().slice(0, 10);
-      if (currentDay !== today) location.reload();
+  /* EG-01: Midnight rollover — save today's final score BEFORE reloading
+     so past days are never overwritten by the new day's live score. */
+  function handleDateRollover() {
+    const currentDay = new Date().toISOString().slice(0, 10);
+    if (currentDay !== today) {
+      weekData[today] = Math.round(heroScore());
+      sv(WK, weekData);
+      location.reload();
     }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) handleDateRollover();
   });
 
-  /* Fix 2: Check every 60s — catches midnight even if screen stays on */
-  setInterval(() => {
-    const currentDay = new Date().toISOString().slice(0, 10);
-    if (currentDay !== today) location.reload();
-  }, 60000);
+  /* Check every 60s — catches midnight even if screen stays on */
+  setInterval(handleDateRollover, 60000);
 }
 
 function initApp() {
@@ -4539,6 +4555,11 @@ function initApp() {
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('headerDate').textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()];
+  /* Stamp version into both display points from the single constant */
+  var lv = document.getElementById('loginVersionBadge');
+  if (lv) lv.textContent = APP_VERSION_STRING;
+  var fv = document.getElementById('appVersionFooter');
+  if (fv) fv.textContent = APP_VERSION_STRING + ' · neurohabit.app';
   updateThemeUI();        // sync toggle pill state with current theme
   updateThemeMetaTag();   // sync iOS PWA status bar colour
   renderLockStatusBars();
