@@ -5160,9 +5160,13 @@ const CHANGELOG_BUILD_KEY = 'nh_last_seen_build';
 function maybeShowChangelog() {
   try {
     var stored = localStorage.getItem(CHANGELOG_BUILD_KEY);
-    // Only show for returning users (stored build exists) who are on an older build
-    if (stored !== null && parseInt(stored, 10) < APP_BUILD) {
-      setTimeout(showChangelog, 800); // slight delay so app renders first
+    var storedBuild = stored !== null ? parseInt(stored, 10) : null;
+    // Show if: stored build is older, OR key is missing but user has existing app data
+    // (missing key = returning user from before build 30 who never had this key)
+    var hasExistingData = localStorage.getItem(SK) !== null || localStorage.getItem(UK) !== null;
+    var isReturningUser = storedBuild === null ? hasExistingData : storedBuild < APP_BUILD;
+    if (isReturningUser) {
+      setTimeout(showChangelog, 800);
     }
     // Always stamp current build so future updates trigger the modal
     localStorage.setItem(CHANGELOG_BUILD_KEY, String(APP_BUILD));
