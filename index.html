@@ -346,6 +346,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .share-action-btn { flex: 1; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-family: 'Geist', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-align: center; }
 .share-action-btn.primary { background: var(--coach); border-color: var(--coach); }
 .share-action-btn:hover { opacity: 0.85; }
+/* Radar share card */
+.share-radar-wrap { display: flex; align-items: center; justify-content: center; margin: 4px 0 10px; }
+.share-phase-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 8px; }
+.share-insight { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; margin-bottom: 10px; }
+.share-insight-eye { font-size: 9.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--coach); margin-bottom: 4px; }
+.share-insight-body { font-size: 12px; color: var(--text); line-height: 1.65; font-style: italic; }
+.share-perf-row { display: flex; gap: 6px; margin-bottom: 10px; }
+.share-perf-cell { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; text-align: center; }
+.share-perf-val { font-family: 'Instrument Serif', serif; font-size: 18px; font-weight: 400; color: var(--text); line-height: 1; }
+.share-perf-lbl { font-size: 9px; color: var(--muted); margin-top: 2px; letter-spacing: 0.3px; }
 
 /* ═══ COACH PAGE ═════════════════════════════════════════════ */
 #screen-app { overflow: hidden; }
@@ -1564,25 +1574,45 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 <!-- REVISION 6: Share modal -->
 <div class="modal-overlay" id="shareOverlay" onclick="closeModal('shareOverlay')">
-  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:440px">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:440px;max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div class="share-card-inner" id="shareCardInner">
       <div class="share-card-top">
         <div class="share-card-brand">NeuroHabit <span>By The Aufthority</span></div>
         <div class="share-card-date" id="shareDate"></div>
       </div>
-      <!-- Brain Phase display -->
-      <div style="display:flex;flex-direction:column;align-items:center;padding:16px 0 8px">
-        <svg id="shareBrainSvg" width="80" height="80" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
-        <div id="sharePhaseLabel" style="font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;margin-top:8px;color:var(--text)"></div>
-        <div id="shareGrade" style="font-size:12px;color:var(--muted);margin-top:3px"></div>
+
+      <!-- BRAINVATAR CARD — shown for Phase 0-2 -->
+      <div id="shareBrainvatarSection">
+        <div style="display:flex;flex-direction:column;align-items:center;padding:16px 0 8px">
+          <svg id="shareBrainSvg" width="80" height="80" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div id="sharePhaseLabel" style="font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;margin-top:8px;color:var(--text)"></div>
+          <div id="shareGrade" style="font-size:12px;color:var(--muted);margin-top:3px"></div>
+        </div>
+        <div style="display:flex;justify-content:center;gap:6px;margin-bottom:12px" id="sharePipsRow"></div>
+        <div id="shareCoachAnalysis" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px"></div>
+        <div class="share-cats" id="shareCats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px"></div>
       </div>
-      <!-- Core pips -->
-      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:12px" id="sharePipsRow"></div>
-      <!-- NeuroCoach analysis -->
-      <div id="shareCoachAnalysis" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px"></div>
-      <!-- Category status -->
-      <div class="share-cats" id="shareCats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px"></div>
+
+      <!-- RADAR CARD — shown for Phase 3+ -->
+      <div id="shareRadarSection" style="display:none">
+        <!-- Phase badge -->
+        <div style="display:flex;justify-content:center;margin-bottom:10px">
+          <div class="share-phase-badge" id="shareRadarPhaseBadge"></div>
+        </div>
+        <!-- Performance summary row -->
+        <div class="share-perf-row" id="sharePerfRow"></div>
+        <!-- Radar SVG -->
+        <div class="share-radar-wrap">
+          <svg id="shareRadarSvg" viewBox="0 0 280 240" width="100%" style="max-width:260px"></svg>
+        </div>
+        <!-- Personalised insight -->
+        <div class="share-insight">
+          <div class="share-insight-eye">Brain Balance Insight</div>
+          <div class="share-insight-body" id="shareInsightBody"></div>
+        </div>
+      </div>
+
       <div class="share-tagline">neurohabit.app · by The Aufthority</div>
     </div>
     <div class="share-actions">
@@ -1971,7 +2001,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 28;
+const APP_BUILD   = 30;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2181,13 +2211,10 @@ function canAddHabit(type, habitId) {
 }
 
 function canRemoveHabit(type, habitId) {
-  const h = HABITS[type].habits.find(x => x.id === habitId);
-  if (!h || !h.foundational) return true;
-  const selectedFdns = getSelectedFoundationals(type);
-  if (selectedFdns.length <= 1) return false;
-  if (isInGracePeriod()) return true;
-  if (isLockActive()) return false;
-  return true;
+  if (isInGracePeriod()) return true;  // grace window: free adjustment
+  if (isLockActive()) return false;    // locked: nothing moves
+  // Post-grace, post-lock: swap is always required — never outright removal
+  return false;
 }
 
 const today = new Date().toISOString().slice(0, 10);
@@ -3549,6 +3576,105 @@ function getBrainBalanceFeedback() {
   return `${lowName} and overall balance need attention today. Focus on foundational habits — they unlock the full scoring potential for each category.`;
 }
 
+/* ── Generate personalised evidence-based insight from live data ── */
+function buildShareInsight() {
+  var catColors = { dopamine:'#c8712a', serotonin:'#4a9e82', oxytocin:'#b85070', endorphin:'#5a82c0' };
+  var catNames  = { dopamine:'Dopamine', serotonin:'Serotonin', oxytocin:'Oxytocin', endorphin:'Endorphin' };
+  var cats = Object.keys(HABITS).map(function(t) {
+    return { type: t, name: catNames[t], pct: catEffectivePct(t), color: catColors[t] };
+  });
+  var sorted   = cats.slice().sort(function(a, b) { return b.pct - a.pct; });
+  var strongest = sorted[0];
+  var weakest   = sorted[sorted.length - 1];
+
+  var insights = {
+    dopamine: {
+      strong: 'Your Dopamine system is your lead driver today. Sustained focus creates a compounding reward signal — the effort you put in today makes tomorrow\'s motivation easier to access.',
+      weak:   'Your Dopamine pathway is quieter today. Even one session of focused work on your main goal activates your motivation circuit for the rest of the day.'
+    },
+    serotonin: {
+      strong: 'Serotonin is your anchor today. Mood stability and emotional regulation are active — this is the neurochemical foundation that makes everything else feel manageable.',
+      weak:   'Your Serotonin system has room to grow. Sleep quality and morning light exposure are the two highest-leverage inputs. Even 10 minutes outside moves the needle.'
+    },
+    oxytocin: {
+      strong: 'Your Oxytocin system is leading today. Social bonding and trust behaviours have measurable effects on cortisol regulation — connection is not soft science, it is physiology.',
+      weak:   'Your Oxytocin pathway is the quietest system today. A single moment of genuine connection — not scrolling, actual presence — is enough to activate it.'
+    },
+    endorphin: {
+      strong: 'Endorphin is your strongest system today. Movement and physical stress relief are active — your nervous system is processing and recovering the way it is designed to.',
+      weak:   'Your Endorphin system has the most room to activate. Even 10 minutes of movement changes your stress chemistry. It does not need to be intense to count.'
+    }
+  };
+
+  var insightText = insights[strongest.type].strong;
+  if (weakest.pct < 30) {
+    insightText += ' ' + insights[weakest.type].weak;
+  }
+  return insightText;
+}
+
+/* ── Draw radar SVG into a given SVG element ── */
+function drawShareRadar(svgEl) {
+  var catColors = ['#c8712a','#4a9e82','#b85070','#5a82c0'];
+  var catNames  = ['Dopamine','Serotonin','Oxytocin','Endorphin'];
+  var catTypes  = ['dopamine','serotonin','oxytocin','endorphin'];
+  var cats = catTypes.map(function(t, i) {
+    return { name: catNames[i], color: catColors[i], pct: catEffectivePct(t) };
+  });
+
+  var cx = 140, cy = 118, R = 72;
+  var angles = [-90, 0, 90, 180];
+  var toRad  = function(d) { return d * Math.PI / 180; };
+  var gridRings = [0.25, 0.5, 0.75, 1.0];
+
+  var gridLines = gridRings.map(function(frac) {
+    return angles.map(function(a) {
+      return (cx + R * frac * Math.cos(toRad(a))) + ',' + (cy + R * frac * Math.sin(toRad(a)));
+    }).join(' ');
+  });
+
+  var dataPoints = cats.map(function(cat, i) {
+    var frac = cat.pct / 100;
+    return [cx + R * frac * Math.cos(toRad(angles[i])), cy + R * frac * Math.sin(toRad(angles[i]))];
+  });
+  var dataPath = dataPoints.map(function(p) { return p.join(','); }).join(' ');
+
+  var labelPositions = [
+    { x: cx,        y: cy - R - 18, anchor: 'middle' },
+    { x: cx + R + 8, y: cy - 5,     anchor: 'start'  },
+    { x: cx,        y: cy + R + 16, anchor: 'middle' },
+    { x: cx - R - 8, y: cy - 5,    anchor: 'end'    },
+  ];
+
+  var gridHTML = gridLines.map(function(pts, i) {
+    return '<polygon points="' + pts + '" fill="none" stroke="' + (i === 3 ? '#4a4640' : '#3d3a33') + '" stroke-width="' + (i === 3 ? 1.5 : 0.8) + '"/>';
+  }).join('');
+
+  var axisHTML = angles.map(function(a) {
+    return '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + R * Math.cos(toRad(a))) + '" y2="' + (cy + R * Math.sin(toRad(a))) + '" stroke="#3d3a33" stroke-width="0.8"/>';
+  }).join('');
+
+  var labelHTML = cats.map(function(cat, i) {
+    var pos = labelPositions[i];
+    var isRightOrLeft = i === 1 || i === 3;
+    if (isRightOrLeft) {
+      return '<text x="' + pos.x + '" y="' + pos.y + '" text-anchor="' + pos.anchor + '" fill="' + cat.color + '" font-size="10" font-family="system-ui" font-weight="600">' +
+        '<tspan x="' + pos.x + '" dy="0">' + cat.name + '</tspan>' +
+        '<tspan x="' + pos.x + '" dy="13" fill="#7a7469" font-weight="400" font-size="9">' + Math.round(cat.pct) + '%</tspan>' +
+        '</text>';
+    }
+    return '<text x="' + pos.x + '" y="' + pos.y + '" text-anchor="' + pos.anchor + '" fill="' + cat.color + '" font-size="10" font-family="system-ui" font-weight="600">' + cat.name + '</text>' +
+      '<text x="' + pos.x + '" y="' + (pos.y + 13) + '" text-anchor="' + pos.anchor + '" fill="#7a7469" font-size="9" font-family="system-ui">' + Math.round(cat.pct) + '%</text>';
+  }).join('');
+
+  svgEl.setAttribute('viewBox', '0 0 280 240');
+  svgEl.innerHTML = gridHTML + axisHTML +
+    '<polygon points="' + dataPath + '" fill="rgba(124,106,184,0.18)" stroke="#7c6ab8" stroke-width="1.5" stroke-linejoin="round"/>' +
+    dataPoints.map(function(p, i) {
+      return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" fill="' + cats[i].color + '"/>';
+    }).join('') + labelHTML;
+}
+
 function openShareModal() {
   var phase = brainPhase();
   var now   = new Date();
@@ -3559,53 +3685,79 @@ function openShareModal() {
 
   document.getElementById('shareDate').textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()];
 
-  // Brain SVG
-  drawBrainSvg(document.getElementById('shareBrainSvg'), phase);
+  var brainSection  = document.getElementById('shareBrainvatarSection');
+  var radarSection  = document.getElementById('shareRadarSection');
+  var useRadar = phase >= 3;
 
-  // Phase label
-  document.getElementById('sharePhaseLabel').textContent = BRAIN_LABELS[phase];
+  if (useRadar) {
+    brainSection.style.display = 'none';
+    radarSection.style.display = 'block';
 
-  // Sub label — foundational count
-  var cf = countFoundationals();
-  document.getElementById('shareGrade').textContent = cf.done + ' of ' + cf.total + ' core habits done today';
+    // Phase badge
+    var phaseColors = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
+    var badge = document.getElementById('shareRadarPhaseBadge');
+    badge.style.cssText = 'background:' + phaseColors[phase] + '22;border:1px solid ' + phaseColors[phase] + '55;color:' + phaseColors[phase] + ';border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:0.3px';
+    badge.textContent = '🧠 ' + BRAIN_LABELS[phase];
 
-  // Core pips
-  var pipsRow = document.getElementById('sharePipsRow');
-  if (pipsRow) {
-    pipsRow.innerHTML = '';
-    Object.keys(HABITS).forEach(function(type) {
-      var ok = foundationDone(type);
-      var dot = document.createElement('div');
-      dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:' + (ok ? catColors[type] : 'var(--border2)') + ';border:' + (ok ? 'none' : '1.5px solid var(--border2)') + ';transition:background 0.3s';
-      pipsRow.appendChild(dot);
-    });
-  }
+    // Performance summary row
+    var cf = countFoundationals();
+    var perfRow = document.getElementById('sharePerfRow');
+    perfRow.innerHTML =
+      '<div class="share-perf-cell"><div class="share-perf-val">' + cf.done + '/' + cf.total + '</div><div class="share-perf-lbl">Core habits</div></div>' +
+      '<div class="share-perf-cell"><div class="share-perf-val">' + (streak.count || 0) + '</div><div class="share-perf-lbl">Day streak</div></div>' +
+      '<div class="share-perf-cell"><div class="share-perf-val">' + Math.round(heroScore()) + '%</div><div class="share-perf-lbl">Brain score</div></div>';
 
-  // NeuroCoach analysis — pull the current reflect card text
-  var coachEl = document.getElementById('shareCoachAnalysis');
-  if (coachEl) {
-    var feedCards = document.querySelectorAll('#coachFeed .coach-feed-card.card-reflect, #coachFeed .coach-feed-card.card-nudge');
-    var coachText = '';
-    feedCards.forEach(function(card) {
-      var body = card.querySelector('.coach-feed-body');
-      if (body && !coachText) coachText = body.textContent;
-    });
-    coachEl.innerHTML =
-      '<div style="font-size:10px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;color:var(--serotonin);margin-bottom:5px">NeuroCoach</div>' +
-      '<div style="font-size:12.5px;color:var(--text);line-height:1.6">' + (coachText || BRAIN_SUBS[phase]) + '</div>';
-  }
+    // Radar
+    drawShareRadar(document.getElementById('shareRadarSvg'));
 
-  // Category tiles
-  var catsEl = document.getElementById('shareCats');
-  if (catsEl) {
-    catsEl.innerHTML = Object.keys(HABITS).map(function(type) {
-      var ok  = foundationDone(type);
-      var col = catColors[type];
-      return '<div style="background:var(--surface);border:1px solid ' + (ok ? col : 'var(--border)') + ';border-radius:var(--radius-sm);padding:8px 10px;text-align:center">' +
-        '<div style="font-size:11px;font-weight:600;color:' + col + '">' + catNames[type] + '</div>' +
-        '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + (ok ? 'Active' : 'Building') + '</div>' +
-        '</div>';
-    }).join('');
+    // Insight
+    document.getElementById('shareInsightBody').textContent = buildShareInsight();
+
+  } else {
+    brainSection.style.display = 'block';
+    radarSection.style.display = 'none';
+
+    // Brainvatar card — existing logic
+    drawBrainSvg(document.getElementById('shareBrainSvg'), phase);
+    document.getElementById('sharePhaseLabel').textContent = BRAIN_LABELS[phase];
+    var cf = countFoundationals();
+    document.getElementById('shareGrade').textContent = cf.done + ' of ' + cf.total + ' core habits done today';
+
+    var pipsRow = document.getElementById('sharePipsRow');
+    if (pipsRow) {
+      pipsRow.innerHTML = '';
+      Object.keys(HABITS).forEach(function(type) {
+        var ok = foundationDone(type);
+        var dot = document.createElement('div');
+        dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:' + (ok ? catColors[type] : 'var(--border2)') + ';border:' + (ok ? 'none' : '1.5px solid var(--border2)') + ';transition:background 0.3s';
+        pipsRow.appendChild(dot);
+      });
+    }
+
+    var coachEl = document.getElementById('shareCoachAnalysis');
+    if (coachEl) {
+      var feedCards = document.querySelectorAll('#coachFeed .coach-feed-card.card-reflect, #coachFeed .coach-feed-card.card-nudge');
+      var coachText = '';
+      feedCards.forEach(function(card) {
+        var body = card.querySelector('.coach-feed-body');
+        if (body && !coachText) coachText = body.textContent;
+      });
+      coachEl.innerHTML =
+        '<div style="font-size:10px;font-weight:600;letter-spacing:0.7px;text-transform:uppercase;color:var(--serotonin);margin-bottom:5px">NeuroCoach</div>' +
+        '<div style="font-size:12.5px;color:var(--text);line-height:1.6">' + (coachText || BRAIN_SUBS[phase]) + '</div>';
+    }
+
+    var catsEl = document.getElementById('shareCats');
+    if (catsEl) {
+      catsEl.innerHTML = Object.keys(HABITS).map(function(type) {
+        var ok  = foundationDone(type);
+        var col = catColors[type];
+        return '<div style="background:var(--surface);border:1px solid ' + (ok ? col : 'var(--border)') + ';border-radius:var(--radius-sm);padding:8px 10px;text-align:center">' +
+          '<div style="font-size:11px;font-weight:600;color:' + col + '">' + catNames[type] + '</div>' +
+          '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + (ok ? 'Active' : 'Building') + '</div>' +
+          '</div>';
+      }).join('');
+    }
   }
 
   openModal('shareOverlay');
@@ -3648,6 +3800,7 @@ function nativeShare() {
 
 /* ═══════════════════════════════════════════════════════════
    GENERATE SHARE IMAGE — Canvas-drawn score card
+   Phase 3+: radar + insight card  |  Phase 0-2: brainvatar card
    1080×1080 px, matches app dark matte earthy theme
    ═══════════════════════════════════════════════════════════ */
 async function generateShareImage() {
@@ -3658,174 +3811,224 @@ async function generateShareImage() {
   var days      = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months    = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var dateStr   = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()];
-  var phaseLabel = BRAIN_LABELS[phase];
-  var phaseSub   = BRAIN_SUBS[phase];
+  var phaseColors = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
+  var phaseCol  = phaseColors[phase];
 
-  /* Pull NeuroCoach insight text from live feed */
-  var coachText = phaseSub;
-  var feedCards = document.querySelectorAll('#coachFeed .coach-feed-card.card-reflect');
-  feedCards.forEach(function(card) {
-    var body = card.querySelector('.coach-feed-body');
-    if (body && coachText === phaseSub) coachText = body.textContent.trim();
-  });
-
-  /* Category status */
-  var catColors = { dopamine:'#c8712a', serotonin:'#4a9e82', oxytocin:'#b85070', endorphin:'#5a82c0' };
-  var catNames  = { dopamine:'Dopamine', serotonin:'Serotonin', oxytocin:'Oxytocin', endorphin:'Endorphin' };
-  var catData   = Object.keys(HABITS).map(function(t) {
-    return { name: catNames[t], color: catColors[t], active: foundationDone(t) };
-  });
-
-  /* ── Draw brain SVG to image via off-screen SVG ── */
-  var svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svgEl.setAttribute('width', '300'); svgEl.setAttribute('height', '300');
-  svgEl.setAttribute('viewBox', '0 0 96 96');
-  svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-  drawBrainSvg(svgEl, phase);
-  var svgStr = new XMLSerializer().serializeToString(svgEl);
-
-  /* ── Canvas setup — 1080×1080 ── */
   var W = 1080, H = 1080, PAD = 72;
   var canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   var ctx = canvas.getContext('2d');
 
-  /* Background */
+  /* ── Shared background ── */
   ctx.fillStyle = '#1c1a17';
   ctx.fillRect(0, 0, W, H);
-
-  /* Subtle phase-coloured glow behind centre */
-  var phaseColors = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
-  var phaseCol = phaseColors[phase];
   var bgGrd = ctx.createRadialGradient(W/2, H*0.38, 60, W/2, H*0.38, 480);
-  bgGrd.addColorStop(0, phaseCol + '28');
-  bgGrd.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = bgGrd;
-  ctx.fillRect(0, 0, W, H);
-
-  /* Top accent bar */
+  bgGrd.addColorStop(0, phaseCol + '28'); bgGrd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = bgGrd; ctx.fillRect(0, 0, W, H);
   var acGrd = ctx.createLinearGradient(0, 0, W, 0);
   acGrd.addColorStop(0, '#c8712a'); acGrd.addColorStop(0.33, '#b85070');
   acGrd.addColorStop(0.66, '#4a9e82'); acGrd.addColorStop(1, '#5a82c0');
-  ctx.fillStyle = acGrd;
-  ctx.fillRect(0, 0, W, 8);
-
-  /* Card background */
+  ctx.fillStyle = acGrd; ctx.fillRect(0, 0, W, 8);
   ctx.fillStyle = '#242119';
-  roundRect(ctx, PAD - 20, 50, W - (PAD - 20) * 2, H - 110, 24);
-  ctx.fill();
+  roundRect(ctx, PAD - 20, 50, W - (PAD - 20) * 2, H - 110, 24); ctx.fill();
 
-  /* Brand */
-  ctx.fillStyle = '#e8e3d8';
-  ctx.font = '600 38px system-ui, sans-serif';
-  ctx.textBaseline = 'alphabetic';
-  ctx.textAlign = 'left';
+  /* ── Shared header ── */
+  ctx.fillStyle = '#e8e3d8'; ctx.font = '600 38px system-ui, sans-serif';
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
   ctx.fillText('NeuroHabit', PAD, 118);
-  ctx.fillStyle = '#7a7469';
-  ctx.font = '400 17px system-ui, sans-serif';
+  ctx.fillStyle = '#7a7469'; ctx.font = '400 17px system-ui, sans-serif';
   ctx.fillText('BY THE AUFTHORITY', PAD, 144);
-
-  /* Date */
-  ctx.fillStyle = '#7a7469';
-  ctx.font = '400 20px system-ui, sans-serif';
-  ctx.textAlign = 'right';
-  ctx.fillText(dateStr, W - PAD, 118);
-  ctx.textAlign = 'left';
-
-  /* Divider */
+  ctx.textAlign = 'right'; ctx.font = '400 20px system-ui, sans-serif';
+  ctx.fillText(dateStr, W - PAD, 118); ctx.textAlign = 'left';
   ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(PAD, 168); ctx.lineTo(W - PAD, 168); ctx.stroke();
 
-  /* ── Draw brain SVG into canvas ── */
-  await new Promise(function(resolve) {
-    var img  = new Image();
-    var blob = new Blob([svgStr], { type: 'image/svg+xml' });
-    var url  = URL.createObjectURL(blob);
-    img.onload = function() {
-      var bvSize = 360;
-      ctx.drawImage(img, (W - bvSize) / 2, 190, bvSize, bvSize);
-      URL.revokeObjectURL(url);
-      resolve();
-    };
-    img.onerror = function() { URL.revokeObjectURL(url); resolve(); };
-    img.src = url;
-  });
+  if (phase >= 3) {
+    /* ════ RADAR CARD (Phase 3+) ════ */
+    var catColors = ['#c8712a','#4a9e82','#b85070','#5a82c0'];
+    var catNames  = ['Dopamine','Serotonin','Oxytocin','Endorphin'];
+    var catTypes  = ['dopamine','serotonin','oxytocin','endorphin'];
+    var cats = catTypes.map(function(t, i) {
+      return { name: catNames[i], color: catColors[i], pct: catEffectivePct(t) };
+    });
 
-  /* Phase label */
-  ctx.textAlign = 'center';
-  ctx.fillStyle = phaseCol;
-  ctx.font = '600 44px system-ui, sans-serif';
-  ctx.fillText(phaseLabel.toUpperCase(), W / 2, 590);
+    /* Phase label */
+    ctx.textAlign = 'center';
+    ctx.fillStyle = phaseCol; ctx.font = '600 40px system-ui, sans-serif';
+    ctx.fillText('🧠 ' + BRAIN_LABELS[phase].toUpperCase(), W / 2, 215);
 
-  /* Foundational count */
-  var cf = countFoundationals();
-  ctx.fillStyle = '#7a7469';
-  ctx.font = '400 22px system-ui, sans-serif';
-  ctx.fillText(cf.done + ' of ' + cf.total + ' core habits active', W / 2, 628);
+    /* Performance summary — 3 cells */
+    var cf = countFoundationals();
+    var cells = [
+      { val: cf.done + '/' + cf.total, lbl: 'Core habits' },
+      { val: (streak.count || 0) + 'd', lbl: 'Day streak' },
+      { val: Math.round(heroScore()) + '%', lbl: 'Brain score' },
+    ];
+    var cellW = (W - PAD * 2) / 3, cellH = 90, cellY = 240;
+    cells.forEach(function(cell, i) {
+      var cx2 = PAD + i * cellW;
+      ctx.fillStyle = '#2e2b24';
+      roundRect(ctx, cx2 + 6, cellY, cellW - 12, cellH, 12); ctx.fill();
+      ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
+      roundRect(ctx, cx2 + 6, cellY, cellW - 12, cellH, 12); ctx.stroke();
+      ctx.fillStyle = '#e8e3d8'; ctx.font = '600 36px system-ui, sans-serif';
+      ctx.fillText(cell.val, cx2 + cellW / 2, cellY + 50);
+      ctx.fillStyle = '#7a7469'; ctx.font = '400 18px system-ui, sans-serif';
+      ctx.fillText(cell.lbl, cx2 + cellW / 2, cellY + 76);
+    });
 
-  /* Divider */
-  ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD, 658); ctx.lineTo(W - PAD, 658); ctx.stroke();
+    /* Radar chart — drawn on canvas */
+    var rcx = W / 2, rcy = 530, R2 = 200;
+    var angles = [-90, 0, 90, 180];
+    var toRad = function(d) { return d * Math.PI / 180; };
 
-  /* Category dots row */
-  var dotY = 698, dotR = 14, dotSpacing = (W - PAD * 2) / 4;
-  catData.forEach(function(cat, i) {
-    var x = PAD + i * dotSpacing + dotSpacing / 2;
+    /* Grid rings */
+    [0.25, 0.5, 0.75, 1.0].forEach(function(frac, ri) {
+      ctx.strokeStyle = ri === 3 ? '#4a4640' : '#3d3a33';
+      ctx.lineWidth = ri === 3 ? 1.5 : 0.8;
+      ctx.beginPath();
+      angles.forEach(function(a, ai) {
+        var px = rcx + R2 * frac * Math.cos(toRad(a));
+        var py = rcy + R2 * frac * Math.sin(toRad(a));
+        ai === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      });
+      ctx.closePath(); ctx.stroke();
+    });
+
+    /* Axes */
+    ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 0.8;
+    angles.forEach(function(a) {
+      ctx.beginPath();
+      ctx.moveTo(rcx, rcy);
+      ctx.lineTo(rcx + R2 * Math.cos(toRad(a)), rcy + R2 * Math.sin(toRad(a)));
+      ctx.stroke();
+    });
+
+    /* Data polygon */
+    var dataPoints = cats.map(function(cat, i) {
+      var frac = cat.pct / 100;
+      return [rcx + R2 * frac * Math.cos(toRad(angles[i])), rcy + R2 * frac * Math.sin(toRad(angles[i]))];
+    });
     ctx.beginPath();
-    ctx.arc(x, dotY, dotR, 0, Math.PI * 2);
-    ctx.fillStyle = cat.active ? cat.color : '#3d3a33';
-    ctx.fill();
-    ctx.fillStyle = cat.active ? cat.color : '#504c45';
-    ctx.font = '500 18px system-ui, sans-serif';
-    ctx.fillText(cat.name, x - ctx.measureText(cat.name).width / 2, dotY + dotR + 22);
-    ctx.fillStyle = cat.active ? cat.color : '#504c45';
-    ctx.font = '500 14px system-ui, sans-serif';
-    var statusTxt = cat.active ? 'Active' : 'Building';
-    ctx.fillText(statusTxt, x - ctx.measureText(statusTxt).width / 2, dotY + dotR + 42);
-  });
+    dataPoints.forEach(function(p, i) { i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]); });
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(124,106,184,0.18)'; ctx.fill();
+    ctx.strokeStyle = '#7c6ab8'; ctx.lineWidth = 2.5; ctx.stroke();
 
-  /* Divider */
-  ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD, 762); ctx.lineTo(W - PAD, 762); ctx.stroke();
+    /* Data dots + labels */
+    var labelOffsets = [
+      { dx: 0,    dy: -28 },
+      { dx: 32,   dy: 0   },
+      { dx: 0,    dy: 32  },
+      { dx: -32,  dy: 0   },
+    ];
+    dataPoints.forEach(function(p, i) {
+      ctx.beginPath(); ctx.arc(p[0], p[1], 8, 0, Math.PI * 2);
+      ctx.fillStyle = cats[i].color; ctx.fill();
+      var lx = rcx + (R2 + 40) * Math.cos(toRad(angles[i]));
+      var ly = rcy + (R2 + 40) * Math.sin(toRad(angles[i]));
+      ctx.textAlign = i === 0 || i === 2 ? 'center' : i === 1 ? 'left' : 'right';
+      ctx.fillStyle = cats[i].color; ctx.font = '600 22px system-ui, sans-serif';
+      ctx.fillText(cats[i].name, lx, ly);
+      ctx.fillStyle = '#7a7469'; ctx.font = '400 18px system-ui, sans-serif';
+      ctx.fillText(Math.round(cats[i].pct) + '%', lx, ly + 24);
+    });
 
-  /* NeuroCoach label */
-  ctx.fillStyle = '#4a9e82';
-  ctx.font = '600 16px system-ui, sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('NEUROCOACH', PAD, 796);
+    /* Insight text box */
+    var insightY = 730;
+    ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, insightY - 16); ctx.lineTo(W - PAD, insightY - 16); ctx.stroke();
+    ctx.fillStyle = '#7c6ab8'; ctx.font = '600 17px system-ui, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('BRAIN BALANCE INSIGHT', PAD, insightY + 10);
+    ctx.fillStyle = '#e8e3d8'; ctx.font = 'italic 400 22px system-ui, sans-serif';
+    wrapText(ctx, buildShareInsight(), PAD, insightY + 48, W - PAD * 2, 34);
 
-  /* Coach insight text — wrapped */
-  ctx.fillStyle = '#e8e3d8';
-  ctx.font = 'italic 400 22px system-ui, sans-serif';
-  wrapText(ctx, coachText, PAD, 830, W - PAD * 2, 34);
+  } else {
+    /* ════ BRAINVATAR CARD (Phase 0-2) ════ */
+    var svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgEl.setAttribute('width', '300'); svgEl.setAttribute('height', '300');
+    svgEl.setAttribute('viewBox', '0 0 96 96');
+    svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    drawBrainSvg(svgEl, phase);
+    var svgStr = new XMLSerializer().serializeToString(svgEl);
 
-  /* User identity strip */
+    await new Promise(function(resolve) {
+      var img  = new Image();
+      var blob = new Blob([svgStr], { type: 'image/svg+xml' });
+      var url  = URL.createObjectURL(blob);
+      img.onload = function() {
+        var bvSize = 360;
+        ctx.drawImage(img, (W - bvSize) / 2, 190, bvSize, bvSize);
+        URL.revokeObjectURL(url); resolve();
+      };
+      img.onerror = function() { URL.revokeObjectURL(url); resolve(); };
+      img.src = url;
+    });
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = phaseCol; ctx.font = '600 44px system-ui, sans-serif';
+    ctx.fillText(BRAIN_LABELS[phase].toUpperCase(), W / 2, 590);
+    var cf = countFoundationals();
+    ctx.fillStyle = '#7a7469'; ctx.font = '400 22px system-ui, sans-serif';
+    ctx.fillText(cf.done + ' of ' + cf.total + ' core habits active', W / 2, 628);
+    ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, 658); ctx.lineTo(W - PAD, 658); ctx.stroke();
+
+    var catColors2 = { dopamine:'#c8712a', serotonin:'#4a9e82', oxytocin:'#b85070', endorphin:'#5a82c0' };
+    var catNames2  = { dopamine:'Dopamine', serotonin:'Serotonin', oxytocin:'Oxytocin', endorphin:'Endorphin' };
+    var catData = Object.keys(HABITS).map(function(t) {
+      return { name: catNames2[t], color: catColors2[t], active: foundationDone(t) };
+    });
+    var dotY = 698, dotSpacing = (W - PAD * 2) / 4;
+    catData.forEach(function(cat, i) {
+      var x = PAD + i * dotSpacing + dotSpacing / 2;
+      ctx.beginPath(); ctx.arc(x, dotY, 14, 0, Math.PI * 2);
+      ctx.fillStyle = cat.active ? cat.color : '#3d3a33'; ctx.fill();
+      ctx.fillStyle = cat.active ? cat.color : '#504c45';
+      ctx.font = '500 18px system-ui, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(cat.name, x, dotY + 36);
+      ctx.font = '500 14px system-ui, sans-serif';
+      ctx.fillText(cat.active ? 'Active' : 'Building', x, dotY + 56);
+    });
+
+    ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, 762); ctx.lineTo(W - PAD, 762); ctx.stroke();
+
+    var phaseSub = BRAIN_SUBS[phase];
+    var coachText = phaseSub;
+    var feedCards = document.querySelectorAll('#coachFeed .coach-feed-card.card-reflect');
+    feedCards.forEach(function(card) {
+      var body = card.querySelector('.coach-feed-body');
+      if (body && coachText === phaseSub) coachText = body.textContent.trim();
+    });
+    ctx.fillStyle = '#4a9e82'; ctx.font = '600 16px system-ui, sans-serif';
+    ctx.textAlign = 'left'; ctx.fillText('NEUROCOACH', PAD, 796);
+    ctx.fillStyle = '#e8e3d8'; ctx.font = 'italic 400 22px system-ui, sans-serif';
+    wrapText(ctx, coachText, PAD, 830, W - PAD * 2, 34);
+  }
+
+  /* ── Shared identity strip ── */
   var identityY = H - 170;
   ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(PAD, identityY - 16); ctx.lineTo(W - PAD, identityY - 16); ctx.stroke();
-
-  var userName    = (userData && userData.name) ? userData.name.split(' ')[0] : 'NeuroHabit';
-  var avatarLbl   = userAvatar ? userAvatar.label : '';
+  var userName  = (userData && userData.name) ? userData.name.split(' ')[0] : 'NeuroHabit';
+  var avatarLbl = userAvatar ? userAvatar.label : '';
   var photoR = 28, photoX = PAD + 28, photoY = identityY + 36;
-
   var photoDrawn = false;
   if (userData && userData.photo && !userData.skipAuth) {
     try {
       await new Promise(function(res) {
-        var pImg = new Image();
-        pImg.crossOrigin = 'anonymous';
+        var pImg = new Image(); pImg.crossOrigin = 'anonymous';
         pImg.onload = function() {
-          ctx.save();
-          ctx.beginPath(); ctx.arc(photoX, photoY, photoR, 0, Math.PI * 2); ctx.clip();
-          ctx.drawImage(pImg, photoX - photoR, photoY - photoR, photoR * 2, photoR * 2);
-          ctx.restore();
+          ctx.save(); ctx.beginPath(); ctx.arc(photoX, photoY, photoR, 0, Math.PI * 2); ctx.clip();
+          ctx.drawImage(pImg, photoX - photoR, photoY - photoR, photoR * 2, photoR * 2); ctx.restore();
           ctx.beginPath(); ctx.arc(photoX, photoY, photoR + 1.5, 0, Math.PI * 2);
           ctx.strokeStyle = '#4a4640'; ctx.lineWidth = 2; ctx.stroke();
           photoDrawn = true; res();
         };
         pImg.onerror = function() { res(); };
-        pImg.src = userData.photo;
-        setTimeout(res, 2000);
+        pImg.src = userData.photo; setTimeout(res, 2000);
       });
     } catch(e) {}
   }
@@ -3845,7 +4048,6 @@ async function generateShareImage() {
     ctx.fillStyle = '#7a7469'; ctx.font = '400 16px system-ui, sans-serif';
     ctx.fillText(avatarLbl, txX, identityY + 50);
   }
-  /* CTA on right */
   ctx.textAlign = 'right';
   ctx.fillStyle = '#7c6ab8'; ctx.font = '600 15px system-ui, sans-serif';
   ctx.fillText('🧠 Try NeuroHabit free', W - PAD, identityY + 28);
@@ -4601,18 +4803,22 @@ function showCoreReplaceModal(type, hid) {
   var alts = HABITS[type].habits.filter(function(h) {
     return fdnIds.includes(h.id) && h.id !== hid && !selIds.includes(h.id);
   });
+  var isLastCore = getSelectedFoundationals(type).length <= 1;
+  var bodyMsg = isLastCore
+    ? ('<strong>' + curL + '</strong> is your only ' + catName + ' core habit. Every category needs at least one core habit — that is the foundation the whole system is built on.')
+    : ('Core habits must be swapped, not removed. Pick a replacement for <strong>' + curL + '</strong> and we will swap it in.');
+  var noAlt = alts.length === 0 ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px">No other core habits available to swap to in this category. All available core habits are already in your set.</p>' : '';
+  var subMsg = alts.length > 0 ? ('<p style="font-size:12.5px;color:var(--muted);line-height:1.6">Pick a replacement and we will swap it in. Your ' + catName + ' category stays active.</p>') : '';
   var overlay = document.createElement('div');
   overlay.id = 'coreReplaceModal';
   overlay.className = 'modal-overlay';
   overlay.style.display = 'flex';
-  var noAlt = alts.length === 0 ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px">No other core habits available to swap to in this category. Add a different core habit to your set first, then remove this one.</p>' : '';
-  var subMsg = alts.length > 0 ? ('<p style="font-size:12.5px;color:var(--muted);line-height:1.6">Pick a replacement and we will swap it in. Your ' + catName + ' category stays active.</p>') : '';
   overlay.innerHTML =
     '<div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px">' +
       '<div class="modal-handle"></div>' +
-      '<div class="modal-header"><div class="modal-icon">🔄</div><div class="modal-title">Replace core habit</div></div>' +
+      '<div class="modal-header"><div class="modal-icon">🔄</div><div class="modal-title">Swap core habit</div></div>' +
       '<div class="modal-body" style="margin-bottom:10px">' +
-        '<p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px"><strong>' + curL + '</strong> is your only ' + catName + ' core habit. Every category needs at least one core habit — that is the foundation the whole system is built on.</p>' +
+        '<p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">' + bodyMsg + '</p>' +
         subMsg + noAlt +
         '<div id="coreReplaceAltList"></div>' +
       '</div>' +
@@ -4632,6 +4838,55 @@ function showCoreReplaceModal(type, hid) {
   });
 }
 
+function showSecondarySwapModal(type, hid) {
+  var existing = document.getElementById('secondarySwapModal');
+  if (existing) existing.remove();
+  var catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
+  var catName  = catNames[type] || type;
+  var curH = HABITS[type].habits.find(function(x) { return x.id === hid; });
+  var curL = curH ? curH.label : hid;
+  var curType = curH ? curH.type : 'secondary'; // 'secondary' or 'bonus'
+  var selIds = getConfig()[type].selected;
+  // Find alternatives of the same type not already selected
+  var alts = HABITS[type].habits.filter(function(h) {
+    return h.type === curType && h.id !== hid && !selIds.includes(h.id);
+  });
+  var typeLabel = curType === 'bonus' ? 'bonus' : 'secondary';
+  var noAlt = alts.length === 0
+    ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px">No other ' + typeLabel + ' habits available to swap to in ' + catName + '. All options are already in your set.</p>'
+    : '';
+  var subMsg = alts.length > 0
+    ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.6">Pick a replacement ' + typeLabel + ' habit to swap in.</p>'
+    : '';
+  var overlay = document.createElement('div');
+  overlay.id = 'secondarySwapModal';
+  overlay.className = 'modal-overlay';
+  overlay.style.display = 'flex';
+  overlay.innerHTML =
+    '<div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px">' +
+      '<div class="modal-handle"></div>' +
+      '<div class="modal-header"><div class="modal-icon">🔄</div><div class="modal-title">Swap ' + typeLabel + ' habit</div></div>' +
+      '<div class="modal-body" style="margin-bottom:10px">' +
+        '<p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">Habits must be swapped, not removed. Pick a replacement for <strong>' + curL + '</strong>.</p>' +
+        subMsg + noAlt +
+        '<div id="secondarySwapAltList"></div>' +
+      '</div>' +
+      '<button class="modal-close" id="secondarySwapCloseBtn">Cancel</button>' +
+    '</div>';
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+  document.getElementById('secondarySwapCloseBtn').addEventListener('click', function() { overlay.remove(); });
+  var altList = document.getElementById('secondarySwapAltList');
+  alts.forEach(function(h) {
+    var btn = document.createElement('button');
+    btn.className = 'modal-close';
+    btn.style.cssText = 'margin-top:8px;background:var(--surface2);border-color:var(--border2);color:var(--text);text-align:left;padding:12px 14px;border-radius:var(--radius-sm);width:100%';
+    btn.innerHTML = '<span style="font-size:12px;font-weight:600;display:block;color:var(--text)">' + h.label + '</span><span style="font-size:11px;color:var(--muted)">Swap to this ' + typeLabel + ' habit</span>';
+    btn.addEventListener('click', function() { confirmSecondarySwap(type, hid, h.id); });
+    altList.appendChild(btn);
+  });
+}
+
 function confirmCoreSwap(type, oldHid, newHid) {
   document.getElementById('coreReplaceModal').remove();
   if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
@@ -4643,19 +4898,22 @@ function confirmCoreSwap(type, oldHid, newHid) {
   showToast('Swapped to ' + (nh ? nh.label : newHid), 'success');
 }
 
+function confirmSecondarySwap(type, oldHid, newHid) {
+  document.getElementById('secondarySwapModal').remove();
+  if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
+  if (!userHabitConfig[type].selected.includes(newHid)) userHabitConfig[type].selected.push(newHid);
+  userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== oldHid; });
+  sv(HCK, userHabitConfig);
+  renderSection(type); updateCatUI(type); renderCoach();
+  var nh = HABITS[type].habits.find(function(h) { return h.id === newHid; });
+  showToast('Swapped to ' + (nh ? nh.label : newHid), 'success');
+}
+
 function removeHabitFromSet(type, hid) {
   var h = HABITS[type].habits.find(function(x) { return x.id === hid; });
-  if (h && h.foundational && getSelectedFoundationals(type).length <= 1) {
-    showCoreReplaceModal(type, hid);
-    return;
-  }
-  if (!canRemoveHabit(type, hid)) {
-    showToast(isLockActive()
-      ? ('Habit set locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you.')
-      : 'You need at least one core habit per category. Add another core habit first.'
-    , 'info');
-    return;
-  }
+  if (!h) return;
+
+  // Grace period — free removal allowed
   if (isInGracePeriod()) {
     if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
     userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
@@ -4664,13 +4922,21 @@ function removeHabitFromSet(type, hid) {
     showToast('Habit removed. You have ' + hoursUntilGraceEnd() + ' hrs left to adjust your set.', 'success');
     return;
   }
-  var reason = prompt('Before removing this habit — what made it difficult? (This helps you reflect, not a requirement)');
-  if (reason === null) return;
-  if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
-  userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
-  sv(HCK, userHabitConfig);
-  renderSection(type); updateCatUI(type); renderCoach();
-  showToast('Habit removed from your set', 'success');
+
+  // Locked — nothing moves
+  if (isLockActive()) {
+    showToast('Habit set locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you.', 'info');
+    return;
+  }
+
+  // Post-grace, post-lock — swap is required, never outright removal
+  if (h.foundational) {
+    // Core habit: route to existing core swap modal (handles both last and extra core)
+    showCoreReplaceModal(type, hid);
+  } else {
+    // Secondary or bonus habit: route to secondary swap modal
+    showSecondarySwapModal(type, hid);
+  }
 }
 
 auth.onAuthStateChanged((user) => {
@@ -5049,6 +5315,8 @@ window.proceedToAvatarStep = proceedToAvatarStep;
 window.addHabitToSet       = addHabitToSet;
 window.removeHabitFromSet  = removeHabitFromSet;
 window.confirmCoreSwap     = confirmCoreSwap;
+window.confirmSecondarySwap = confirmSecondarySwap;
+window.showSecondarySwapModal = showSecondarySwapModal;
 window.showMainApp         = showMainApp;
 window.openShareModal     = openShareModal;
 window.generateShareImage = generateShareImage;
