@@ -310,6 +310,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 /* ── REVISION 4: Habit info modal has examples list ── */
 .habit-examples { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.habit-trigger { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border2); }
+.habit-trigger p { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.habit-trigger span { font-size: 13px; color: var(--text2); line-height: 1.55; display: block; }
+.habit-tips { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border2); }
+.habit-tips p { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.habit-tips ul { padding-left: 16px; margin: 0; }
+.habit-tips ul li { font-size: 13px; color: var(--text2); line-height: 1.55; margin-bottom: 5px; }
 .habit-examples p { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
 .habit-examples ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
 .habit-examples li { font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 7px; }
@@ -1592,7 +1599,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   </div>
 </div>
 
-<!-- REVISION 4: Habit info modal -->
+<!-- REVISION 5: How It Works modal — What counts + Trigger + Tips -->
 <div class="modal-overlay" id="infoOverlay" onclick="closeModal('infoOverlay')">
   <div class="modal-card" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
@@ -1602,6 +1609,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     </div>
     <div class="modal-body" id="infoBody"></div>
     <div class="habit-examples" id="infoExamples"></div>
+    <div class="habit-trigger" id="infoTrigger"></div>
+    <div class="habit-tips" id="infoTips"></div>
     <div class="info-modal-note-zone" id="infoNoteZone"></div>
     <button class="modal-close" onclick="closeModal('infoOverlay')">Close</button>
   </div>
@@ -1729,7 +1738,7 @@ const HABITS = {
           { label: '90 min',   weight: 2, sessions: 2 },
           { label: '135+ min', weight: 3, sessions: 3 },
         ]},
-        info: { body: "Dedicated, distraction-free work on your most important goal. Each session is 45+ minutes of uninterrupted focus.", examples: ["1 session (45 min) = a focused start", "2 sessions (90 min) = a strong productive day", "3+ sessions = elite deep work output"] },
+        info: { body: "Dedicated, distraction-free work on your most important goal. Each session is 45+ minutes of uninterrupted focus.", examples: ["1 session (45 min) = a focused start", "2 sessions (90 min) = a strong productive day", "3+ sessions = elite deep work output"], trigger: "After Subuh or first coffee — before opening WhatsApp or email. The window between waking and first digital input is the highest-focus window of the day.", tips: ["Phone in another room, not face-down — face-down still creates urge anxiety", "Close all browser tabs except the one you need", "Use a timer: 45 min on, 10 min off. A kitchen timer works better than a phone timer", "Tell someone nearby you are in deep work — social accountability raises completion rate"] },
         tooltip: { icon: "⚡", title: "Deep Work activates Dopamine", body: "Sustained focused effort is the strongest natural dopamine trigger. Each session compounds the reward signal." }
       },
       {
@@ -1737,14 +1746,14 @@ const HABITS = {
         label: 'Meaningful Progress',
         weight: 3, foundational: true, type: 'foundational',
         flex: null,
-        info: { body: "Completing a meaningful step on any important goal or responsibility — work, caregiving, a creative project, or a physical task. The key word is meaningful progress, not cognitive intensity.", examples: ["Completing a key task on your to-do list for the day", "Finishing a caregiving or household responsibility you planned", "Taking a meaningful step on a creative or personal project"] },
+        info: { body: "Completing a meaningful step on any important goal or responsibility — work, caregiving, a creative project, or a physical task. The key word is meaningful progress, not cognitive intensity.", examples: ["Completing a key task on your to-do list for the day", "Finishing a caregiving or household responsibility you planned", "Taking a meaningful step on a creative or personal project"], trigger: "Identify the one meaningful task the night before and write it down — the morning trigger is seeing it, not deciding it.", tips: ["Define meaningful the night before — vague intentions rarely fire the dopamine response", "A completed caregiving task counts fully — do not discount it", "If stuck, break the task into a 10-minute starter action and do only that"] },
         tooltip: { icon: "🎯", title: "Progress activates Dopamine", body: "The Progress Principle (Amabile & Kramer, replicated 2022): logging meaningful forward progress is the single strongest daily predictor of intrinsic motivation. Valid for any role or lifestyle." }
       },
       {
         id: 'sun',
         label: 'Morning Sunlight (10–15 min)',
         weight: 2, foundational: true, type: 'foundational', flex: null,
-        info: { body: "Direct outdoor light within 60 minutes of waking — no sunglasses, no glass in the way. The most accessible foundational: anyone can do it regardless of cognitive state, work type, or neurodivergence.", examples: ["Walk outside barefoot or on a balcony", "Eat breakfast near an open window", "Short walk outside within the first hour of waking"] },
+        info: { body: "Direct outdoor light within 60 minutes of waking — no sunglasses, no glass in the way. The most accessible foundational: anyone can do it regardless of cognitive state, work type, or neurodivergence.", examples: ["Walk outside barefoot or on a balcony", "Eat breakfast near an open window", "Short walk outside within the first hour of waking"], trigger: "Pair with your first drink of the day — teh tarik at the kedai, kopi outside, or just a glass of water on the balcony. The drink habit pulls the sunlight habit.", tips: ["No sunglasses — UV filtering blocks the retinal signal", "Glass windows reduce light intensity by up to 50% — step outside, even briefly", "Overcast days still work — cloud-filtered light is 10–100x brighter than indoor light", "The angle of morning light (low on horizon) is neurologically distinct from midday light — timing matters"] },
         tooltip: { icon: "🌅", title: "Sunlight primes Dopamine", body: "Morning light increases dopamine receptor sensitivity via the retinal-hypothalamic-VTA pathway (Leung et al. Nature Neuroscience 2020) — setting motivational tone for the day." }
       },
       /* ── SECONDARY & BONUS ─────────────────────────────────────── */
@@ -1752,42 +1761,42 @@ const HABITS = {
         id: 'tl',
         label: 'Task List Completion',
         weight: 1, foundational: false, type: 'secondary', flex: null,
-        info: { body: "Clearing short planned tasks — emails, admin, errands — that create mental open loops if left undone.", examples: ["Replying to all pending emails", "Paying a bill or filing a form", "Scheduling appointments"] },
+        info: { body: "Clearing short planned tasks — emails, admin, errands — that create mental open loops if left undone.", examples: ["Replying to all pending emails", "Paying a bill or filing a form", "Scheduling appointments"], trigger: "Batch into one fixed daily slot — after lunch or after Asar. Random task-clearing throughout the day fragments deep work.", tips: ["Write the list the night before — not the morning", "Cap it at 5 items maximum. More than 5 becomes a source of anxiety, not completion", "Mark done with physical pen if possible — the tactile action slightly amplifies the dopamine hit"] },
         tooltip: { icon: "✅", title: "Checkmarks trigger Dopamine", body: "Each completed task releases a small dopamine hit." }
       },
       {
         id: 'sk',
         label: 'Active Skill Practice (20+ min)',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Deliberate practice of a skill you are actively improving — not passive consumption, but active doing.", examples: ["Practising an instrument or sport drill", "Writing, drawing, or coding for improvement", "Language learning with active speaking"] },
+        info: { body: "Deliberate practice of a skill you are actively improving — not passive consumption, but active doing.", examples: ["Practising an instrument or sport drill", "Writing, drawing, or coding for improvement", "Language learning with active speaking"], trigger: "Attach to an existing daily slot — after dinner, or after Maghrib when the house settles.", tips: ["Passive watching (YouTube tutorials) does not count — active doing only", "Work at the edge of your current ability, not in the comfort zone — slight difficulty is the signal", "20 minutes of genuine deliberate practice beats 90 minutes of casual repetition"] },
         tooltip: { icon: "🎸", title: "Learning grows your reward system", body: "Skill acquisition activates dopaminergic pathways." }
       },
       {
         id: 'jn',
         label: 'Goal-Focused Journaling',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Writing specifically about your goals, priorities, or progress — not general diary writing.", examples: ["Reviewing your 3 priorities for the day", "Reflecting on what worked and why", "Writing out a problem you are trying to solve"] },
+        info: { body: "Writing specifically about your goals, priorities, or progress — not general diary writing.", examples: ["Reviewing your 3 priorities for the day", "Reflecting on what worked and why", "Writing out a problem you are trying to solve"], trigger: "Last 5 minutes before closing your laptop for the night — captures the day while it is fresh and primes the next morning.", tips: ["Use a physical notebook if possible — screens compete for the same attention you are trying to reflect on", "Three questions are enough: What did I do? What blocked me? What is the next step?", "If you miss a day, write two lines — do not attempt to catch up in full"] },
         tooltip: { icon: "📓", title: "Journaling clarifies the reward target", body: "Writing goals activates the prefrontal cortex and increases anticipatory dopamine." }
       },
       {
         id: 'sc',
         label: 'Screen-Free Block (2+ hrs)',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Protecting at least 2 continuous hours from passive scrolling or social media.", examples: ["Phone in another room during a meal and the hour after", "No social media before completing your main task", "Screen-free evening from dinner onwards"] },
+        info: { body: "Protecting at least 2 continuous hours from passive scrolling or social media.", examples: ["Phone in another room during a meal and the hour after", "No social media before completing your main task", "Screen-free evening from dinner onwards"], trigger: "Use the family dinner or makan malam as the natural start point — phones off at the table, stay off for 2 hours after.", tips: ["Delete social apps from your home screen — keeping them requires an extra step that breaks the reflex", "Grayscale mode on your phone reduces the reward signal of colour-coded apps", "Tell someone in the house you are doing a screen-free block — witnesses increase follow-through"] },
         tooltip: { icon: "📵", title: "Protect your Dopamine baseline", body: "Passive scrolling exploits dopamine reward loops. Protecting 2+ hrs daily restores baseline sensitivity." }
       },
       {
         id: 'ty',
         label: 'Tyrosine-Rich Meal',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Eating a meal containing tyrosine-rich foods — the dietary precursor to dopamine.", examples: ["Eggs with protein at breakfast", "Chicken or beef with lunch or dinner", "Almonds, pumpkin seeds, or walnuts as a snack"] },
+        info: { body: "Eating a meal containing tyrosine-rich foods — the dietary precursor to dopamine.", examples: ["Eggs with protein at breakfast", "Chicken or beef with lunch or dinner", "Almonds, pumpkin seeds, or walnuts as a snack"], trigger: "Easily built into a standard Malaysian meal — ayam, ikan, telur, or tauhu at any warung or nasi campur counter.", tips: ["Nasi + sayur alone is not enough — you need a protein source at the meal", "Tauhu and tempe are valid plant-based sources and widely available", "Combine with a complex carbohydrate (brown rice, oats) — the insulin response improves tyrosine brain entry"] },
         tooltip: { icon: "🥚", title: "Feed your Dopamine system", body: "Tyrosine is the amino acid your brain converts into dopamine." }
       },
       {
         id: 'fast',
         label: 'Fasting (Eating Window)',
         weight: 1, foundational: false, type: 'secondary', flex: null,
-        info: { body: "Maintaining a consistent daily eating window — typically 8 to 10 hours. Known as Time-Restricted Eating (TRE) in research. Included here for its behaviour-correcting effects: a consistent eating window improves self-regulatory discipline that spills over into other habits, and stabilises blood sugar to protect dopamine receptor sensitivity.", examples: ["Eating between 8am and 6pm only", "Skipping late-night snacking consistently", "First meal at noon, last meal by 8pm (16:8 pattern)"] },
+        info: { body: "Maintaining a consistent daily eating window — typically 8 to 10 hours. Known as Time-Restricted Eating (TRE) in research. Included here for its behaviour-correcting effects: a consistent eating window improves self-regulatory discipline that spills over into other habits, and stabilises blood sugar to protect dopamine receptor sensitivity.", examples: ["Eating between 8am and 6pm only", "Skipping late-night snacking consistently", "First meal at noon, last meal by 8pm (16:8 pattern)"], trigger: "Set a phone alarm for your eating window close — the alarm is the cue, not willpower.", tips: ["Water, plain kopi-o, and teh-o (no sugar) are fine during the fasting window", "Ramadan-trained Malaysians already have the muscle for this — extend that discipline year-round", "Late-night mamak runs are the most common window-breaker — plan your last meal before leaving the house"] },
         tooltip: { icon: "⏱", title: "Fasting protects your Dopamine system", body: "Stable blood sugar from a consistent eating window prevents the dopamine receptor blunting caused by glucose spikes. Research also shows TRE creates spillover self-regulation — one committed boundary strengthens others (Lowe et al. Obesity Reviews 2020)." }
       },
     ]
@@ -1808,7 +1817,7 @@ const HABITS = {
           { label: '4–6 hrs', weight: 2, sessions: 2 },
           { label: '7–9 hrs', weight: 3, sessions: 3 },
         ]},
-        info: { body: "A full night of sleep. Log the closest tier to your actual duration — partial sleep still earns points.", examples: ["2–3 hrs = something is better than nothing", "4–6 hrs = partial recovery", "7–9 hrs = full restorative sleep"] },
+        info: { body: "A full night of sleep. Log the closest tier to your actual duration — partial sleep still earns points.", examples: ["2–3 hrs = something is better than nothing", "4–6 hrs = partial recovery", "7–9 hrs = full restorative sleep"], trigger: "Isyak prayer as the natural wind-down signal — screens off, lights dim, the ritual already primes the body.", tips: ["Room temperature: 18–22°C if aircon is available — core body temperature must drop to initiate sleep", "No screens 30 minutes before sleeping — blue light delays melatonin onset by 90 minutes", "Cover LED lights on routers, chargers, and TVs — even dim light disrupts melatonin", "Keep the same wake time even on weekends — the anchor is waking, not sleeping"] },
         tooltip: { icon: "😴", title: "Sleep is the master regulator", body: "During deep sleep, tryptophan converts to serotonin and melatonin. Nothing replaces this pathway fully." }
       },
       {
@@ -1820,14 +1829,14 @@ const HABITS = {
           { label: '3 sessions', weight: 2, sessions: 3 },
           { label: '5 sessions', weight: 2, sessions: 5 },
         ]},
-        info: { body: "Structured prayer or mindfulness practice. Both activate the HPA axis downregulation pathway that protects serotonin from cortisol depletion (Matousek et al. Psychoneuroendocrinology 2020).", examples: ["1 session = at least one prayer or 5-min meditation", "3 sessions = Fajr, Dhuhr, Asar or 3 mindfulness blocks", "5 sessions = all 5 solat on time, or 5 mindfulness sessions"] },
+        info: { body: "Structured prayer or mindfulness practice. Both activate the HPA axis downregulation pathway that protects serotonin from cortisol depletion (Matousek et al. Psychoneuroendocrinology 2020).", examples: ["1 session = at least one prayer or 5-min meditation", "3 sessions = Fajr, Dhuhr, Asar or 3 mindfulness blocks", "5 sessions = all 5 solat on time, or 5 mindfulness sessions"], trigger: "The azan is the trigger — it requires no additional cue. Treat it as a non-negotiable context switch.", tips: ["Pray on time rather than combining — the spacing creates 5 cortisol-reset windows throughout the day", "For non-Muslim users: anchor mindfulness to meals — pre-meal breathing is a natural pause point", "Even 5 minutes of slow intentional breathing counts — the mechanism is physiological, not theological"] },
         tooltip: { icon: "🕌", title: "Prayer and mindfulness protect Serotonin", body: "8-week mindfulness programmes produce significant increases in urinary 5-HIAA (primary serotonin metabolite). The mechanism is HPA axis downregulation reducing cortisol competition for brain tryptophan entry." }
       },
       {
         id: 'rm',
         label: 'Rhythmic Movement (20+ min)',
         weight: 2, foundational: true, type: 'foundational', flex: null,
-        info: { body: "Any sustained rhythmic physical movement for 20+ minutes — walking, swimming, cycling, gentle jogging, tai chi. The rhythm itself is the serotonin mechanism, not the intensity.", examples: ["A 20-minute walk at any pace", "Swimming laps for 20+ minutes", "Tai chi, qi gong, or gentle cycling"] },
+        info: { body: "Any sustained rhythmic physical movement for 20+ minutes — walking, swimming, cycling, gentle jogging, tai chi. The rhythm itself is the serotonin mechanism, not the intensity.", examples: ["A 20-minute walk at any pace", "Swimming laps for 20+ minutes", "Tai chi, qi gong, or gentle cycling"], trigger: "After Asar is optimal — cooler air, the day is winding down, and it creates a natural transition before dinner.", tips: ["Rhythm is the key variable — consistent cadence, not speed", "Walking while listening to a podcast is fine; walking while replying to WhatsApp is not", "If motivation is low, commit to only 5 minutes — the rhythmic movement itself will often extend it naturally"] },
         tooltip: { icon: "🚶", title: "Rhythmic movement activates Serotonin", body: "Rhythmic motor activity directly increases raphe nuclei firing rate — the brain's primary serotonin production site (Jacobs & Fornal 1999, confirmed via PET by Aan het Rot et al. 2016). This is independent of the endorphin and BDNF pathways from exercise." }
       },
       /* ── SECONDARY & BONUS ─────────────────────────────────────── */
@@ -1840,14 +1849,14 @@ const HABITS = {
           { label: '3–4 servings',  weight: 2, sessions: 2 },
           { label: '5+ servings',   weight: 2, sessions: 3 },
         ]},
-        info: { body: "Track whole-food plant servings. A serving is roughly one cupped hand of vegetables or fruit. Juice does not count.", examples: ["1–2 servings = a start", "3–4 servings = good gut input", "5+ servings = full 5-a-day achieved"] },
+        info: { body: "Track whole-food plant servings. A serving is roughly one cupped hand of vegetables or fruit. Juice does not count.", examples: ["1–2 servings = a start", "3–4 servings = good gut input", "5+ servings = full 5-a-day achieved"], trigger: "Nasi campur and mixed rice counters are built for this — choose at least 2 vegetable dishes alongside your protein.", tips: ["Ulam (raw vegetables) at a Malaysian table counts — one of the most efficient ways to hit this habit daily", "Juice does not count — the fibre is the mechanism, not the sugar", "Frozen vegetables are nutritionally equivalent to fresh — easier to keep at home"] },
         tooltip: { icon: "🥦", title: "Gut feeds Serotonin", body: "95% of serotonin is produced in the gut. Plant diversity directly fuels it." }
       },
       {
         id: 'nw',
         label: 'Nature Walk (20+ min)',
         weight: 2, foundational: false, type: 'secondary', flex: null,
-        info: { body: "An outdoor walk in a natural or semi-natural environment — not treadmill, not indoors.", examples: ["A park walk or trail during lunch break", "Morning walk in a green neighbourhood", "Beach or riverside walk"] },
+        info: { body: "An outdoor walk in a natural or semi-natural environment — not treadmill, not indoors.", examples: ["A park walk or trail during lunch break", "Morning walk in a green neighbourhood", "Beach or riverside walk"], trigger: "Most Malaysian towns have a taman or park connector within walking distance — identify yours once and use it as the default.", tips: ["Leave the phone in your pocket or at home — the nature effect requires reduced digital stimulation", "Evening walks after Asar avoid the midday heat and align with a natural serotonin window", "Even a tree-lined street qualifies — full wilderness is not required"] },
         tooltip: { icon: "🌿", title: "Nature amplifies Serotonin", body: "Outdoor walking combines sunlight, rhythmic movement, and nature exposure — three independent serotonin activators." }
       },
       {
@@ -1859,14 +1868,14 @@ const HABITS = {
           { label: '2 servings',  weight: 2, sessions: 2 },
           { label: '3+ servings', weight: 2, sessions: 3 },
         ]},
-        info: { body: "A palm-sized protein portion at each main meal. Tryptophan — the precursor to serotonin — is found only in protein.", examples: ["1 palm = one chicken breast at lunch", "2 palms = eggs at breakfast + fish at dinner", "3+ palms = protein at every main meal"] },
+        info: { body: "A palm-sized protein portion at each main meal. Tryptophan — the precursor to serotonin — is found only in protein.", examples: ["1 palm = one chicken breast at lunch", "2 palms = eggs at breakfast + fish at dinner", "3+ palms = protein at every main meal"], trigger: "Order protein first when choosing a meal — the default at nasi campur is to pick rice first, then lauk. Reverse it.", tips: ["Ikan, ayam, telur, and tauhu are all valid sources — widely available at any warung", "Tryptophan competes with other amino acids for brain entry — pairing protein with a moderate carb improves the ratio", "Vegetarians: tempe and tauhu are high-tryptophan sources; seeds and nuts are secondary"] },
         tooltip: { icon: "🥩", title: "Protein provides Tryptophan", body: "Without adequate dietary protein, your brain lacks the raw material to produce serotonin." }
       },
       {
         id: 'gr',
         label: 'Gratitude / Muhasabah',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "A brief intentional practice of listing specific things you are genuinely grateful for.", examples: ["Writing 3 specific things you are thankful for today", "Reflecting during prayer or quiet time on blessings", "Telling someone what you appreciate about them"] },
+        info: { body: "A brief intentional practice of listing specific things you are genuinely grateful for.", examples: ["Writing 3 specific things you are thankful for today", "Reflecting during prayer or quiet time on blessings", "Telling someone what you appreciate about them"], trigger: "Last thing before sleep, or during the quiet after Isyak — gratitude and muhasabah share the same reflective posture.", tips: ["Specificity is the active ingredient — \"I am grateful for my family\" has weaker effect than \"I am grateful that my mother called today\"", "Write it down — the act of writing creates stronger encoding than thinking it", "Aim for variety — repeating the same three things becomes automatic and loses neurological effect"] },
         tooltip: { icon: "🤲", title: "Gratitude elevates Serotonin", body: "Consciously recalling positive experiences increases serotonin production." }
       },
       {
@@ -1878,28 +1887,28 @@ const HABITS = {
           { label: '3 sessions', weight: 2, sessions: 3 },
           { label: '5 sessions', weight: 2, sessions: 5 },
         ]},
-        info: { body: "Intentional breathwork or dhikr practice. If you selected Prayer as foundational, this is the top-up habit for additional sessions.", examples: ["Box breathing or 4-7-8 technique", "Tasbih, subhanallah, alhamdulillah sequences", "Guided breathwork session"] },
+        info: { body: "Intentional breathwork or dhikr practice. If you selected Prayer as foundational, this is the top-up habit for additional sessions.", examples: ["Box breathing or 4-7-8 technique", "Tasbih, subhanallah, alhamdulillah sequences", "Guided breathwork session"], trigger: "Pair with moments of rising stress — before a difficult meeting, after a frustrating commute, or when the WhatsApp group becomes too much.", tips: ["Dhikr and breathwork share the same physiological mechanism — slow exhalation activates the vagus nerve", "For box breathing: 4 counts in, hold 4, out 4, hold 4. One round takes 16 seconds", "Tasbih beads are a built-in count mechanism — use them if you have them"] },
         tooltip: { icon: "🧘", title: "Breathwork calms the nervous system", body: "Activates the parasympathetic nervous system and reduces cortisol." }
       },
       {
         id: 'nap',
         label: 'Power Nap / Qailullah (10–25 min)',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "A short midday rest. This supplements night sleep — it does not replace the Sleep foundational.", examples: ["A 15-min rest after Dhuhr prayer (Qailullah — Sunnah)", "Eyes closed for 20 min during lunch break"] },
+        info: { body: "A short midday rest. This supplements night sleep — it does not replace the Sleep foundational.", examples: ["A 15-min rest after Dhuhr prayer (Qailullah — Sunnah)", "Eyes closed for 20 min during lunch break"], trigger: "Immediately after Dhuhr prayer — Qailullah is already a Sunnah practice with a built-in cultural anchor.", tips: ["Set an alarm for 20 minutes — longer naps cause sleep inertia by entering deep sleep", "Lie down in a dark or eye-covered space — light suppresses the melatonin micro-release that drives the rest benefit", "Coffee nap: drink a kopi-o before lying down — caffeine takes 20 min to absorb, so you wake up at peak caffeine and post-nap alertness"] },
         tooltip: { icon: "💤", title: "Qailullah resets alertness", body: "A 10-20 min nap aligns with the natural circadian dip at 1-3pm." }
       },
       {
         id: 'rh',
         label: 'Restorative Hobby (20+ min)',
         weight: 1, foundational: false, type: 'secondary', flex: null,
-        info: { body: "A non-digital hobby that genuinely restores you — reading, gardening, craft, drawing, or cooking for joy. Gaming does not qualify.", examples: ["Reading a physical book for 20+ min", "Gardening or tending plants", "Cooking a meal mindfully"] },
+        info: { body: "A non-digital hobby that genuinely restores you — reading, gardening, craft, drawing, or cooking for joy. Gaming does not qualify.", examples: ["Reading a physical book for 20+ min", "Gardening or tending plants", "Cooking a meal mindfully"], trigger: "Replace the post-dinner scroll habit — the body is already settled, the environment is already home.", tips: ["The hobby must be non-digital — the restoration mechanism requires the brain to generate its own stimulation", "Gaming is excluded because it shares the dopamine-scroll loop of social media", "Cooking counts if it is mindful — cooking while on the phone does not"] },
         tooltip: { icon: "📖", title: "Restorative hobbies boost Serotonin", body: "Reading reduces cortisol by up to 68% in 6 minutes (Sussex 2009)." }
       },
       {
         id: 'ns',
         label: 'No Added Sugar Today',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "No added sugar in food or drinks. Natural sugars in whole fruit are fine.", examples: ["No sugary drinks, juice, or energy drinks", "No biscuits, cakes, or confectionery"] },
+        info: { body: "No added sugar in food or drinks. Natural sugars in whole fruit are fine.", examples: ["No sugary drinks, juice, or energy drinks", "No biscuits, cakes, or confectionery"], trigger: "The hardest Malaysian moment is teh tarik and kuih — replace with teh-o kosong or kopi-o kosong as the default order.", tips: ["Malaysian sugar exposure is uniquely high — teh tarik, Milo, condensed milk, and kuih are all silent sources", "Ask for kurang manis or kosong consistently — most kedai will accommodate", "Whole fruit is fine — the fibre slows sugar absorption and the fructose quantity is naturally self-limiting"] },
         tooltip: { icon: "🍬", title: "Stable blood sugar stabilises Serotonin", body: "Added sugar spikes then crashes dopamine, directly destabilising your serotonin baseline." }
       },
     ]
@@ -1915,21 +1924,21 @@ const HABITS = {
         id: 'as',
         label: 'Active Socialising (20+ min)',
         weight: 3, foundational: true, type: 'foundational', flex: null,
-        info: { body: "A real focused in-person or voice conversation lasting at least 20 minutes — phone in pocket, full presence.", examples: ["Lunch with a friend without phones", "A genuine catch-up call (voice, not texting)", "Family dinner with real conversation"] },
+        info: { body: "A real focused in-person or voice conversation lasting at least 20 minutes — phone in pocket, full presence.", examples: ["Lunch with a friend without phones", "A genuine catch-up call (voice, not texting)", "Family dinner with real conversation"], trigger: "Lunch after Jumaat prayer is a built-in weekly oxytocin anchor for Muslim Malaysians — maximise it rather than rushing back.", tips: ["Phone face-down on the table at the start — the visual signal commits both people", "Voice calls count fully; video calls count; text chains do not", "Ask one genuine question and listen — the quality of presence matters more than the duration"] },
         tooltip: { icon: "🤝", title: "Face-to-face is the gold standard", body: "In-person social interaction is the highest-evidence oxytocin trigger. Eye contact and vocal tone activate pathways digital communication cannot replicate." }
       },
       {
         id: 'pt',
         label: 'Physical Touch / Oxytocin Anchor',
         weight: 2, foundational: true, type: 'foundational', flex: null,
-        info: { body: "Sustained physical touch — a hug with a family member or partner, petting an animal, or a hand on the shoulder during a difficult conversation. Best for introverts, those with social anxiety, isolated individuals, and parents.", examples: ["A long hug with a family member or partner", "Petting or stroking an animal for a few minutes", "A genuine hand on the shoulder during a tough moment"] },
+        info: { body: "Sustained physical touch — a hug with a family member or partner, petting an animal, or a hand on the shoulder during a difficult conversation. Best for introverts, those with social anxiety, isolated individuals, and parents.", examples: ["A long hug with a family member or partner", "Petting or stroking an animal for a few minutes", "A genuine hand on the shoulder during a tough moment"], trigger: "Morning greeting and returning home are two natural touch moments in Malaysian family culture — do not rush past them.", tips: ["Duration matters — a 6-second hug produces measurably higher oxytocin than brief contact", "Petting a cat or dog for a few minutes produces equivalent oxytocin to human touch", "For those who live alone: self-massage or placing a warm hand on the chest activates the same receptor pathway, weakly"] },
         tooltip: { icon: "🫂", title: "Physical touch triggers Oxytocin", body: "Sustained physical contact produces oxytocin release comparable to verbal social interaction (Inagaki et al. PNAS 2020). The most accessible foundational for isolated or introverted users." }
       },
       {
         id: 'sa',
         label: 'Sincere Appreciation (Expressed)',
         weight: 2, foundational: true, type: 'foundational', flex: null,
-        info: { body: "Telling someone clearly and specifically what you appreciate about them. The expression to another person is the mechanism — private gratitude journaling does not count here.", examples: ["Thanking a colleague for their specific help today", "Texting a friend to say what they mean to you", "Expressing gratitude to a family member directly"] },
+        info: { body: "Telling someone clearly and specifically what you appreciate about them. The expression to another person is the mechanism — private gratitude journaling does not count here.", examples: ["Thanking a colleague for their specific help today", "Texting a friend to say what they mean to you", "Expressing gratitude to a family member directly"], trigger: "End-of-workday transition — before closing the laptop, send one specific appreciation message.", tips: ["Specificity is the mechanism — \"thank you for covering me in the meeting today\" beats \"you are always so helpful\"", "Voice or face-to-face is stronger than text, but text counts", "Malaysians often express care through acts (belanja makan) — verbal expression is a separate and complementary pathway"] },
         tooltip: { icon: "💛", title: "Appreciation bonds the brain", body: "Expressed appreciation activates oxytocin in both giver and receiver (Algoe et al. Psychological Science 2020, Williams & Bartlett Emotion 2015). Best for remote workers with limited in-person contact." }
       },
       /* ── SECONDARY & BONUS ─────────────────────────────────────── */
@@ -1937,35 +1946,35 @@ const HABITS = {
         id: 'sm',
         label: 'Shared Meal (Eat Together)',
         weight: 2, foundational: false, type: 'secondary', flex: null,
-        info: { body: "Eating a meal with at least one other person, with genuine presence — not side-by-side screens.", examples: ["Lunch with a colleague without phones", "Family dinner with conversation", "Breakfast with a housemate or partner"] },
+        info: { body: "Eating a meal with at least one other person, with genuine presence — not side-by-side screens.", examples: ["Lunch with a colleague without phones", "Family dinner with conversation", "Breakfast with a housemate or partner"], trigger: "Malaysian makan culture makes this the easiest oxytocin habit — the social meal is already the default. The key is protecting it from phones.", tips: ["One person putting their phone away often creates social permission for others to do the same", "A makan session at a kedai or mamak counts if there is real conversation", "Eating in front of a screen is not a shared meal — co-presence requires mutual attention"] },
         tooltip: { icon: "🍽️", title: "Shared meals bond the brain", body: "Communal eating predicts social network strength more than almost any other daily behaviour (Dunbar et al. 2017)." }
       },
       {
         id: 'rc',
         label: 'Receive Care / Be Vulnerable',
         weight: 1, foundational: false, type: 'secondary', flex: null,
-        info: { body: "Asking for help, accepting support, or sharing something real with someone you trust.", examples: ["Asking a friend for help with something", "Sharing how you are feeling with someone you trust", "Accepting an offer of help without deflecting"] },
+        info: { body: "Asking for help, accepting support, or sharing something real with someone you trust.", examples: ["Asking a friend for help with something", "Sharing how you are feeling with someone you trust", "Accepting an offer of help without deflecting"], trigger: "When someone offers help and you notice the urge to deflect — pause and accept instead. The deflection reflex is the cue.", tips: ["Malaysian social culture often rewards self-sufficiency — receiving care can feel uncomfortable, which is precisely why it has neurological value", "Sharing something real does not require emotional oversharing — even acknowledging a difficult week is enough", "Vulnerability in small amounts builds the tolerance for it"] },
         tooltip: { icon: "🙏", title: "Receiving care activates Oxytocin", body: "Receiving social support triggers oxytocin as strongly as giving it (Inagaki et al. 2020)." }
       },
       {
         id: 'gs',
         label: 'Group Singing / Shared Music',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Singing together with others, or playing music in a shared social context — not alone with headphones.", examples: ["Singing nasheeds or hymns in a group", "Playing music with others", "Attending a live musical event"] },
+        info: { body: "Singing together with others, or playing music in a shared social context — not alone with headphones.", examples: ["Singing nasheeds or hymns in a group", "Playing music with others", "Attending a live musical event"], trigger: "Backseat karaoke on long drives — a uniquely Malaysian tradition that is genuinely neurologically valid.", tips: ["The synchrony is the mechanism — everyone making sound together, not just one person performing", "Karaoke is valid if genuinely social and not competitive", "Listening together at a concert counts — shared attention and emotional synchrony activate the pathway"] },
         tooltip: { icon: "🎵", title: "Group singing releases Oxytocin", body: "Group singing triggers oxytocin and endorphin simultaneously through interpersonal synchrony (Weinstein et al. 2016)." }
       },
       {
         id: 'ch',
         label: 'Community Help / Act of Kindness',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Doing something for someone without expecting anything in return — voluntary and without obligation.", examples: ["Helping a neighbour carry something", "Paying for someone's coffee anonymously", "Volunteering time at a community event"] },
+        info: { body: "Doing something for someone without expecting anything in return — voluntary and without obligation.", examples: ["Helping a neighbour carry something", "Paying for someone's coffee anonymously", "Volunteering time at a community event"], trigger: "Gotong-royong culture is a built-in community trigger — when your neighbourhood has one, this habit logs itself.", tips: ["Voluntary is the key word — acts done from obligation do not produce the same oxytocin response", "Small acts count: holding a door, letting someone merge in traffic, paying it forward", "The anonymity of the act does not matter — the intention and voluntariness do"] },
         tooltip: { icon: "🌱", title: "Giving triggers Oxytocin", body: "Acts of genuine kindness trigger oxytocin release and lower cortisol." }
       },
       {
         id: 'sl2',
         label: 'Social Laughter / Humor',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "Genuine sustained laughter shared with another person — not scrolling memes alone.", examples: ["A genuinely funny conversation with a friend", "Watching a comedy together and laughing", "Playing a silly game with someone"] },
+        info: { body: "Genuine sustained laughter shared with another person — not scrolling memes alone.", examples: ["A genuinely funny conversation with a friend", "Watching a comedy together and laughing", "Playing a silly game with someone"], trigger: "The mamak session that runs long is often where this happens naturally — let it.", tips: ["Scrolling memes alone does not count — the social synchrony is the mechanism", "Even a voice call where both people genuinely laugh together is fully valid", "Do not force it — manufactured laughter does not produce the same neurochemical response"] },
         tooltip: { icon: "😂", title: "Laughter bonds the brain", body: "Laughter triggers oxytocin and endorphin — it is a bonding behaviour first." }
       },
     ]
@@ -1986,7 +1995,7 @@ const HABITS = {
           { label: 'Moderate — 30 min',    weight: 2, sessions: 2 },
           { label: 'Vigorous — 45+ min',   weight: 3, sessions: 3 },
         ]},
-        info: { body: "A dedicated exercise session — intentional, with elevated heart rate. Can be logged alongside Active Day: they are independent neurochemical events (Stamatakis et al. BJSM 2024).", examples: ["Light = 15–20 min walk, yoga, or easy swim", "Moderate = 30 min jog, cycling, or brisk swim", "Vigorous = 45+ min HIIT, weights, or intense sport"] },
+        info: { body: "A dedicated exercise session — intentional, with elevated heart rate. Can be logged alongside Active Day: they are independent neurochemical events (Stamatakis et al. BJSM 2024).", examples: ["Light = 15–20 min walk, yoga, or easy swim", "Moderate = 30 min jog, cycling, or brisk swim", "Vigorous = 45+ min HIIT, weights, or intense sport"], trigger: "After Asar is ideal for most Malaysians — the heat has dropped, prayer creates a natural transition, and it is before dinner.", tips: ["Start with shoes on — putting on exercise clothes is the most important step, not the workout itself", "Any elevation of heart rate counts for the light tier — do not wait for the perfect session", "Pair with a playlist you only hear during exercise — the music becomes a Pavlovian trigger over time"] },
         tooltip: { icon: "🏃", title: "Exercise is the endorphin king", body: "Sustained exercise triggers endorphin release, produces BDNF, reduces cortisol, and improves both depression and anxiety (Singh et al. BJSM 2023)." }
       },
       {
@@ -1998,7 +2007,7 @@ const HABITS = {
           { label: '5,000–7,500 steps',  weight: 2, sessions: 2 },
           { label: '7,500–10,000 steps', weight: 3, sessions: 3 },
         ]},
-        info: { body: "Incidental steps from daily life — stairs, walking errands, standing. Independent from and additive to exercise: structured exercise and incidental movement have separate neurochemical effects (Stamatakis et al. BJSM 2024, Paluch et al. JAMA 2022).", examples: ["3k–5k steps = took stairs, parked further away", "5k–7.5k steps = walked to meetings, active errands", "7.5k–10k+ steps = consistently active all day"] },
+        info: { body: "Incidental steps from daily life — stairs, walking errands, standing. Independent from and additive to exercise: structured exercise and incidental movement have separate neurochemical effects (Stamatakis et al. BJSM 2024, Paluch et al. JAMA 2022).", examples: ["3k–5k steps = took stairs, parked further away", "5k–7.5k steps = walked to meetings, active errands", "7.5k–10k+ steps = consistently active all day"], trigger: "Park deliberately further away — one decision at the start of the day accumulates across every trip.", tips: ["Stairs instead of lifts is the single highest-return step hack — every building has them", "Walking meetings are real — suggest them for 1-on-1s", "A phone health app already tracks this passively — no wearable needed"] },
         tooltip: { icon: "🚶", title: "Movement is medicine, any amount", body: "Step count has a clear dose-response mortality and mental health benefit — independent of any exercise session (Paluch et al. JAMA 2022)." }
       },
       /* ── SECONDARY & BONUS ─────────────────────────────────────── */
@@ -2006,21 +2015,21 @@ const HABITS = {
         id: 'cs',
         label: 'Cold Shower / Contrast Therapy',
         weight: 2, foundational: false, type: 'secondary', flex: null,
-        info: { body: "Deliberate cold water exposure — at minimum a cold shower, ideally ending on cold.", examples: ["2-minute cold shower at the end of your normal shower", "Alternating hot and cold in 1-min intervals (3 rounds)"] },
+        info: { body: "Deliberate cold water exposure — at minimum a cold shower, ideally ending on cold.", examples: ["2-minute cold shower at the end of your normal shower", "Alternating hot and cold in 1-min intervals (3 rounds)"], trigger: "End of your existing shower — the trigger is already built in. The final 2 minutes is the only change.", tips: ["Start warm, end cold — the cold must be the last thing", "Breathe slowly and deliberately during cold exposure — the respiratory reflex diminishes with practice", "Malaysian tap water is warm by global standards — use the aircon to pre-cool the room or add ice to a bucket if needed", "Do not do this if you have cardiovascular conditions — cold causes a vasopressor response"] },
         tooltip: { icon: "🚿", title: "Cold triggers a noradrenaline surge", body: "Cold water immersion triggers noradrenaline and secondary endorphin release." }
       },
       {
         id: 'cp',
         label: 'Creative Play / Dancing',
         weight: 2, foundational: false, type: 'secondary', flex: null,
-        info: { body: "Physical creative expression — dancing, movement arts, or active play — that combines joy with motion.", examples: ["Dancing to music for 10+ minutes", "Improv or drama class", "Playing a physically active game with children"] },
+        info: { body: "Physical creative expression — dancing, movement arts, or active play — that combines joy with motion.", examples: ["Dancing to music for 10+ minutes", "Improv or drama class", "Playing a physically active game with children"], trigger: "Music on during cooking or chores — movement happens naturally when the environment invites it.", tips: ["This habit is uniquely hard to fake — you know whether you were genuinely playing or performing", "10 minutes of full-body dancing to music you love counts fully", "Playing physical games with children is a high-quality trigger — it generates laughter, touch, and movement simultaneously"] },
         tooltip: { icon: "💃", title: "Dance triggers multiple pathways", body: "Dancing combines rhythmic movement, social bonding, and creativity — each independently triggering endorphin release." }
       },
       {
         id: 'ym',
         label: 'Yoga / Mobility / Stretching (10+ min)',
         weight: 1, foundational: false, type: 'bonus', flex: null,
-        info: { body: "A dedicated yoga, tai chi, mobility, or stretching session — not just a quick stretch after sitting.", examples: ["10-min morning yoga or sun salutation", "A tai chi or qi gong session", "Post-workout static stretching"] },
+        info: { body: "A dedicated yoga, tai chi, mobility, or stretching session — not just a quick stretch after sitting.", examples: ["10-min morning yoga or sun salutation", "A tai chi or qi gong session", "Post-workout static stretching"], trigger: "After waking, before leaving the bedroom — a yoga mat already on the floor is a stronger trigger than one in the cupboard.", tips: ["10 minutes is the threshold — a quick stretch after sitting does not count", "Morning mobility reduces cortisol and improves joint readiness — it is not just flexibility work", "Pair with breathwork during holds — the combined vagal activation is additive"] },
         tooltip: { icon: "🧘", title: "Yoga and mobility calm the system", body: "Yoga and tai chi reduce cortisol, improve vagal tone, and trigger mild endorphin release." }
       },
     ]
@@ -2036,7 +2045,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 32;
+const APP_BUILD   = 33;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2405,7 +2414,7 @@ function renderSection(type) {
             '<span class="habit-type-tag">' + typeMap[h.type] + '</span>' +
             '<span class="habit-unsel-badge">Not in your set</span>' +
           '</div>' +
-          '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">What counts</button>' +
+          '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">How it works</button>' +
         '</div>' +
         '<div class="habit-right" style="gap:5px;">' +
           (canAdd ? '<button class="habit-add-btn" data-type="' + type + '" data-id="' + h.id + '">+ Add</button>' : '') +
@@ -2472,7 +2481,7 @@ function renderSection(type) {
 
           (isFlex ? '<span class="flex-tag show">' + (isMulti ? 'SESSIONS' : 'FLEX') + '</span>' : '') +
         '</div>' +
-        '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">What counts</button>' +
+        '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">How it works</button>' +
       '</div>' +
       '<div class="habit-right">' +
         '<div style="display:flex;align-items:center;gap:5px;">' +
@@ -2565,6 +2574,20 @@ function showHabitInfo(h) {
     ex.style.display = 'block';
   } else {
     ex.style.display = 'none';
+  }
+  const tr = document.getElementById('infoTrigger');
+  if (h.info?.trigger) {
+    tr.innerHTML = `<p>When to do it</p><span>${h.info.trigger}</span>`;
+    tr.style.display = 'block';
+  } else {
+    tr.style.display = 'none';
+  }
+  const tp = document.getElementById('infoTips');
+  if (h.info?.tips?.length) {
+    tp.innerHTML = `<p>Make it stick</p><ul>${h.info.tips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+    tp.style.display = 'block';
+  } else {
+    tp.style.display = 'none';
   }
   openModal('infoOverlay');
 }
