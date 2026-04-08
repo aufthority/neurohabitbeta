@@ -971,6 +971,24 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .trend-day-label.today { fill: var(--text); font-weight: 600; }
 .trend-active-dot { transition: r 0.2s; }
 
+/* ═══ HISTORY GRID ═══════════════════════════════════════════ */
+.history-grid-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 14px; margin-bottom: 14px; }
+.history-grid-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.history-grid-title { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.history-grid-legend { display: flex; align-items: center; gap: 8px; }
+.history-legend-item { display: flex; align-items: center; gap: 3px; }
+.history-legend-dot { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+.history-legend-label { font-size: 9px; color: var(--muted); }
+.history-month-labels { display: flex; margin-bottom: 4px; padding-left: 20px; min-height: 11px; }
+.history-month-label { font-size: 9px; color: var(--muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; }
+.history-grid-body { display: flex; gap: 3px; align-items: flex-start; }
+.history-dow-labels { display: flex; flex-direction: column; gap: 2px; padding-top: 1px; flex-shrink: 0; }
+.history-dow-label { font-size: 8px; color: var(--muted); height: 9px; line-height: 9px; width: 14px; text-align: right; }
+.history-grid-cells { display: flex; gap: 2px; flex: 1; min-width: 0; overflow: hidden; }
+.history-week-col { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+.history-cell { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; cursor: default; }
+.history-cell.cell-today { outline: 1.5px solid var(--text); outline-offset: 1px; }
+
 /* ═══ THEME TOGGLE ══════════════════════════════════════════ */
 .theme-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
 .theme-toggle-left { display: flex; align-items: center; gap: 12px; }
@@ -1184,6 +1202,32 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="week-trend-inline">
           <div class="week-trend-label">This week</div>
           <div id="weeklyTrendChart"></div>
+        </div>
+
+        <!-- All-time history grid -->
+        <div class="history-grid-wrap" id="historyGridWrap">
+          <div class="history-grid-header">
+            <span class="history-grid-title">Your journey</span>
+            <div class="history-grid-legend">
+              <div class="history-legend-item"><div class="history-legend-dot" style="background:var(--dopamine)"></div><span class="history-legend-label">D</span></div>
+              <div class="history-legend-item"><div class="history-legend-dot" style="background:var(--serotonin)"></div><span class="history-legend-label">S</span></div>
+              <div class="history-legend-item"><div class="history-legend-dot" style="background:var(--oxytocin)"></div><span class="history-legend-label">O</span></div>
+              <div class="history-legend-item"><div class="history-legend-dot" style="background:var(--endorphin)"></div><span class="history-legend-label">E</span></div>
+            </div>
+          </div>
+          <div id="historyMonthLabels" class="history-month-labels"></div>
+          <div class="history-grid-body">
+            <div class="history-dow-labels">
+              <div class="history-dow-label"></div>
+              <div class="history-dow-label">T</div>
+              <div class="history-dow-label"></div>
+              <div class="history-dow-label">T</div>
+              <div class="history-dow-label"></div>
+              <div class="history-dow-label">S</div>
+              <div class="history-dow-label"></div>
+            </div>
+            <div id="historyGridCells" class="history-grid-cells"></div>
+          </div>
         </div>
 
 
@@ -3207,6 +3251,7 @@ function renderCoach() {
 
   // Always render the weekly trend chart (inline, not premium-gated)
   renderWeeklyTrend();
+  renderHistoryGrid();
   // Premium panels (if open)
   const premBody = document.getElementById('premiumCollapseBody');
   if (premBody && premBody.style.display !== 'none') {
@@ -3329,6 +3374,127 @@ function renderWeeklyTrend() {
         dots + labelsHTML + phaseLabels +
       '</svg>' +
     '</div>';
+}
+
+/* ── HG-01: All-time history grid ──────────────────────────────────────────────────────────────────────
+   Renders a GitHub-style contribution grid. Each cell = one day.
+   Colour = dominant neurochemical category for that day (from appState).
+   Intensity = how complete that day's habits were (0–100%).
+   Zero-habit days = muted surface fill. Future days = transparent.
+   ─────────────────────────────────────────────────────────────────────── */
+function renderHistoryGrid() {
+  var cellsEl  = document.getElementById('historyGridCells');
+  var monthsEl = document.getElementById('historyMonthLabels');
+  if (!cellsEl || !monthsEl) return;
+
+  var CAT_COLORS = {
+    dopamine:  'var(--dopamine)',
+    serotonin: 'var(--serotonin)',
+    oxytocin:  'var(--oxytocin)',
+    endorphin: 'var(--endorphin)',
+  };
+  var CATS = Object.keys(CAT_COLORS);
+
+  /* Earliest date in appState */
+  var allKeys = Object.keys(appState).filter(function(k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); });
+  var earliest = allKeys.length > 0 ? allKeys.reduce(function(a, b) { return a < b ? a : b; }) : today;
+
+  /* Snap to Monday of the week containing a given date */
+  function mondayOf(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    var dow = d.getDay();
+    var off = dow === 0 ? -6 : 1 - dow;
+    d.setDate(d.getDate() + off);
+    return localDateStr(d);
+  }
+
+  /* Build list of week-start Mondays covering earliest→today */
+  var startMonday = mondayOf(earliest);
+  var endMonday   = mondayOf(today);
+  var weeks = [];
+  var cur = new Date(startMonday + 'T00:00:00');
+  var endD = new Date(endMonday + 'T00:00:00');
+  while (cur <= endD) {
+    weeks.push(localDateStr(cur));
+    cur.setDate(cur.getDate() + 7);
+  }
+
+  /* Determine dominant category and intensity for a given day */
+  function dayInfo(dateStr) {
+    if (dateStr > today) return { color: 'transparent', opacity: 0, isToday: false };
+    var state = appState[dateStr];
+    var catScores = { dopamine: 0, serotonin: 0, oxytocin: 0, endorphin: 0 };
+    var totalLogged = 0;
+
+    if (state) {
+      CATS.forEach(function(cat) {
+        var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+        habits.forEach(function(h, idx) {
+          if (state[cat + '_' + idx] === true) {
+            catScores[cat] += (h.weight || 1);
+            totalLogged++;
+          }
+        });
+      });
+    }
+
+    /* Zero day — neutral muted fill */
+    if (totalLogged === 0) {
+      return { color: 'var(--surface3)', opacity: 1, isToday: dateStr === today };
+    }
+
+    /* Dominant = category with highest weighted score */
+    var dominant = CATS.reduce(function(a, b) { return catScores[a] >= catScores[b] ? a : b; });
+
+    /* Intensity: map score 0–100 → opacity 0.3–1.0 */
+    var score = dateStr === today ? Math.round(heroScore()) : (weekData[dateStr] || 0);
+    var opacity = 0.3 + 0.7 * Math.min(score / 100, 1);
+
+    return { color: CAT_COLORS[dominant], opacity: opacity, isToday: dateStr === today };
+  }
+
+  /* Month label: stamp once per calendar month at its first week column */
+  var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var seenMonths = {};
+  var monthPositions = {};
+  weeks.forEach(function(wStart, wi) {
+    for (var d = 0; d < 7; d++) {
+      var dd = new Date(wStart + 'T00:00:00');
+      dd.setDate(dd.getDate() + d);
+      var key = localDateStr(dd);
+      if (key > today) break;
+      var moKey = dd.getFullYear() + '-' + dd.getMonth();
+      if (!seenMonths[moKey]) {
+        seenMonths[moKey] = true;
+        monthPositions[wi] = MONTH_NAMES[dd.getMonth()];
+        break;
+      }
+    }
+  });
+
+  monthsEl.innerHTML = weeks.map(function(_, wi) {
+    return '<div class="history-month-label">' + (monthPositions[wi] || '') + '</div>';
+  }).join('');
+
+  /* Render week columns left→right, days top→bottom (Mon–Sun) */
+  cellsEl.innerHTML = weeks.map(function(wStart) {
+    var days = Array.from({ length: 7 }, function(_, d) {
+      var dd = new Date(wStart + 'T00:00:00');
+      dd.setDate(dd.getDate() + d);
+      return localDateStr(dd);
+    });
+    return '<div class="history-week-col">' +
+      days.map(function(dateStr) {
+        if (dateStr > today) {
+          return '<div class="history-cell" style="background:transparent"></div>';
+        }
+        var info = dayInfo(dateStr);
+        return '<div class="history-cell' + (info.isToday ? ' cell-today' : '') + '" ' +
+          'style="background:' + info.color + ';opacity:' + info.opacity.toFixed(2) + '" ' +
+          'title="' + dateStr + '"></div>';
+      }).join('') +
+    '</div>';
+  }).join('');
 }
 
 /* 2. Per-category streaks — computed from weekData history */
