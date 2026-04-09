@@ -30,7 +30,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
 <!-- ============================================================
      NEUROHABIT PWA — by The Aufthority  v3
@@ -973,7 +972,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .trend-active-dot { transition: r 0.2s; }
 
 /* ═══ HISTORY SCREEN ════════════════════════════════════════ */
-.history-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 48px) 18px 12px; display: flex; align-items: center; gap: 10px; }
+.history-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 12px) 18px 12px; display: flex; align-items: center; gap: 10px; }
 .history-screen-content { overflow-y: auto; flex: 1; padding: 24px 20px 80px; }
 .history-screen-title { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 4px; }
 .history-screen-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
@@ -1751,7 +1750,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="pr-glance-label">Hardest day</div>
         <div class="pr-glance-num" id="prLowNum" style="color:var(--oxytocin)">--</div>
         <div class="pr-glance-ctx" id="prLowCtx"></div>
-        <div class="pr-droop" id="prDroopTag"></div>
       </div>
     </div>
 
@@ -2272,7 +2270,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 40;
+const APP_BUILD   = 41;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2499,7 +2497,6 @@ function localDateStr(d) {
 }
 
 const today = localDateStr();
-function getToday() { return localDateStr(); }
 if (!appState[today]) appState[today] = {};
 
 /* ═══════════════════════════════════════════════════════════
@@ -3880,7 +3877,7 @@ function prRenderInsights(dateKeys) {
 function prRenderKeystone(dateKeys) {
   var el = document.getElementById('prKeystoneBlock');
   if (!el) return;
-  if (dateKeys.length < 14) { el.innerHTML = ''; return; }
+  if (dateKeys.length < 7) { el.innerHTML = ''; return; }
   var best = null, bestGap = 0;
   PR_CATS.forEach(function(cat) {
     var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
@@ -3893,14 +3890,14 @@ function prRenderKeystone(dateKeys) {
         if (state && state[cat + '_' + idx] === true) withDays.push(score);
         else withoutDays.push(score);
       });
-      if (withDays.length < 3 || withoutDays.length < 3) return;
+      if (withDays.length < 2 || withoutDays.length < 2) return;
       var withAvg    = Math.round(withDays.reduce(function(a,b){return a+b;},0) / withDays.length);
       var withoutAvg = Math.round(withoutDays.reduce(function(a,b){return a+b;},0) / withoutDays.length);
       var gap = withAvg - withoutAvg;
       if (gap > bestGap) { bestGap = gap; best = { label: h.label, cat: cat, withAvg: withAvg, withoutAvg: withoutAvg }; }
     });
   });
-  if (!best || bestGap < 10) { el.innerHTML = ''; return; }
+  if (!best || bestGap < 5) { el.innerHTML = ''; return; }
   var hex = PR_CAT_HEX[best.cat];
   el.innerHTML = '<div class="pr-keystone">' +
     '<div class="pr-keystone-eye" style="color:' + hex + '">Possible keystone habit identified</div>' +
@@ -3932,12 +3929,11 @@ function prRenderGlance(dateKeys) {
   var bestCtx = document.getElementById('prBestCtx');
   var lowNum  = document.getElementById('prLowNum');
   var lowCtx  = document.getElementById('prLowCtx');
-  var droop   = document.getElementById('prDroopTag');
   if (!avgNum) return;
   if (scores.length === 0) {
     avgNum.textContent = '--'; bestNum.textContent = '--'; lowNum.textContent = '--';
     avgCtx.textContent = 'No data yet for this period.';
-    bestCtx.textContent = ''; lowCtx.textContent = ''; droop.textContent = '';
+    bestCtx.textContent = ''; lowCtx.textContent = '';
     return;
   }
   var avg  = Math.round(scores.reduce(function(a,b){return a+b;},0) / scores.length);
@@ -3954,7 +3950,6 @@ function prRenderGlance(dateKeys) {
   avgCtx.textContent  = avg >= 70 ? 'A strong period. Your brain was working for you most days.' : avg >= 50 ? 'A solid base. More good days than not.' : 'A quieter period. The data is still useful.';
   bestCtx.textContent = bestDay + '. Notice what you did that day \u2014 that\'s your formula.';
   lowCtx.textContent  = lowDay + '. One quiet day doesn\'t define the period.';
-  droop.textContent   = 'Your brain is designed to return to neutral after a peak. A dip isn\'t failure \u2014 it\'s biology.';
 }
 
 /* Render trend line chart */
