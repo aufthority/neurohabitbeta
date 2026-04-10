@@ -1129,7 +1129,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .pr-glance-label { font-size: 10px; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 .pr-glance-num { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; color: var(--text); line-height: 1; }
 .pr-glance-ctx { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
-.pr-droop { display: inline-block; margin-top: 7px; font-size: 10px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 3px 8px; line-height: 1.4; }
+
 /* Chart */
 .pr-chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 14px 10px; margin-bottom: 18px; }
 /* Neuro bars */
@@ -1751,7 +1751,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="pr-glance-label">Hardest day</div>
         <div class="pr-glance-num" id="prLowNum" style="color:var(--oxytocin)">--</div>
         <div class="pr-glance-ctx" id="prLowCtx"></div>
-        <div class="pr-droop" id="prDroopTag"></div>
       </div>
     </div>
 
@@ -2272,7 +2271,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 42;
+const APP_BUILD   = 43;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3938,12 +3937,11 @@ function prRenderGlance(dateKeys) {
   var bestCtx = document.getElementById('prBestCtx');
   var lowNum  = document.getElementById('prLowNum');
   var lowCtx  = document.getElementById('prLowCtx');
-  var droop   = document.getElementById('prDroopTag');
   if (!avgNum) return;
   if (scores.length === 0) {
     avgNum.textContent = '--'; bestNum.textContent = '--'; lowNum.textContent = '--';
     avgCtx.textContent = 'No data yet for this period.';
-    bestCtx.textContent = ''; lowCtx.textContent = ''; droop.textContent = '';
+    bestCtx.textContent = ''; lowCtx.textContent = '';
     return;
   }
   var avg  = Math.round(scores.reduce(function(a,b){return a+b;},0) / scores.length);
@@ -3960,7 +3958,6 @@ function prRenderGlance(dateKeys) {
   avgCtx.textContent  = avg >= 70 ? 'A strong period. Your brain was working for you most days.' : avg >= 50 ? 'A solid base. More good days than not.' : 'A quieter period. The data is still useful.';
   bestCtx.textContent = bestDay + '. Notice what you did that day \u2014 that\'s your formula.';
   lowCtx.textContent  = lowDay + '. One quiet day doesn\'t define the period.';
-  droop.textContent   = 'Your brain is designed to return to neutral after a peak. A dip isn\'t failure \u2014 it\'s biology.';
 }
 
 /* Render trend line chart */
@@ -3978,17 +3975,78 @@ function prRenderChart(dateKeys) {
     (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
   var gridC = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
   var textC = isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.38)';
+  var maxVal = Math.max.apply(null, data);
+  var minVal = Math.min.apply(null, data);
+  var maxIdx = data.indexOf(maxVal);
+  var minIdx = data.indexOf(minVal);
+  var yMin = Math.max(0,  Math.round(minVal - 15));
+  var yMax = Math.min(100, Math.round(maxVal + 15));
+  var ptBg = data.map(function(v, i) {
+    if (i === maxIdx) return '#4a9e82';
+    if (i === minIdx) return isDark ? '#555555' : '#cccccc';
+    return isDark ? '#1e1e1e' : '#ffffff';
+  });
+  var ptBorder = data.map(function(v, i) {
+    if (i === minIdx) return isDark ? '#888888' : '#aaaaaa';
+    return '#4a9e82';
+  });
+  var ptRadius = data.map(function(v, i) {
+    return (i === maxIdx || i === minIdx) ? 6 : 4;
+  });
   if (_prTrendChart) { _prTrendChart.destroy(); _prTrendChart = null; }
   _prTrendChart = new Chart(canvas, {
     type: 'line',
-    data: { labels: labels, datasets: [{ data: data, borderColor:'#4a9e82', backgroundColor:'rgba(74,158,130,0.07)', fill:true, tension:0.38, pointBackgroundColor:'#4a9e82', pointRadius:3, pointHoverRadius:5, borderWidth:2 }] },
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        borderColor: '#4a9e82',
+        backgroundColor: function(context) {
+          var ctx2 = context.chart.ctx;
+          var area = context.chart.chartArea;
+          if (!area) return 'rgba(74,158,130,0.08)';
+          var grad = ctx2.createLinearGradient(0, area.top, 0, area.bottom);
+          grad.addColorStop(0, 'rgba(74,158,130,0.18)');
+          grad.addColorStop(1, 'rgba(74,158,130,0.01)');
+          return grad;
+        },
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: ptBg,
+        pointBorderColor: ptBorder,
+        pointBorderWidth: 2,
+        pointRadius: ptRadius,
+        pointHoverRadius: 7,
+        borderWidth: 2
+      }]
+    },
     options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:function(ctx){ return ctx.parsed.y + '%'; } } } },
-      scales:{
-        y:{ min:0, max:100, grid:{color:gridC}, ticks:{color:textC, callback:function(v){return v+'%';}, maxTicksLimit:5} },
-        x:{ grid:{display:false}, ticks:{color:textC, autoSkip:true, maxTicksLimit:10} }
-      }
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { left: 8, right: 8, top: 8, bottom: 0 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: function(items) { return items[0].label; },
+            label: function(ctx) { return 'Score: ' + ctx.parsed.y; }
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: yMin,
+          max: yMax,
+          grid: { color: gridC },
+          border: { dash: [3, 3], display: false },
+          ticks: { color: textC, callback: function(v) { return v; }, maxTicksLimit: 4 }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: textC, autoSkip: true, maxTicksLimit: 10 }
+        }
+      },
+      interaction: { intersect: false, mode: 'index' }
     }
   });
 }
