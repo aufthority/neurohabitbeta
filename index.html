@@ -248,6 +248,21 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .flex-toggle-btn { font-size: 9px; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
 .flex-toggle-btn.active { color: var(--warning); border-color: color-mix(in srgb, var(--warning) 35%, transparent); background: color-mix(in srgb, var(--warning) 8%, var(--surface2)); }
 
+/* ── BUILD 44: Habit personalisation label ── */
+.habit-label-area { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease; padding: 0 13px 0 46px; }
+.habit-label-area.visible { max-height: 72px; opacity: 1; padding: 8px 13px 12px 46px; }
+.habit-label-prompt { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.habit-label-wrap { display: flex; align-items: center; gap: 7px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 7px 10px; transition: border-color 0.15s; }
+.habit-label-wrap:focus-within { border-color: color-mix(in srgb, var(--ac) 50%, var(--border2)); }
+.habit-label-wrap.hl-saved { border-color: color-mix(in srgb, var(--serotonin) 40%, var(--border2)); }
+.habit-label-input { flex: 1; background: none; border: none; outline: none; font-family: inherit; font-size: 12.5px; color: var(--text); }
+.habit-label-input::placeholder { color: var(--muted); font-style: italic; }
+.habit-label-saved { font-size: 10px; color: var(--serotonin); flex-shrink: 0; opacity: 0; transition: opacity 0.2s; font-weight: 500; }
+.habit-label-saved.show { opacity: 1; }
+.habit-label-preview { font-size: 10.5px; color: var(--muted); margin-top: 2px; font-style: italic; display: none; align-items: center; gap: 4px; }
+.habit-label-preview.show { display: flex; }
+.habit-label-preview-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ac); flex-shrink: 0; opacity: 0.7; }
+
 /* ── Multi-session tier cycler ── */
 .session-flex-ctrl {
   display: flex; align-items: center; gap: 3px;
@@ -2271,7 +2286,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 43;
+const APP_BUILD   = 44;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2281,6 +2296,7 @@ const WK  = 'nh_pwa_week';
 const UK  = 'nh_pwa_user';
 const HCK = 'nh_pwa_habitconfig';  // user habit selection
 const HLK = 'nh_pwa_habitlock';    // habit lock metadata
+const HBL = 'nh_habit_labels';     // BUILD 44: persistent habit personalisation labels
 
 const ld = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
 const sv = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -2291,6 +2307,7 @@ let weekData       = ld(WK)  || {};
 let userData       = ld(UK)  || { name: null, skipAuth: false };
 let userHabitConfig = ld(HCK) || null;   // null = not yet configured (triggers onboarding)
 let habitLockMeta   = ld(HLK) || null;   // { startDate, lockUntil, lockedSelection }
+let habitLabels     = ld(HBL) || {};     // BUILD 44: { 'serotonin_2': 'skincare routine', … }
 
 /* ── Default config applied when user skips onboarding ─────────────── */
 /* ── Avatar-mapped starter configs ──────────────────────────────────
@@ -2769,6 +2786,67 @@ function renderSection(type) {
     });
 
     list.appendChild(row);
+
+    // BUILD 44: Habit personalisation label — secondary and bonus only
+    if (h.type === 'secondary' || h.type === 'bonus') {
+      const labelKey = type + '_' + i;
+      const savedLabel = habitLabels[labelKey] || '';
+
+      const labelArea = document.createElement('div');
+      labelArea.className = 'habit-label-area' + (isDone ? ' visible' : '');
+      labelArea.id = 'hla-' + labelKey;
+
+      const previewHTML = savedLabel
+        ? '<div class="habit-label-preview show" id="hlp-' + labelKey + '"><div class="habit-label-preview-dot"></div><span>' + savedLabel.replace(/</g,'&lt;') + '</span></div>'
+        : '<div class="habit-label-preview" id="hlp-' + labelKey + '"><div class="habit-label-preview-dot"></div><span></span></div>';
+
+      labelArea.innerHTML =
+        '<div class="habit-label-prompt">What\'s your version of this habit?</div>' +
+        '<div class="habit-label-wrap' + (savedLabel ? ' hl-saved' : '') + '" id="hlw-' + labelKey + '">' +
+          '<input class="habit-label-input" id="hli-' + labelKey + '" type="text" maxlength="60"' +
+            ' placeholder="e.g. ' + h.label.toLowerCase() + '..."' +
+            ' value="' + savedLabel.replace(/"/g, '&quot;') + '">' +
+          '<span class="habit-label-saved" id="hls-' + labelKey + '">saved</span>' +
+        '</div>';
+
+      // Insert preview into habit-meta inside the row
+      const metaEl = row.querySelector('.habit-meta');
+      if (metaEl) metaEl.insertAdjacentHTML('afterend', previewHTML);
+
+      const input = labelArea.querySelector('.habit-label-input');
+      input.addEventListener('input', function() {
+        document.getElementById('hls-' + labelKey).classList.remove('show');
+        document.getElementById('hlw-' + labelKey).classList.remove('hl-saved');
+      });
+      input.addEventListener('blur', function() {
+        const val = input.value.trim();
+        const prev = habitLabels[labelKey] || '';
+        if (val === prev) return;
+        if (val) { habitLabels[labelKey] = val; } else { delete habitLabels[labelKey]; }
+        localStorage.setItem(HBL, JSON.stringify(habitLabels));
+        // Update preview
+        const previewEl = document.getElementById('hlp-' + labelKey);
+        if (previewEl) {
+          if (val) {
+            previewEl.querySelector('span').textContent = val;
+            previewEl.classList.add('show');
+          } else {
+            previewEl.classList.remove('show');
+          }
+        }
+        if (val) {
+          document.getElementById('hls-' + labelKey).classList.add('show');
+          document.getElementById('hlw-' + labelKey).classList.add('hl-saved');
+          setTimeout(function() {
+            var s = document.getElementById('hls-' + labelKey);
+            if (s) s.classList.remove('show');
+          }, 2000);
+        }
+      });
+      input.addEventListener('click', function(e) { e.stopPropagation(); });
+
+      list.appendChild(labelArea);
+    }
   });
 
   updateCatUI(type);
