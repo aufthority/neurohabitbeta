@@ -2306,7 +2306,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 50;
+const APP_BUILD   = 51;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2671,7 +2671,8 @@ function renderSection(type) {
     const isFlex   = isMulti ? tierIdx > 0 : false;
     const w        = habitWeight(type, i);
     const typeMap  = { foundational: 'Core', secondary: 'Secondary', bonus: 'Bonus' };
-    const stars    = '⭐'.repeat(Math.max(1, Math.min(3, w)));
+    const _starSVG = '<svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-bottom:1px"><path d="M6 1.2l1.3 2.63 2.9.42-2.1 2.05.5 2.89L6 7.74 3.4 9.19l.5-2.89L1.8 4.25l2.9-.42L6 1.2z" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"/></svg>';
+    const stars    = _starSVG.repeat(Math.max(1, Math.min(3, w)));
 
     const displayLabel = h.label;
 
