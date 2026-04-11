@@ -2327,7 +2327,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 54;
+const APP_BUILD   = 55;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4135,13 +4135,12 @@ function prRenderChart(dateKeys) {
   if (!canvas) return;
   var labels = dateKeys.map(function(ds) {
     var d = new Date(ds + 'T00:00:00');
-    return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    return ['S','M','T','W','T','F','S'][d.getDay()];
   });
   var data = dateKeys.map(function(ds) {
     return ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
   });
-  var isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
-    (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
+  var isDark = !document.documentElement.classList.contains('light-theme');
   var gridC = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
   var textC = isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.38)';
   var maxVal = Math.max.apply(null, data);
