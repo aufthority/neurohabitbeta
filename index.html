@@ -1077,6 +1077,83 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .profile-avatar-emoji { font-size: 32px; line-height: 1; display: flex; align-items: center; justify-content: center; }
 
 /* ═══ ONBOARDING  ════════════════════════════════════════════ */
+/* ═══ INTRO / QUIZ SCREENS ══════════════════════════════════════ */
+#screen-intro-0,
+#screen-intro-1,
+#screen-intro-2,
+#screen-quiz-1,
+#screen-quiz-2,
+#screen-quiz-3,
+#screen-quiz-4 { overflow-y: auto; padding: 0; background: var(--bg); }
+
+.intro-inner { max-width: 480px; margin: 0 auto; padding: 40px 24px 64px; display: flex; flex-direction: column; min-height: 100%; }
+.intro-progress { height: 3px; background: var(--border); position: sticky; top: 0; z-index: 2; flex-shrink: 0; }
+.intro-progress-fill { height: 100%; background: var(--coach); transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
+
+.intro-back { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; color: var(--muted); font-size: 12px; font-family: 'Geist', sans-serif; cursor: pointer; padding: 0; margin-bottom: 32px; }
+.intro-back svg { flex-shrink: 0; }
+
+.intro-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--coach); margin-bottom: 12px; }
+.intro-title { font-family: 'Instrument Serif', serif; font-size: 28px; font-weight: 400; line-height: 1.28; color: var(--text); margin-bottom: 14px; }
+.intro-title em { font-style: italic; color: var(--coach); }
+.intro-body { font-size: 13.5px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+.intro-body strong { color: var(--text); font-weight: 500; }
+
+.intro-spacer { flex: 1; min-height: 16px; }
+.intro-cta { width: 100%; padding: 15px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-family: 'Geist', sans-serif; font-size: 15px; font-weight: 600; background: var(--coach); color: #fff; transition: transform 0.2s; }
+.intro-cta:active { transform: scale(0.97); }
+.intro-cta:disabled { opacity: 0.38; cursor: not-allowed; transform: none; }
+.intro-cta-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 9px; line-height: 1.5; }
+
+/* Neuro pills */
+.intro-pills { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+.intro-pill { display: flex; align-items: center; gap: 11px; padding: 11px 13px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); }
+.intro-pill-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.intro-pill-name { font-size: 12px; font-weight: 600; min-width: 72px; }
+.intro-pill-desc { font-size: 11.5px; color: var(--muted); line-height: 1.35; }
+
+/* Phase grid */
+.intro-phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.intro-phase-card { padding: 13px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); }
+.intro-phase-bar  { width: 20px; height: 3px; border-radius: 2px; background: var(--coach); margin-bottom: 8px; }
+.intro-phase-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.intro-phase-desc { font-size: 10.5px; color: var(--muted); line-height: 1.4; }
+
+/* Streak row */
+.intro-streak-row { display: flex; gap: 7px; justify-content: center; margin-bottom: 12px; }
+.intro-s-day { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; border: 2px solid var(--border); color: var(--muted); }
+.intro-s-day.done  { background: var(--serotonin); border-color: var(--serotonin); color: #fff; }
+.intro-s-day.grace { background: color-mix(in srgb, var(--dopamine) 18%, var(--surface)); border-color: var(--dopamine); color: var(--dopamine); }
+.intro-s-day.today { border-color: var(--text); color: var(--text); }
+.intro-streak-legend { display: flex; gap: 14px; justify-content: center; margin-bottom: 20px; }
+.intro-sl-item { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--muted); }
+.intro-sl-dot  { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.intro-rule { height: 1px; background: var(--border); margin: 20px 0; }
+
+/* Quiz */
+.quiz-q-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.quiz-q-title { font-family: 'Instrument Serif', serif; font-size: 23px; font-weight: 400; line-height: 1.3; color: var(--text); margin-bottom: 6px; }
+.quiz-q-sub   { font-size: 12.5px; color: var(--muted); line-height: 1.65; margin-bottom: 22px; }
+.quiz-opts    { display: flex; flex-direction: column; gap: 9px; }
+.quiz-opt {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 14px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: var(--surface);
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.quiz-opt.selected { border-color: var(--coach); background: color-mix(in srgb, var(--coach) 10%, var(--surface)); }
+.quiz-opt-radio {
+  width: 17px; height: 17px; border-radius: 50%;
+  border: 2px solid var(--border2); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.quiz-opt.selected .quiz-opt-radio { border-color: var(--coach); background: var(--coach); }
+.quiz-opt.selected .quiz-opt-radio::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+.quiz-opt-body { flex: 1; }
+.quiz-opt-label { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.quiz-opt-sub   { font-size: 11px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
+
 #screen-onboarding { overflow-y: auto; padding: 0; background: var(--bg); }
 #screen-avatar     { overflow-y: auto; padding: 0; background: var(--bg); }
 .onboard-inner { max-width: 480px; margin: 0 auto; padding: 32px 20px 60px; }
@@ -1248,7 +1325,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 <div class="screen" id="screen-onboarding" style="display:none">
   <div class="onboard-inner">
     <div class="onboard-header">
-      <div class="onboard-logo">🧠</div>
+      <img src="icon-192.png" alt="NeuroHabit" style="width:64px;height:64px;border-radius:16px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
       <div class="onboard-title">Build your NeuroHabit set</div>
       <div class="onboard-sub">Choose at least one core habit per category. You can add more anytime — but your choices are locked for 28 days so the science can work.</div>
     </div>
@@ -1270,7 +1347,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 <div class="screen" id="screen-avatar" style="display:none">
   <div class="onboard-inner">
     <div class="onboard-header">
-      <div class="onboard-logo" id="avatarStepBrain" style="font-size:56px"></div>
+      <img src="icon-192.png" alt="NeuroHabit" id="avatarStepBrain" style="width:72px;height:72px;border-radius:18px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
       <div class="onboard-title">What kind of person are you?</div>
       <div class="onboard-sub">Pick the avatar that feels most like you. We will pre-select a habit set tailored to your lifestyle — you can fine-tune it anytime in the first 48 hours.</div>
     </div>
@@ -1278,6 +1355,182 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     <button class="onboard-cta-btn" id="avatarStartBtn" onclick="finishOnboarding()">Build my habit set →</button>
     <div class="onboard-cta-note" style="margin-top:8px">Not sure? Skip and we will use a balanced default set.</div>
     <button onclick="finishOnboarding()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px;margin-top:4px">Skip →</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     INTRO SCREEN 0 — The foundation
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-intro-0" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:0%"></div></div>
+  <div class="intro-inner">
+    <img src="icon-192.png" alt="NeuroHabit" style="width:72px;height:72px;border-radius:18px;margin-bottom:20px;display:block;">
+    <div class="intro-eyebrow">NeuroHabit</div>
+    <h1 class="intro-title">You are not failing.<br>You are missing<em> the foundation.</em></h1>
+    <p class="intro-body">Four brain chemicals. A small set of habits that feed each one. That is the whole system.</p>
+    <div class="intro-pills">
+      <div class="intro-pill"><div class="intro-pill-dot" style="background:var(--dopamine)"></div><div class="intro-pill-name" style="color:var(--dopamine)">Dopamine</div><div class="intro-pill-desc">Drive and focus</div></div>
+      <div class="intro-pill"><div class="intro-pill-dot" style="background:var(--serotonin)"></div><div class="intro-pill-name" style="color:var(--serotonin)">Serotonin</div><div class="intro-pill-desc">Calm and stability</div></div>
+      <div class="intro-pill"><div class="intro-pill-dot" style="background:var(--oxytocin)"></div><div class="intro-pill-name" style="color:var(--oxytocin)">Oxytocin</div><div class="intro-pill-desc">Connection and trust</div></div>
+      <div class="intro-pill"><div class="intro-pill-dot" style="background:var(--endorphin)"></div><div class="intro-pill-name" style="color:var(--endorphin)">Endorphin</div><div class="intro-pill-desc">Energy and resilience</div></div>
+    </div>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" onclick="introGoTo('screen-intro-1', 1, 7)">That sounds like what I need →</button>
+    <div class="intro-cta-note">About 2 minutes to set up</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     INTRO SCREEN 1 — Brain phases
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-intro-1" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:14%"></div></div>
+  <div class="intro-inner">
+    <button class="intro-back" onclick="introGoTo('screen-intro-0', 0, 7)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="intro-eyebrow">Your weekly read</div>
+    <h1 class="intro-title">Every week, the app tells you which <em>phase</em> your brain is in.</h1>
+    <div class="intro-phase-grid">
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--muted)"></div><div class="intro-phase-name">Restorative</div><div class="intro-phase-desc">Building the foundation</div></div>
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--dopamine)"></div><div class="intro-phase-name">Building</div><div class="intro-phase-desc">Momentum forming</div></div>
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--serotonin)"></div><div class="intro-phase-name">Peak</div><div class="intro-phase-desc">All systems active</div></div>
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--warning)"></div><div class="intro-phase-name">Overloaded</div><div class="intro-phase-desc">Time to rest</div></div>
+    </div>
+    <p class="intro-body" style="margin-bottom:0">Complete all four core habits in one day and unlock <strong style="color:var(--coach)">Enlightened</strong> — the rarest phase of all.</p>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" onclick="introGoTo('screen-intro-2', 2, 7)">Got it →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     INTRO SCREEN 2 — Streaks and grace
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-intro-2" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:28%"></div></div>
+  <div class="intro-inner">
+    <button class="intro-back" onclick="introGoTo('screen-intro-1', 1, 7)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="intro-eyebrow">Miss a day</div>
+    <h1 class="intro-title">Your streak gets one <em>grace day</em> a week. Life happens.</h1>
+    <div class="intro-streak-row">
+      <div class="intro-s-day done">M</div>
+      <div class="intro-s-day done">T</div>
+      <div class="intro-s-day done">W</div>
+      <div class="intro-s-day grace">T</div>
+      <div class="intro-s-day done">F</div>
+      <div class="intro-s-day done">S</div>
+      <div class="intro-s-day today">S</div>
+    </div>
+    <div class="intro-streak-legend">
+      <div class="intro-sl-item"><div class="intro-sl-dot" style="background:var(--serotonin)"></div>Done</div>
+      <div class="intro-sl-item"><div class="intro-sl-dot" style="background:var(--dopamine)"></div>Grace</div>
+      <div class="intro-sl-item"><div class="intro-sl-dot" style="border:1.5px solid var(--text)"></div>Today</div>
+    </div>
+    <p class="intro-body" style="margin-bottom:0">Habits older than 14 days get locked automatically — a rough week cannot undo what your brain already built.</p>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" onclick="introGoTo('screen-quiz-1', 3, 7)">Now let’s build your set →</button>
+    <div class="intro-cta-note">Four quick questions. We will do the matching.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     QUIZ SCREEN 1 — Life right now
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-quiz-1" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:42%"></div></div>
+  <div class="intro-inner">
+    <button class="intro-back" onclick="introGoTo('screen-intro-2', 2, 7)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="quiz-q-label">Question 1 of 4</div>
+    <div class="quiz-q-title">Which of these sounds most like your life right now?</div>
+    <div class="quiz-q-sub">No wrong answer. We want to meet you where you are — not where you think you should be.</div>
+    <div class="quiz-opts" id="quiz-opts-1">
+      <div class="quiz-opt" data-q="1" data-v="structured" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">I have a fairly stable routine</div><div class="quiz-opt-sub">Days are predictable enough to plan habits around</div></div></div>
+      <div class="quiz-opt" data-q="1" data-v="overloaded" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">Life is full — maybe too full</div><div class="quiz-opt-sub">Work, people, responsibilities — not much left in the day</div></div></div>
+      <div class="quiz-opt" data-q="1" data-v="irregular" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">My days don’t follow a pattern</div><div class="quiz-opt-sub">Shifts, disrupted sleep, or a life that won’t stay still</div></div></div>
+      <div class="quiz-opt" data-q="1" data-v="recovering" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">I’m running on empty right now</div><div class="quiz-opt-sub">Burnout or a long stretch of hard — energy is low</div></div></div>
+    </div>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" id="quiz-next-1" onclick="introGoTo('screen-quiz-2', 4, 7)" disabled>Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     QUIZ SCREEN 2 — Social world
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-quiz-2" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:57%"></div></div>
+  <div class="intro-inner">
+    <button class="intro-back" onclick="introGoTo('screen-quiz-1', 3, 7)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="quiz-q-label">Question 2 of 4</div>
+    <div class="quiz-q-title">How does your social world feel most of the time?</div>
+    <div class="quiz-q-sub">This shapes which Oxytocin habits will actually work for you.</div>
+    <div class="quiz-opts" id="quiz-opts-2">
+      <div class="quiz-opt" data-q="2" data-v="connected" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">People give me energy</div><div class="quiz-opt-sub">I come alive around others — the more, the better</div></div></div>
+      <div class="quiz-opt" data-q="2" data-v="selective" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">I’m selective — some people lift me, others cost me</div><div class="quiz-opt-sub">Quality matters more than quantity</div></div></div>
+      <div class="quiz-opt" data-q="2" data-v="recharge-alone" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">People drain me — I need quiet to recharge</div><div class="quiz-opt-sub">Social is fine in doses; alone time is where I reset</div></div></div>
+      <div class="quiz-opt" data-q="2" data-v="isolated" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">Honestly — I don’t see many people most days</div><div class="quiz-opt-sub">Caregiving, remote work, or just a quieter life</div></div></div>
+    </div>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" id="quiz-next-2" onclick="introGoTo('screen-quiz-3', 5, 7)" disabled>Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     QUIZ SCREEN 3 — What gets in the way
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-quiz-3" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:71%"></div></div>
+  <div class="intro-inner">
+    <button class="intro-back" onclick="introGoTo('screen-quiz-2', 4, 7)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="quiz-q-label">Question 3 of 4</div>
+    <div class="quiz-q-title">What has gotten in the way of habits before?</div>
+    <div class="quiz-q-sub">The more honest your answer, the better we can set this up to actually stick.</div>
+    <div class="quiz-opts" id="quiz-opts-3">
+      <div class="quiz-opt" data-q="3" data-v="busy" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">No time — the day just disappears</div><div class="quiz-opt-sub">I want to do it. Life keeps filling every gap.</div></div></div>
+      <div class="quiz-opt" data-q="3" data-v="fade" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">I start strong — then the feeling fades</div><div class="quiz-opt-sub">Week one is great. Week three, the habit is gone.</div></div></div>
+      <div class="quiz-opt" data-q="3" data-v="inconsistent" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">My schedule makes consistency nearly impossible</div><div class="quiz-opt-sub">Irregular hours, caregiving, or a life that shifts</div></div></div>
+      <div class="quiz-opt" data-q="3" data-v="all-or-nothing" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">I take on everything — then crash</div><div class="quiz-opt-sub">All-in until I burn out. Then nothing for weeks.</div></div></div>
+    </div>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" id="quiz-next-3" onclick="introGoTo('screen-quiz-4', 6, 7)" disabled>Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     QUIZ SCREEN 4 — Body right now
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-quiz-4" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:85%"></div></div>
+  <div class="intro-inner">
+    <button class="intro-back" onclick="introGoTo('screen-quiz-3', 5, 7)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <div class="quiz-q-label">Question 4 of 4</div>
+    <div class="quiz-q-title">Where are you with your body right now?</div>
+    <div class="quiz-q-sub">We use this to set your Endorphin habits at the right level. There is no wrong starting point.</div>
+    <div class="quiz-opts" id="quiz-opts-4">
+      <div class="quiz-opt" data-q="4" data-v="active" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">Moving regularly — it’s part of my week</div><div class="quiz-opt-sub">Exercise is already in the routine in some form</div></div></div>
+      <div class="quiz-opt" data-q="4" data-v="building" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">Starting to move — taking it slow</div><div class="quiz-opt-sub">Want to move more but building from a low base</div></div></div>
+      <div class="quiz-opt" data-q="4" data-v="resting" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">Rest is the priority right now</div><div class="quiz-opt-sub">Fatigue, recovery, or a season where gentle is enough</div></div></div>
+      <div class="quiz-opt" data-q="4" data-v="variable" onclick="quizPick(this)"><div class="quiz-opt-radio"></div><div class="quiz-opt-body"><div class="quiz-opt-label">It varies — good days and harder days</div><div class="quiz-opt-sub">No reliable pattern yet</div></div></div>
+    </div>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" id="quiz-next-4" onclick="quizFinish()" disabled>See who we matched you with →</button>
   </div>
 </div>
 
@@ -2327,7 +2580,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 55;
+const APP_BUILD   = 57;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -5440,19 +5693,17 @@ function showOnboarding() {
 }
 
 function showAvatarOnboarding() {
-  /* Primary onboarding: avatar first, habits auto-configured from mapping */
+  /* Route new users through intro screens then quiz, then avatar confirmation */
+  var intro = document.getElementById('screen-intro-0');
+  if (intro) {
+    intro.style.display = 'flex';
+    intro.classList.add('screen-active');
+    return;
+  }
+  /* Fallback: go straight to avatar screen if intro screens missing */
   var avScreen = document.getElementById('screen-avatar');
   avScreen.style.display = 'flex';
   avScreen.classList.add('screen-active');
-  var brainEl = document.getElementById('avatarStepBrain');
-  if (brainEl) {
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '56'); svg.setAttribute('height', '56');
-    svg.setAttribute('viewBox', '0 0 96 96');
-    drawBrainSvg(svg, 1);
-    brainEl.innerHTML = '';
-    brainEl.appendChild(svg);
-  }
   renderOnboardAvatarGrid();
 }
 
@@ -5621,16 +5872,6 @@ function proceedToAvatarStep() {
   var avScreen = document.getElementById('screen-avatar');
   avScreen.style.display = 'flex';
   avScreen.classList.add('screen-active');
-  /* Draw brain in avatar step header */
-  var brainEl = document.getElementById('avatarStepBrain');
-  if (brainEl) {
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '56'); svg.setAttribute('height', '56');
-    svg.setAttribute('viewBox', '0 0 96 96');
-    drawBrainSvg(svg, 1);
-    brainEl.innerHTML = '';
-    brainEl.appendChild(svg);
-  }
   renderOnboardAvatarGrid();
 }
 
@@ -6357,6 +6598,105 @@ window.confirmNewDay      = confirmNewDay;
 window.dismissInstall     = dismissInstall;
 window.dismissIosSheet    = dismissIosSheet;
 window.triggerInstall     = triggerInstall;
+
+/* ═══ INTRO / QUIZ FLOW ══════════════════════════════════════════
+   introGoTo(screenId, step, total)  — slide between intro/quiz screens
+   quizPick(el)                      — handle quiz option selection
+   quizFinish()                      — score answers, pick avatar, hand off
+   quizComputeMatch()                — weighted scoring → avatar id
+   ═══════════════════════════════════════════════════════════════ */
+
+var _quizAnswers = {};   // { 1: 'structured', 2: 'connected', ... }
+
+function introGoTo(toId, step, total) {
+  /* Slide the current active intro/quiz screen out, slide next one in */
+  var screens = [
+    'screen-intro-0','screen-intro-1','screen-intro-2',
+    'screen-quiz-1','screen-quiz-2','screen-quiz-3','screen-quiz-4',
+    'screen-avatar'
+  ];
+  screens.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.classList.contains('screen-active')) {
+      el.classList.remove('screen-active');
+      el.classList.add('screen-left');
+      setTimeout(function() { el.classList.remove('screen-left'); el.style.display = 'none'; }, 310);
+    }
+  });
+  var next = document.getElementById(toId);
+  if (!next) return;
+  next.style.display = 'flex';
+  /* Force reflow so transition fires */
+  void next.offsetWidth;
+  next.classList.add('screen-active');
+}
+
+function quizPick(el) {
+  var q = parseInt(el.dataset.q, 10);
+  var v = el.dataset.v;
+  var parent = el.closest('.quiz-opts');
+  if (parent) {
+    parent.querySelectorAll('.quiz-opt').forEach(function(o) { o.classList.remove('selected'); });
+  }
+  el.classList.add('selected');
+  _quizAnswers[q] = v;
+  var nextBtn = document.getElementById('quiz-next-' + q);
+  if (nextBtn) nextBtn.disabled = false;
+}
+
+function quizComputeMatch() {
+  var scores = {};
+  AVATARS.forEach(function(av) { scores[av.id] = 0; });
+
+  var q1 = _quizAnswers[1];
+  if (q1 === 'structured')  { scores['gym-devotee']+=2; scores['runner']+=2; scores['overachiever']+=2; scores['outdoor-junkie']+=1; scores['corp-survivor']+=1; }
+  if (q1 === 'overloaded')  { scores['corp-survivor']+=3; scores['tired-carer']+=3; scores['homemaker']+=2; scores['busy-student']+=2; scores['overachiever']+=1; }
+  if (q1 === 'irregular')   { scores['shift-worker']+=5; scores['neurodivergent']+=3; scores['tired-carer']+=1; scores['gamer']+=1; }
+  if (q1 === 'recovering')  { scores['tired-carer']+=3; scores['overachiever']+=3; scores['corp-survivor']+=2; scores['homemaker']+=1; }
+
+  var q2 = _quizAnswers[2];
+  if (q2 === 'connected')      { scores['extrovert']+=5; scores['outdoor-junkie']+=1; scores['corp-survivor']+=1; }
+  if (q2 === 'selective')      { scores['creative']+=2; scores['overthinker']+=2; scores['busy-student']+=1; scores['runner']+=1; }
+  if (q2 === 'recharge-alone') { scores['introvert']+=5; scores['overthinker']+=2; scores['neurodivergent']+=1; scores['gamer']+=1; }
+  if (q2 === 'isolated')       { scores['tired-carer']+=3; scores['homemaker']+=4; scores['shift-worker']+=1; }
+
+  var q3 = _quizAnswers[3];
+  if (q3 === 'busy')           { scores['corp-survivor']+=3; scores['tired-carer']+=2; scores['homemaker']+=2; scores['busy-student']+=2; }
+  if (q3 === 'fade')           { scores['overthinker']+=3; scores['gamer']+=2; scores['creative']+=2; scores['neurodivergent']+=1; }
+  if (q3 === 'inconsistent')   { scores['shift-worker']+=4; scores['neurodivergent']+=3; scores['tired-carer']+=1; }
+  if (q3 === 'all-or-nothing') { scores['overachiever']+=5; scores['corp-survivor']+=2; scores['overthinker']+=1; }
+
+  var q4 = _quizAnswers[4];
+  if (q4 === 'active')   { scores['gym-devotee']+=4; scores['runner']+=4; scores['outdoor-junkie']+=3; }
+  if (q4 === 'building') { scores['busy-student']+=2; scores['homemaker']+=2; scores['extrovert']+=1; scores['creative']+=1; }
+  if (q4 === 'resting')  { scores['tired-carer']+=4; scores['overachiever']+=3; scores['corp-survivor']+=2; scores['neurodivergent']+=1; }
+  if (q4 === 'variable') { scores['neurodivergent']+=3; scores['shift-worker']+=2; scores['gamer']+=1; scores['overthinker']+=1; }
+
+  var topId = null, topScore = -1;
+  Object.keys(scores).forEach(function(id) {
+    if (scores[id] > topScore) { topScore = scores[id]; topId = id; }
+  });
+  return AVATARS.filter(function(av) { return av.id === topId; })[0] || AVATARS[0];
+}
+
+function quizFinish() {
+  /* Score quiz, pre-select the matched avatar, then hand off to existing avatar screen */
+  var matched = quizComputeMatch();
+  /* Pre-select in avatar grid — reuse existing userAvatar mechanism */
+  userAvatar = { id: matched.id, emoji: matched.emoji, label: matched.label };
+  sv(AVK, userAvatar);
+  /* Slide to the existing avatar confirmation screen */
+  introGoTo('screen-avatar', 7, 7);
+  /* Re-render avatar grid with the match pre-selected */
+  renderOnboardAvatarGrid();
+
+}
+
+window.introGoTo  = introGoTo;
+window.quizPick   = quizPick;
+window.quizFinish = quizFinish;
+
 window.showScreen         = showScreen;
 /* showHistoryScreen registered above */
 window.hideScreen         = hideScreen;
