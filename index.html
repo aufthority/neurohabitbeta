@@ -2813,27 +2813,59 @@ function renderSection(type) {
       labelArea.className = 'habit-label-area' + (isDone && !savedLabel ? ' visible' : '');
       labelArea.id = 'hla-' + labelKey;
 
-      const PENCIL = '<svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d=\'M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z\'/><line x1=\'11\' y1=\'4.5\' x2=\'13.5\' y2=\'7\'/></svg>';
-      const CHECK  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polyline points=\'2,7 5.5,10.5 12,3.5\' stroke=\'white\' stroke-width=\'1.8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>';
-
+      // Build label area via innerHTML (no SVGs here — added via DOM below)
       labelArea.innerHTML =
         '<div class="habit-label-prompt">What\'s your version of this habit?</div>' +
         '<div class="habit-label-wrap" id="hlw-' + labelKey + '">' +
           '<input class="habit-label-input" id="hli-' + labelKey + '" type="text" maxlength="60"' +
             ' placeholder="e.g. ' + h.label.toLowerCase() + '..."' +
             ' value="' + savedLabel.replace(/"/g, '&quot;') + '">' +
-          '<button class="habit-label-confirm" id="hlc-' + labelKey + '" title="Save">' + CHECK + '</button>' +
+          '<button class="habit-label-confirm" id="hlc-' + labelKey + '" title="Save"></button>' +
         '</div>';
 
-      // Inline personalisation preview (pencil edit icon) inside the habit card
-      const previewHTML = '<div class="habit-label-preview' + (savedLabel ? ' show' : '') + '" id="hlp-' + labelKey + '">' +
+      // Inject confirm SVG via createElementNS — avoids HTML parser mangling SVG
+      (function() {
+        var NS = 'http://www.w3.org/2000/svg';
+        var svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('width', '14'); svg.setAttribute('height', '14');
+        svg.setAttribute('viewBox', '0 0 14 14'); svg.setAttribute('fill', 'none');
+        var pl = document.createElementNS(NS, 'polyline');
+        pl.setAttribute('points', '2,7 5.5,10.5 12,3.5');
+        pl.setAttribute('stroke', 'white'); pl.setAttribute('stroke-width', '1.8');
+        pl.setAttribute('stroke-linecap', 'round'); pl.setAttribute('stroke-linejoin', 'round');
+        svg.appendChild(pl);
+        var btn = labelArea.querySelector('#hlc-' + labelKey);
+        if (btn) btn.appendChild(svg);
+      })();
+
+      // Build preview row (pencil button SVG also via createElementNS)
+      const previewEl = document.createElement('div');
+      previewEl.className = 'habit-label-preview' + (savedLabel ? ' show' : '');
+      previewEl.id = 'hlp-' + labelKey;
+      previewEl.innerHTML =
         '<div class="habit-label-preview-dot"></div>' +
         '<span>' + (savedLabel ? savedLabel.replace(/</g,'&lt;') : '') + '</span>' +
-        '<button class="habit-edit-btn" id="hleb-' + labelKey + '" title="Edit" style="' + (savedLabel ? '' : 'display:none') + '">' + PENCIL + '</button>' +
-        '</div>';
+        '<button class="habit-edit-btn" id="hleb-' + labelKey + '" title="Edit" style="' + (savedLabel ? '' : 'display:none') + '"></button>';
+
+      (function() {
+        var NS = 'http://www.w3.org/2000/svg';
+        var svg = document.createElementNS(NS, 'svg');
+        svg.setAttribute('width', '13'); svg.setAttribute('height', '13');
+        svg.setAttribute('viewBox', '0 0 18 18'); svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.5');
+        svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+        var path = document.createElementNS(NS, 'path');
+        path.setAttribute('d', 'M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z');
+        var line = document.createElementNS(NS, 'line');
+        line.setAttribute('x1', '11'); line.setAttribute('y1', '4.5');
+        line.setAttribute('x2', '13.5'); line.setAttribute('y2', '7');
+        svg.appendChild(path); svg.appendChild(line);
+        var btn = previewEl.querySelector('#hleb-' + labelKey);
+        if (btn) btn.appendChild(svg);
+      })();
 
       const metaEl = row.querySelector('.habit-meta');
-      if (metaEl) metaEl.insertAdjacentHTML('afterend', previewHTML);
+      if (metaEl) metaEl.insertAdjacentElement('afterend', previewEl);
 
       // Confirm button — saves and collapses
       function doConfirm() {
