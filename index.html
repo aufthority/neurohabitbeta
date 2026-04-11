@@ -543,7 +543,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 /* Changelog items */
 .changelog-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
-.changelog-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.changelog-icon { width: 32px; height: 32px; border-radius: 9px; background: var(--surface3); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.changelog-icon svg { stroke: var(--muted); }
 .changelog-body strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
 .changelog-body span { font-size: 12px; color: var(--muted); line-height: 1.5; }
 
@@ -621,17 +622,20 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .profile-row:hover { background: var(--surface2); }
 .profile-row:active { background: var(--surface3); }
 .profile-row-icon {
-  width: 32px; height: 32px; border-radius: 9px;
+  width: 36px; height: 36px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 15px; flex-shrink: 0;
+  flex-shrink: 0;
   background: var(--surface2);
+  border: 1px solid var(--border2);
 }
+.profile-row-icon svg { stroke: var(--muted); }
 .profile-row-body { flex: 1; min-width: 0; }
 .profile-row-body strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.2; }
 .profile-row-body span { font-size: 12px; color: var(--muted); }
 .profile-row-chevron { color: var(--muted); flex-shrink: 0; }
 .profile-row.danger strong { color: #c0445a; }
-.profile-row.danger .profile-row-icon { background: color-mix(in srgb, #c0445a 10%, var(--surface2)); }
+.profile-row.danger .profile-row-icon { background: color-mix(in srgb, #c0445a 10%, var(--surface2)); border-color: color-mix(in srgb, #c0445a 20%, transparent); }
+.profile-row.danger .profile-row-icon svg { stroke: #c0445a; }
 
 /* Feedback row — explicit colours, no inline color-mix() */
 .profile-row.feedback {
@@ -639,7 +643,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   background: #253830; /* serotonin 5% over surface — hardcoded for max compat */
 }
 .profile-row.feedback:hover { background: #2c4038; }
-.profile-row.feedback .profile-row-icon { background: #2e4f42; }
+.profile-row.feedback .profile-row-icon { background: #2e4f42; border-color: color-mix(in srgb, var(--serotonin) 30%, transparent); }
+.profile-row.feedback .profile-row-icon svg { stroke: var(--serotonin); }
 .profile-row.feedback strong { color: var(--serotonin); }
 
 /* Premium card */
@@ -814,7 +819,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   border-bottom: 1px solid var(--border);
 }
 .adv-insight-row:last-child { border-bottom: none; padding-bottom: 0; }
-.adv-insight-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.adv-insight-icon { width: 28px; height: 28px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.adv-insight-icon svg { stroke: var(--muted); }
 
 /* ═══ ADHD FEATURES ══════════════════════════════════════════ */
 
@@ -1029,7 +1035,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* ═══ THEME TOGGLE ══════════════════════════════════════════ */
 .theme-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
 .theme-toggle-left { display: flex; align-items: center; gap: 12px; }
-.theme-toggle-icon { font-size: 18px; line-height: 1; }
+.theme-toggle-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.theme-toggle-icon svg { stroke: var(--muted); }
 .theme-toggle-body strong { display: block; font-size: 14px; font-weight: 500; color: var(--text); }
 .theme-toggle-body span { font-size: 12px; color: var(--muted); }
 .theme-pill { position: relative; width: 44px; height: 26px; border-radius: 13px; border: none; cursor: pointer; transition: background 0.25s; flex-shrink: 0; background: var(--border2); }
@@ -1270,7 +1277,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     <span class="header-brand-date" id="headerDate"></span>
   </div>
   <div class="header-right">
-    <div class="streak-badge"><span>🔥</span><span id="streakNum">0</span></div>
+    <div class="streak-badge"><svg width="13" height="15" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg><span id="streakNum">0</span></div>
     <div class="brain-state-chip" id="brainStateChip">
       <svg id="headerBrainSvg" width="28" height="28" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
       <span id="headerBrainLabel">Ready</span>
@@ -1355,7 +1362,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             </div>
             <div class="premium-preview-block">
               <div class="premium-preview-header">
-                <span class="premium-preview-title">🔥 Category Streaks</span>
+                <span class="premium-preview-title"><svg width="12" height="14" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>Category Streaks</span>
                 <span class="beta-tag">⭐ Premium</span>
               </div>
               <div class="premium-cat-streaks" id="catStreaksPanel"></div>
@@ -1546,7 +1553,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="profile-section-label">Account</div>
         <div class="profile-rows">
           <div class="profile-row" onclick="editProfile()">
-            <div class="profile-row-icon">✏️</div>
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z"/><line x1="11" y1="4.5" x2="13.5" y2="7"/></svg></div>
             <div class="profile-row-body">
               <strong>Edit Display Name</strong>
               <span>Change how your name appears in the app</span>
@@ -1554,7 +1561,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="profile-row" onclick="showAvatarPicker()">
-            <div class="profile-row-icon" id="profileAvatarMini" style="font-size:20px">👤</div>
+            <div class="profile-row-icon" id="profileAvatarMini"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/><line x1="14" y1="2" x2="14" y2="4"/><line x1="13" y1="3" x2="15" y2="3"/></svg></div>
             <div class="profile-row-body">
               <strong>Change Avatar</strong>
               <span>Pick a character that represents you</span>
@@ -1562,7 +1569,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="profile-row" onclick="changePassword()">
-            <div class="profile-row-icon">🔑</div>
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4"/><line x1="10.5" y1="10.5" x2="16" y2="16"/><line x1="14" y1="14" x2="16" y2="12"/></svg></div>
             <div class="profile-row-body">
               <strong>Change Password</strong>
               <span>Update your account password</span>
@@ -1577,7 +1584,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           <!-- Light mode toggle -->
           <div class="profile-row theme-toggle-row" style="cursor:default">
             <div class="theme-toggle-left">
-              <div class="theme-toggle-icon" id="themeToggleIcon">☀️</div>
+              <div class="theme-toggle-icon" id="themeToggleIcon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="3.5"/><line x1="9" y1="1.5" x2="9" y2="3"/><line x1="9" y1="15" x2="9" y2="16.5"/><line x1="1.5" y1="9" x2="3" y2="9"/><line x1="15" y1="9" x2="16.5" y2="9"/><line x1="3.7" y1="3.7" x2="4.8" y2="4.8"/><line x1="13.2" y1="13.2" x2="14.3" y2="14.3"/><line x1="14.3" y1="3.7" x2="13.2" y2="4.8"/><line x1="4.8" y1="13.2" x2="3.7" y2="14.3"/></svg></div>
               <div class="theme-toggle-body">
                 <strong>Light Mode</strong>
                 <span id="themeToggleLabel">Currently dark — tap to switch</span>
@@ -1586,7 +1593,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <button class="theme-pill" id="themePill" onclick="toggleTheme()" aria-label="Toggle light mode"></button>
           </div>
           <div class="profile-row" onclick="openShareModal()">
-            <div class="profile-row-icon">⬆️</div>
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v9"/><polyline points="5.5,5.5 9,2 12.5,5.5"/><path d="M4 10v5a1 1 0 001 1h8a1 1 0 001-1v-5"/></svg></div>
             <div class="profile-row-body">
               <strong>Share Brain State</strong>
               <span>Share your hero score as an image or text</span>
@@ -1594,7 +1601,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="profile-row feedback" onclick="openFeedback()">
-            <div class="profile-row-icon">💬</div>
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H3a1 1 0 00-1 1v8a1 1 0 001 1h3l3 3 3-3h3a1 1 0 001-1V3a1 1 0 00-1-1z"/><path d="M9 6.5c0-1 1.5-1.5 1.5 0S9 8.5 9 8.5S7.5 7.5 7.5 6.5C7.5 5 9 5 9 6.5z"/></svg></div>
             <div class="profile-row-body">
               <strong>Share Your Feedback</strong>
               <span>Help shape NeuroHabit — takes 2 min</span>
@@ -1602,7 +1609,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
           <div class="profile-row" onclick="confirmNewDay()">
-            <div class="profile-row-icon">🌅</div>
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10A5.5 5.5 0 1014.5 10"/><polyline points="3.5,6.5 3.5,10 7,10"/><line x1="9" y1="4" x2="9" y2="2"/></svg></div>
             <div class="profile-row-body">
               <strong>New Day — Reset Today</strong>
               <span>Clear all of today's habits</span>
@@ -1615,7 +1622,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="profile-section-label">Session</div>
         <div class="profile-rows">
           <div class="profile-row danger" onclick="handleSignOut()">
-            <div class="profile-row-icon">🚪</div>
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3a1 1 0 00-1 1v10a1 1 0 001 1h4"/><line x1="12" y1="9" x2="17" y2="9"/><polyline points="14,6 17,9 14,12"/></svg></div>
             <div class="profile-row-body">
               <strong>Sign Out</strong>
               <span>You will be returned to the login screen</span>
@@ -2288,7 +2295,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 46;
+const APP_BUILD   = 47;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4266,7 +4273,7 @@ function renderMilestones() {
 
   const milestones = [
     { icon:'🥇', label:'Best Hero Score',    val: bestScore > 0 ? bestScore + '%' : '—',   sub: 'Highest single-day score' },
-    { icon:'🔥', label:'Longest Streak',     val: longestStreak > 0 ? longestStreak + 'd' : '—', sub: 'Consecutive days ≥50%' },
+    { icon:'<svg width="13" height="15" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>', label:'Longest Streak',     val: longestStreak > 0 ? longestStreak + 'd' : '—', sub: 'Consecutive days ≥50%' },
     { icon:'⭐', label:'Perfect Days',       val: perfectDays > 0 ? perfectDays : '—',     sub: '100% Hero Score days' },
     { icon:'🧠', label:'21-Day Streak',      val: has21 ? '✓' : `${longestStreak}/21`,     sub: has21 ? 'Badge earned!' : 'Keep going — habit forming starts here' },
   ];
@@ -4396,9 +4403,9 @@ function renderAdvInsights() {
 
   // 1. Overall performance read
   if (score === 0) {
-    insights.push({ icon:'🌅', text: `Nothing logged yet today. Pick whichever category feels easiest right now — one habit is one pathway activated, and that is enough to start.` });
+    insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h14"/><path d="M5 13A4 4 0 0113 13"/><line x1="9" y1="3" x2="9" y2="5"/><line x1="3.5" y1="6.5" x2="5" y2="8"/><line x1="14.5" y1="6.5" x2="13" y2="8"/></svg>', text: `Nothing logged yet today. Pick whichever category feels easiest right now — one habit is one pathway activated, and that is enough to start.` });
   } else if (score >= 80) {
-    insights.push({ icon:'🏆', text: `${score}% today — that is a genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
+    insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h8v6a4 4 0 01-8 0V2z"/><path d="M5 5H3a2 2 0 000 4h2"/><path d="M13 5h2a2 2 0 010 4h-2"/><line x1="9" y1="12" x2="9" y2="15"/><line x1="6" y1="15" x2="12" y2="15"/></svg>', text: `${score}% today — that is a genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
   } else if (score >= 50) {
     insights.push({ icon:'📈', text: `You are at ${score}% — streak is safe. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
   } else {
@@ -4412,9 +4419,9 @@ function renderAdvInsights() {
 
   // 3. Streak insight
   if (streak.count >= 7) {
-    insights.push({ icon:'🔥', text: `${streak.count} days in a row. You are ${21 - streak.count > 0 ? (21 - streak.count) + ' days from the point' : 'past the point'} where research says this stops feeling like effort and starts feeling like you. Keep that going.` });
+    insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>', text: `${streak.count} days in a row. You are ${21 - streak.count > 0 ? (21 - streak.count) + ' days from the point' : 'past the point'} where research says this stops feeling like effort and starts feeling like you. Keep that going.` });
   } else if (streak.count > 0) {
-    insights.push({ icon:'🔥', text: `${streak.count}-day streak and building. It is much easier to keep this going than to restart it once it is broken. Show up tomorrow.` });
+    insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>', text: `${streak.count}-day streak and building. It is much easier to keep this going than to restart it once it is broken. Show up tomorrow.` });
   }
 
   // 4. Specific category nudge
@@ -4434,15 +4441,15 @@ function renderAdvInsights() {
     const recent3 = dayScores.slice(-3).map(([,s]) => s);
     const trend   = recent3[2] - recent3[0];
     if (trend > 15) {
-      insights.push({ icon:'📊', text: `Your last 3 days have been trending up (+${trend}%). That is real momentum. Good time to push a little further — or lock in a habit you have been putting off.` });
+      insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="14" x2="16" y2="14"/><rect x="3" y="9" width="3" height="5" rx="1"/><rect x="7.5" y="6" width="3" height="8" rx="1"/><rect x="12" y="3" width="3" height="11" rx="1"/></svg>', text: `Your last 3 days have been trending up (+${trend}%). That is real momentum. Good time to push a little further — or lock in a habit you have been putting off.` });
     } else if (trend < -15) {
-      insights.push({ icon:'📊', text: `Your last 3 days have been trending down. This happens — but something shifted. Worth checking which category went quiet first; that is usually where it starts.` });
+      insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="14" x2="16" y2="14"/><rect x="3" y="9" width="3" height="5" rx="1"/><rect x="7.5" y="6" width="3" height="8" rx="1"/><rect x="12" y="3" width="3" height="11" rx="1"/></svg>', text: `Your last 3 days have been trending down. This happens — but something shifted. Worth checking which category went quiet first; that is usually where it starts.` });
     }
   }
 
   el.innerHTML = insights.map(ins => `
     <div class="adv-insight-row">
-      <span class="adv-insight-icon">${ins.icon}</span>
+      <div class="adv-insight-icon">${ins.icon}</div>
       <span>${ins.text}</span>
     </div>`).join('');
 }
@@ -5320,7 +5327,7 @@ function renderProfileAvatar() {
   }
   // Update profile mini icon
   const mini = document.getElementById('profileAvatarMini');
-  if (mini) mini.textContent = userAvatar ? userAvatar.emoji : '👤';
+  if (mini) mini.textContent = userAvatar ? userAvatar.emoji : '';
 }
 
 const CAT_META = [
@@ -6078,16 +6085,16 @@ function maybeShowChangelog() {
 
 function showChangelog() {
   var items = [
-    { icon: '✏️', title: 'Make it yours', desc: 'Secondary and bonus habits now have a personalisation label. Type in what your version of the habit actually looks like — "skincare routine", "Zumba", "morning muhasabah" — and it will pre-fill every day going forward.' },
-    { icon: '🌅', title: 'Your journey, so far', desc: 'A new history screen on the Coach page shows every day you have logged — coloured by which neurochemical system you fed most that day.' },
-    { icon: '🕛', title: 'Midnight rollover fix', desc: 'The app now resets at midnight your local time. Previously it was resetting at 8am for users in Malaysia — that is now fixed.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z"/><line x1="11" y1="4.5" x2="13.5" y2="7"/></svg>', title: 'Make it yours', desc: 'Secondary and bonus habits now have a personalisation label. Type in what your version of the habit actually looks like — "skincare routine", "Zumba", "morning muhasabah" — and it will pre-fill every day going forward.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="14" height="11" rx="1.5"/><line x1="2" y1="8" x2="16" y2="8"/><line x1="6" y1="2" x2="6" y2="6"/><line x1="12" y1="2" x2="12" y2="6"/></svg>', title: 'Your journey, so far', desc: 'A new history screen on the Coach page shows every day you have logged — coloured by which neurochemical system you fed most that day.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><line x1="9" y1="5" x2="9" y2="9"/><line x1="9" y1="9" x2="12" y2="9"/></svg>', title: 'Midnight rollover fix', desc: 'The app now resets at midnight your local time. Previously it was resetting at 8am for users in Malaysia — that is now fixed.' },
   ];
 
   var list = document.getElementById('changelogList');
   if (!list) return;
   list.innerHTML = items.map(function(item) {
     return '<div class="changelog-item">' +
-      '<span class="changelog-icon">' + item.icon + '</span>' +
+      '<div class="changelog-icon">' + item.icon + '</div>' +
       '<div class="changelog-body"><strong>' + item.title + '</strong><span>' + item.desc + '</span></div>' +
       '</div>';
   }).join('');
@@ -6330,7 +6337,9 @@ function updateThemeUI() {
     var t = document.createElement('div');
     t.className = 'theme-pill-thumb'; pill.appendChild(t);
   }
-  if (icon) icon.textContent  = light ? '🌝' : '☀️';
+  if (icon) icon.innerHTML = light
+    ? '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round"><path d="M14.5 10.5A6 6 0 017 3a7 7 0 100 12 6 6 0 007.5-4.5z"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="3.5"/><line x1="9" y1="1.5" x2="9" y2="3"/><line x1="9" y1="15" x2="9" y2="16.5"/><line x1="1.5" y1="9" x2="3" y2="9"/><line x1="15" y1="9" x2="16.5" y2="9"/><line x1="3.7" y1="3.7" x2="4.8" y2="4.8"/><line x1="13.2" y1="13.2" x2="14.3" y2="14.3"/><line x1="14.3" y1="3.7" x2="13.2" y2="4.8"/><line x1="4.8" y1="13.2" x2="3.7" y2="14.3"/></svg>';
   if (lbl)  lbl.textContent   = light ? 'Currently light — tap to switch' : 'Currently dark — tap to switch';
 }
 window.toggleTheme = toggleTheme;
