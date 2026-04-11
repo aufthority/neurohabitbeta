@@ -1348,8 +1348,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   <div class="onboard-inner">
     <div class="onboard-header">
       <img src="icon-192.png" alt="NeuroHabit" id="avatarStepBrain" style="width:72px;height:72px;border-radius:18px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
-      <div class="onboard-title">What kind of person are you?</div>
-      <div class="onboard-sub">Pick the avatar that feels most like you. We will pre-select a habit set tailored to your lifestyle — you can fine-tune it anytime in the first 48 hours.</div>
+      <div class="onboard-title">Choose your avatar</div>
+      <div class="onboard-sub">We made a suggestion based on your answers — but you know yourself best. Pick the one that feels most like you.</div>
     </div>
     <div class="avatar-grid" id="onboardAvatarGrid" style="margin-bottom:24px"></div>
     <button class="onboard-cta-btn" id="avatarStartBtn" onclick="finishOnboarding()">Build my habit set →</button>
@@ -1531,6 +1531,24 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     </div>
     <div class="intro-spacer"></div>
     <button class="intro-cta" id="quiz-next-4" onclick="quizFinish()" disabled>See who we matched you with →</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     QUIZ RESULT — Match reveal
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-quiz-result" style="display:none">
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:100%"></div></div>
+  <div class="intro-inner">
+    <div class="intro-eyebrow" style="text-align:center">Your match</div>
+    <div id="quiz-result-card" style="text-align:center;padding:16px 0 8px">
+      <!-- Populated by quizFinish() -->
+    </div>
+    <div class="intro-spacer"></div>
+    <button class="intro-cta" onclick="quizConfirmMatch()">Yes, this is me — build my habit set →</button>
+    <button onclick="quizChooseOwn()" style="width:100%;padding:11px;border-radius:var(--radius-sm);border:1.5px solid var(--border);cursor:pointer;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;background:transparent;color:var(--muted);margin-top:8px;">This doesn’t feel right — let me choose</button>
+    <div class="intro-cta-note">Your habits are pre-configured. You can adjust anything in the first 48 hours.</div>
   </div>
 </div>
 
@@ -2580,7 +2598,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 58;
+const APP_BUILD   = 59;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -5560,21 +5578,21 @@ function showAvatarPicker() {
    AVATAR SYSTEM — relatable character identities
    ═══════════════════════════════════════════════════════════ */
 const AVATARS = [
-  { id: 'tired-carer',       emoji: '😪', label: 'Tired Carer',          desc: 'Running on love and coffee' },
-  { id: 'shift-worker',      emoji: '🥱', label: 'Shift Worker',          desc: 'My schedule is a mystery' },
-  { id: 'neurodivergent',    emoji: '🤔', label: 'Neurodivergent',        desc: 'My brain works differently' },
-  { id: 'busy-student',      emoji: '😅', label: 'Busy Student',          desc: 'Deadline? What deadline?' },
-  { id: 'gamer',             emoji: '😎', label: 'The Gamer',             desc: 'One more round, I promise' },
-  { id: 'outdoor-junkie',    emoji: '😄', label: 'Outdoor Junkie',        desc: 'If there is no trail, I make one' },
-  { id: 'corp-survivor',     emoji: '😬', label: 'Corporate Survivor',    desc: 'Meetings that could be emails' },
-  { id: 'overachiever',      emoji: '🤩', label: 'The Overachiever',      desc: 'Sleep is for the weekend' },
-  { id: 'overthinker',       emoji: '😰', label: 'The Overthinker',       desc: 'Overthinking this choice right now' },
-  { id: 'introvert',         emoji: '🙂', label: 'Proud Introvert',       desc: 'People are exhausting' },
-  { id: 'gym-devotee',       emoji: '😤', label: 'Gym Devotee',           desc: 'Did I mention I lift?' },
-  { id: 'runner',            emoji: '🥵', label: 'The Runner',            desc: 'One more kilometre' },
-  { id: 'extrovert',         emoji: '😁', label: 'The Extrovert',         desc: 'I made friends in the queue' },
-  { id: 'homemaker',         emoji: '🤗', label: 'Home Maker',            desc: 'The house runs because of me' },
-  { id: 'creative',          emoji: '😋', label: 'The Creative',          desc: 'Living in my own world' },
+  { id: 'tired-carer',    emoji: '😪', label: 'Tired Carer',       desc: 'Running on love and coffee',         traits: ['Caring','Overextended','Resilient'],      note: 'Recovery first, then connection. You give a lot. This is built around what you actually need.' },
+  { id: 'shift-worker',   emoji: '🥱', label: 'Shift Worker',       desc: 'My schedule is a mystery',           traits: ['Adaptable','Irregular','Determined'],     note: 'Flexible, short habits that don\'t depend on a fixed time. Built for the life you have.' },
+  { id: 'neurodivergent', emoji: '🤔', label: 'Neurodivergent',     desc: 'My brain works differently',         traits: ['Creative','Intense','Non-linear'],        note: 'Low-friction habits with clear cues. No guilt for non-linear days. Your brain is not the problem.' },
+  { id: 'busy-student',   emoji: '😅', label: 'Busy Student',       desc: 'Deadline? What deadline?',           traits: ['Ambitious','Stressed','Curious'],         note: 'Habits that fit into the gaps — because your schedule isn\'t yours right now.' },
+  { id: 'gamer',          emoji: '😎', label: 'The Gamer',          desc: 'One more round, I promise',          traits: ['Focused','Night owl','Goal-driven'],      note: 'Progress-driven habits built for evening energy and the satisfaction of levelling something up.' },
+  { id: 'outdoor-junkie', emoji: '😄', label: 'Outdoor Junkie',     desc: 'If there is no trail, I make one',   traits: ['Active','Adventurous','Grounded'],        note: 'High Endorphin habits, outdoor cues, and the kind of connection that happens side-by-side.' },
+  { id: 'corp-survivor',  emoji: '😬', label: 'Corporate Survivor', desc: 'Meetings that could be emails',      traits: ['Driven','Depleted','Strategic'],          note: 'Habits that fit between the meetings — and protect the margins of your day before someone else claims them.' },
+  { id: 'overachiever',   emoji: '🤩', label: 'The Overachiever',   desc: 'Sleep is for the weekend',           traits: ['High-energy','Ambitious','Burnout-prone'],note: 'We are going to ask you to do less than you think you should. That is the plan. Trust it.' },
+  { id: 'overthinker',    emoji: '😰', label: 'The Overthinker',    desc: 'Overthinking this choice right now', traits: ['Analytical','Anxious','Deep thinker'],    note: 'Simple habits with the science explained — because knowing why helps your brain commit.' },
+  { id: 'introvert',      emoji: '🙂', label: 'Proud Introvert',    desc: 'People are exhausting',              traits: ['Reflective','Selective','Calm'],          note: 'Oxytocin habits built for depth, not volume. One good conversation beats ten shallow ones.' },
+  { id: 'gym-devotee',    emoji: '😤', label: 'Gym Devotee',        desc: 'Did I mention I lift?',              traits: ['Disciplined','Body-focused','Routine'],   note: 'Endorphin is already strong. We will build out the other three so your whole system is balanced.' },
+  { id: 'runner',         emoji: '🥵', label: 'The Runner',         desc: 'One more kilometre',                 traits: ['Endurance','Goal-driven','Outdoorsy'],    note: 'The finish-line mindset applied to four neurochemicals, not just one.' },
+  { id: 'extrovert',      emoji: '😁', label: 'The Extrovert',      desc: 'I made friends in the queue',        traits: ['Social','Energetic','Warm'],              note: 'Oxytocin is your superpower. We will build the other three around your natural energy.' },
+  { id: 'homemaker',      emoji: '🤗', label: 'Home Maker',         desc: 'The house runs because of me',       traits: ['Nurturing','Structured','Unsung'],        note: 'Habits that are yours — not the family\'s, not the house\'s. Yours.' },
+  { id: 'creative',       emoji: '😋', label: 'The Creative',       desc: 'Living in my own world',             traits: ['Imaginative','Fluid','Sensitive'],        note: 'Flexible, curiosity-led habits. Structure that bends around inspiration rather than killing it.' },
 ];
 
 const AVK = 'nh_pwa_avatar'; // localStorage key
@@ -5886,9 +5904,11 @@ function finishOnboarding() {
   initHabitLockWithGrace(userHabitConfig);
   // Mark that the personalise prompt should show on first coach load
   localStorage.setItem('nh_show_personalise_prompt', '1');
-  // Hide avatar screen
+  // Hide avatar and result screens
   var avScreen = document.getElementById('screen-avatar');
   if (avScreen) { avScreen.classList.remove('screen-active'); avScreen.style.display = 'none'; }
+  var qrScreen = document.getElementById('screen-quiz-result');
+  if (qrScreen) { qrScreen.classList.remove('screen-active'); qrScreen.style.display = 'none'; }
   showMainApp();
 }
 
@@ -6619,7 +6639,7 @@ function introGoTo(toId, step, total) {
   var screens = [
     'screen-intro-0','screen-intro-1','screen-intro-2',
     'screen-quiz-1','screen-quiz-2','screen-quiz-3','screen-quiz-4',
-    'screen-avatar'
+    'screen-quiz-result','screen-avatar'
   ];
   screens.forEach(function(id) {
     var el = document.getElementById(id);
@@ -6687,21 +6707,46 @@ function quizComputeMatch() {
 }
 
 function quizFinish() {
-  /* Score quiz, pre-select the matched avatar, then hand off to existing avatar screen */
+  /* Score answers, store match, render reveal card, route to result screen */
   var matched = quizComputeMatch();
-  /* Pre-select in avatar grid — reuse existing userAvatar mechanism */
   userAvatar = { id: matched.id, emoji: matched.emoji, label: matched.label };
   sv(AVK, userAvatar);
-  /* Slide to the existing avatar confirmation screen */
-  introGoTo('screen-avatar', 7, 7);
-  /* Re-render avatar grid with the match pre-selected */
-  renderOnboardAvatarGrid();
+  /* Render the match-reveal card */
+  var card = document.getElementById('quiz-result-card');
+  if (card) {
+    var traitHTML = (matched.traits || []).map(function(t) {
+      return '<span style="font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;' +
+             'background:var(--surface2);color:var(--text);border:1px solid var(--border);' +
+             'display:inline-block;margin:3px 2px">' + t + '</span>';
+    }).join('');
+    card.innerHTML =
+      '<div style="font-size:52px;line-height:1;margin-bottom:12px">' + matched.emoji + '</div>' +
+      '<div style="font-family:\'Instrument Serif\',serif;font-size:24px;font-weight:400;' +
+           'color:var(--text);margin-bottom:5px">' + matched.label + '</div>' +
+      '<div style="font-size:13px;color:var(--muted);margin-bottom:14px">' + matched.desc + '</div>' +
+      (traitHTML ? '<div style="margin-bottom:16px">' + traitHTML + '</div>' : '') +
+      (matched.note ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.7;' +
+                      'max-width:290px;margin:0 auto">' + matched.note + '</p>' : '');
+  }
+  introGoTo('screen-quiz-result', 7, 8);
+}
 
+function quizConfirmMatch() {
+  /* User accepts the matched avatar — finishOnboarding reads userAvatar directly */
+  finishOnboarding();
+}
+
+function quizChooseOwn() {
+  /* User wants to pick manually — show the full avatar grid */
+  renderOnboardAvatarGrid();
+  introGoTo('screen-avatar', 8, 8);
 }
 
 window.introGoTo  = introGoTo;
 window.quizPick   = quizPick;
-window.quizFinish = quizFinish;
+window.quizFinish       = quizFinish;
+window.quizConfirmMatch = quizConfirmMatch;
+window.quizChooseOwn    = quizChooseOwn;
 
 window.showScreen         = showScreen;
 /* showHistoryScreen registered above */
