@@ -1012,7 +1012,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .week-trend-inline { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 14px; margin-bottom: 14px; }
 .week-trend-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .trend-chart-wrap { position: relative; width: 100%; }
-.trend-svg { width: 100%; overflow: visible; }
+.trend-svg { width: 100%; overflow: hidden; }
 .trend-day-label { font-size: 9px; fill: var(--muted); }
 .trend-day-label.today { fill: var(--text); font-weight: 600; }
 .trend-active-dot { transition: r 0.2s; }
@@ -1660,7 +1660,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
                 <span class="premium-preview-title">📅 This Week</span>
                 <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
-              <div class="week-section" style="border:none;margin:0;padding:8px 0 0">
+              <div class="week-section" style="border:none;margin:0;padding:8px 2px 0">
                 <div class="week-grid" id="weekGrid"></div>
               </div>
               <p class="premium-preview-desc">Your daily habit completion pattern for the week.</p>
@@ -2578,7 +2578,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 61;
+const APP_BUILD   = 63;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3905,9 +3905,9 @@ function renderWeeklyTrend() {
   });
 
   /* SVG dimensions */
-  const W = 280, H = 72, PAD_X = 10, PAD_Y = 8;
+  const W = 280, H = 72, PAD_X = 10, PAD_Y = 8, DOT_R = 5;
   const chartW = W - PAD_X * 2;
-  const chartH = H - PAD_Y * 2;
+  const chartH = H - PAD_Y * 2 - DOT_R; /* leave room at bottom for dot radius */
   const n = days.length;
   const xStep = chartW / (n - 1);
 
