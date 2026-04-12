@@ -591,7 +591,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   font-size: 24px; flex-shrink: 0; color: #fff;
   font-family: 'Instrument Serif', serif; font-weight: 400;
 }
-.profile-name { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; line-height: 1.1; }
+.profile-name { font-family: 'Geist', sans-serif; font-size: 13px; font-weight: 400; line-height: 1.1; color: var(--muted); letter-spacing: 0; }
+.profile-name strong { display: block; font-size: 18px; font-weight: 600; color: var(--text); margin-top: 1px; }
 .profile-email { font-size: 12px; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .profile-badge {
   margin-left: auto; flex-shrink: 0;
@@ -1807,7 +1808,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="profile-avatar-block">
           <div class="profile-avatar" id="profileAvatar">?</div>
           <div style="flex:1;min-width:0;overflow:hidden;">
-            <div class="profile-name" id="profileName">Guest</div>
+            <div class="profile-name" id="profileName"><strong>Guest</strong></div>
             <div id="profileAvatarLabel" style="font-size:11px;color:var(--coach);font-weight:500;margin-top:1px;display:none"></div>
             <div class="profile-email" id="profileEmail">Not signed in</div>
           </div>
@@ -6266,7 +6267,13 @@ function renderProfile() {
   const [, g]  = grades.find(([min]) => score >= min) || grades[5];
 
   document.getElementById('profileAvatar').textContent = initials;
-  document.getElementById('profileName').textContent   = name.charAt(0).toUpperCase() + name.slice(1);
+  var profileNameEl = document.getElementById('profileName');
+  if (profileNameEl) {
+    var firstName = name.charAt(0).toUpperCase() + name.slice(1);
+    var hr = new Date().getHours();
+    var greeting = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
+    profileNameEl.innerHTML = greeting + '<strong>' + firstName + '</strong>';
+  }
   document.getElementById('profileEmail').textContent  = email;
   document.getElementById('profilePlanBadge').textContent = userData.skipAuth ? 'Guest' : 'Free';
   // Show guest sign-up banner only for guest sessions
