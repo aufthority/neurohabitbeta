@@ -6031,7 +6031,7 @@ function addHabitToSet(type, hid) {
   var catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
   var lockNote = 'You can remove it at any time after adding.';
   var msgLine2 = lockNote;
-  if (!confirm(msgLine1 + ' ' + msgLine2)) return;
+  if (!confirm('Add "' + h.label + '" to your habit set?')) return;
   userHabitConfig[type].selected.push(hid);
   sv(HCK, userHabitConfig);
   renderSection(type);
