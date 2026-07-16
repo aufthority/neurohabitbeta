@@ -1,10 +1,11 @@
 /* ═══════════════════════════════════════════════════════════
-   NeuroHabit Service Worker v5
-   — index.html always network-first (never cached)
+   NeuroHabit Service Worker v6
+   — index.html always network-first, cache:'no-store' so it
+     truly bypasses the HTTP cache, not just Cache Storage
    — Firebase/Fonts cached for offline use
    ═══════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'neurohabit-v65';
+const CACHE_NAME = 'neurohabit-v67';
 
 const PRECACHE = [
   '/neurohabitbeta/manifest.json',
@@ -38,10 +39,13 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  /* index.html — ALWAYS network-first, never serve from cache */
+  /* index.html — ALWAYS network-first. cache:'no-store' forces
+     a real network round-trip instead of letting the browser's
+     ordinary HTTP cache silently answer the fetch() call —
+     that gap was why deployed changes weren't showing up. */
   if (url.includes('/neurohabitbeta/index.html') || url.endsWith('/neurohabitbeta/') || url.endsWith('/neurohabitbeta')) {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/neurohabitbeta/index.html'))
+      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match('/neurohabitbeta/index.html'))
     );
     return;
   }
@@ -61,10 +65,10 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  /* Navigate requests — network-first */
+  /* Navigate requests — network-first, same no-store guarantee */
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/neurohabitbeta/index.html'))
+      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match('/neurohabitbeta/index.html'))
     );
     return;
   }
@@ -74,3 +78,4 @@ self.addEventListener('fetch', event => {
     fetch(event.request).catch(() => caches.match(event.request))
   );
 });
+
