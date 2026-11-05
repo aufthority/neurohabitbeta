@@ -399,6 +399,17 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .habit-learn-btn::after { content: '\203A'; font-size: 13px; line-height: 1; }
 
 /* ── BUILD 32: Reserved note zone at bottom of info modal ── */
+.habit-own-label { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.habit-info-btn { width: 40px; min-height: 40px; flex-shrink: 0; display: grid; place-items: center; background: none; border: 0; color: var(--subtle); cursor: pointer; border-radius: var(--radius-sm); align-self: center; }
+.habit-info-btn:hover { color: var(--text); }
+.info-points { font-size: 13px; color: var(--muted); line-height: 1.55; margin: 0 0 12px; }
+.info-own-label { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .7px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.info-own-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.info-own-input { flex: 1; min-width: 0; min-height: 40px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-family: 'Geist', sans-serif; font-size: 14px; }
+.info-own-save { min-height: 40px; padding: 0 14px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface); color: var(--text); font-family: 'Geist', sans-serif; font-size: 13px; cursor: pointer; }
+.info-action { width: 100%; min-height: 44px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: none; color: var(--text); font-family: 'Geist', sans-serif; font-size: 13.5px; cursor: pointer; }
+.info-lock-note { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+.info-modal-note-zone:empty { display: none; }
 .info-modal-note-zone {
   margin-top: 18px;
   padding-top: 14px;
@@ -1833,17 +1844,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <p>Drive, motivation & reward pathway.</p>
         <div class="cat-gauge">
           <div class="cat-gauge-track">
-            <div class="cat-gauge-raw"  id="gr-dopamine" style="--ac:var(--dopamine)"></div>
             <div class="cat-gauge-fill" id="gf-dopamine" style="--ac:var(--dopamine)"></div>
-            <div class="cat-gauge-marker" id="gm-dopamine" style="--ac:var(--dopamine)"></div>
           </div>
           <div class="cat-gauge-meta">
             <div class="cat-gauge-label" id="gl-dopamine" style="color:var(--dopamine)">0%</div>
-            <div class="cap-badge" id="cb-dopamine" style="--ac:var(--dopamine)">🔒 Capped at 50%</div>
+            <div class="cap-badge" id="cb-dopamine" style="--ac:var(--dopamine)">Do a core habit to unlock full points</div>
           </div>
         </div>
       </div>
-      <div class="pips-row" id="pips-dopamine" style="--ac:var(--dopamine)"></div>
       <div class="max-note" id="mn-dopamine">✅ Dopamine maxed out!</div>
       <div class="habit-list" id="list-dopamine"></div>
     </div>
@@ -1856,17 +1864,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <p>Mood stability, regulation & balance.</p>
         <div class="cat-gauge">
           <div class="cat-gauge-track">
-            <div class="cat-gauge-raw"  id="gr-serotonin" style="--ac:var(--serotonin)"></div>
             <div class="cat-gauge-fill" id="gf-serotonin" style="--ac:var(--serotonin)"></div>
-            <div class="cat-gauge-marker" id="gm-serotonin" style="--ac:var(--serotonin)"></div>
           </div>
           <div class="cat-gauge-meta">
             <div class="cat-gauge-label" id="gl-serotonin" style="color:var(--serotonin)">0%</div>
-            <div class="cap-badge" id="cb-serotonin" style="--ac:var(--serotonin)">🔒 Capped at 50%</div>
+            <div class="cap-badge" id="cb-serotonin" style="--ac:var(--serotonin)">Do a core habit to unlock full points</div>
           </div>
         </div>
       </div>
-      <div class="pips-row" id="pips-serotonin" style="--ac:var(--serotonin)"></div>
       <div class="max-note" id="mn-serotonin">✅ Serotonin maxed out!</div>
       <div class="habit-list" id="list-serotonin"></div>
     </div>
@@ -1879,17 +1884,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <p>Connection, trust & social bonding.</p>
         <div class="cat-gauge">
           <div class="cat-gauge-track">
-            <div class="cat-gauge-raw"  id="gr-oxytocin" style="--ac:var(--oxytocin)"></div>
             <div class="cat-gauge-fill" id="gf-oxytocin" style="--ac:var(--oxytocin)"></div>
-            <div class="cat-gauge-marker" id="gm-oxytocin" style="--ac:var(--oxytocin)"></div>
           </div>
           <div class="cat-gauge-meta">
             <div class="cat-gauge-label" id="gl-oxytocin" style="color:var(--oxytocin)">0%</div>
-            <div class="cap-badge" id="cb-oxytocin" style="--ac:var(--oxytocin)">🔒 Capped at 50%</div>
+            <div class="cap-badge" id="cb-oxytocin" style="--ac:var(--oxytocin)">Do a core habit to unlock full points</div>
           </div>
         </div>
       </div>
-      <div class="pips-row" id="pips-oxytocin" style="--ac:var(--oxytocin)"></div>
       <div class="max-note" id="mn-oxytocin">✅ Oxytocin maxed out!</div>
       <div class="habit-list" id="list-oxytocin"></div>
     </div>
@@ -1902,17 +1904,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <p>Movement, stress relief & recovery.</p>
         <div class="cat-gauge">
           <div class="cat-gauge-track">
-            <div class="cat-gauge-raw"  id="gr-endorphin" style="--ac:var(--endorphin)"></div>
             <div class="cat-gauge-fill" id="gf-endorphin" style="--ac:var(--endorphin)"></div>
-            <div class="cat-gauge-marker" id="gm-endorphin" style="--ac:var(--endorphin)"></div>
           </div>
           <div class="cat-gauge-meta">
             <div class="cat-gauge-label" id="gl-endorphin" style="color:var(--endorphin)">0%</div>
-            <div class="cap-badge" id="cb-endorphin" style="--ac:var(--endorphin)">🔒 Capped at 50%</div>
+            <div class="cap-badge" id="cb-endorphin" style="--ac:var(--endorphin)">Do a core habit to unlock full points</div>
           </div>
         </div>
       </div>
-      <div class="pips-row" id="pips-endorphin" style="--ac:var(--endorphin)"></div>
       <div class="max-note" id="mn-endorphin">✅ Endorphin maxed out!</div>
       <div class="habit-list" id="list-endorphin"></div>
     </div>
@@ -3247,7 +3246,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 75;
+const APP_BUILD   = 76;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3671,20 +3670,19 @@ function renderSection(type) {
 
     let flexCtrlHTML = '';
     if (isMulti) {
-      const tierLabel = tierIdx === 0 ? 'Set session' : h.flex.tiers[tierIdx-1].label;
+      /* BUILD 76: plain wording — "How much?" until a level is picked */
+      const tierLabel = tierIdx === 0 ? 'How much?' : h.flex.tiers[tierIdx-1].label;
       flexCtrlHTML = '<div class="session-flex-ctrl">' +
-        '<button class="session-tier-btn" data-dir="-1" title="Fewer sessions">‹</button>' +
+        '<button class="session-tier-btn" data-dir="-1" aria-label="Less">‹</button>' +
         '<span class="session-tier-label">' + tierLabel + '</span>' +
-        '<button class="session-tier-btn" data-dir="1" title="More sessions">›</button>' +
+        '<button class="session-tier-btn" data-dir="1" aria-label="More">›</button>' +
         '</div>';
     } else if (h.flex) {
+      /* No habit currently uses a single on/off flex; kept working, with a clearer name */
       const isFl = h.flex && !!appState[today][type + '_' + i + '_flex'];
-      flexCtrlHTML = '<button class="flex-toggle-btn ' + (isFl ? 'active' : '') + '">Flex ' + (isFl ? 'ON' : 'OFF') + '</button>';
+      flexCtrlHTML = '<button class="flex-toggle-btn ' + (isFl ? 'active' : '') + '">Lighter version' + (isFl ? ' ✓' : '') + '</button>';
     }
-
-    const canRem = canRemoveHabit(type, h.id);
-    const lockInfo = isInGracePeriod() ? ' (free to change — ' + hoursUntilGraceEnd() + 'h left)' : isLockActive() ? ' (unlocks in ' + daysUntilUnlock() + 'd)' : '';
-    const remBtn = '<button class="habit-rem-btn" data-type="' + type + '" data-id="' + h.id + '" title="' + (canRem ? 'Remove from your set' : 'Locked' + lockInfo) + '" style="opacity:' + (canRem ? '0.6' : '0.25') + ';cursor:' + (canRem ? 'pointer' : 'default') + '">✕</button>';
+    const ownLabel = habitLabels[key];
 
     row.innerHTML =
       '<div class="habit-check">' +
@@ -3694,24 +3692,17 @@ function renderSection(type) {
       '</div>' +
       '<div class="habit-body">' +
         '<span class="habit-label">' + displayLabel + '</span>' +
+        (ownLabel ? '<span class="habit-own-label">' + todayEsc(ownLabel) + '</span>' : '') +
         '<div class="habit-meta">' +
           '<span class="habit-type-tag">' + typeMap[h.type] + '</span>' +
-
-          (isFlex ? '<span class="flex-tag show">' + (isMulti ? 'SESSIONS' : 'FLEX') + '</span>' : '') +
         '</div>' +
-        '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">How it works</button>' +
       '</div>' +
-      '<div class="habit-right">' +
-        '<div style="display:flex;align-items:center;gap:5px;">' +
-          '<div class="weight-badge">' + stars + ' ' + w + '</div>' +
-          remBtn +
-        '</div>' +
-        flexCtrlHTML +
-      '</div>';
+      (flexCtrlHTML ? '<div class="habit-right">' + flexCtrlHTML + '</div>' : '') +
+      '<button class="habit-info-btn" aria-label="How ' + displayLabel + ' works">' + TODAY_INFO + '</button>';
 
     row.addEventListener('click', function(e) {
-      if (e.target.closest('.habit-learn-btn') || e.target.closest('.flex-toggle-btn') ||
-          e.target.closest('.session-flex-ctrl') || e.target.closest('.habit-rem-btn')) return;
+      if (e.target.closest('.habit-info-btn') || e.target.closest('.flex-toggle-btn') ||
+          e.target.closest('.session-flex-ctrl')) return;
       toggleHabit(key, type, i);
     });
 
@@ -3730,130 +3721,14 @@ function renderSection(type) {
       });
     });
 
-    const learnBtn = row.querySelector('.habit-learn-btn');
-    if (learnBtn) learnBtn.addEventListener('click', function(e) {
+    const infoBtn2 = row.querySelector('.habit-info-btn');
+    if (infoBtn2) infoBtn2.addEventListener('click', function(e) {
       e.stopPropagation();
       showHabitInfo(h);
     });
 
-    const remBtn2 = row.querySelector('.habit-rem-btn');
-    if (remBtn2) remBtn2.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (!canRem) return; // dimmed button is truly inert
-      removeHabitFromSet(type, h.id);
-    });
-
     list.appendChild(row);
 
-    // BUILD 44: Habit personalisation label — secondary and bonus only
-    if (h.type === 'secondary' || h.type === 'bonus') {
-      const labelKey = type + '_' + i;
-      const savedLabel = habitLabels[labelKey] || '';
-
-      // BUILD 48: label area — confirm button collapses input; pencil re-opens it
-      const labelArea = document.createElement('div');
-      // Show input only if not yet saved
-      labelArea.className = 'habit-label-area' + (isDone && !savedLabel ? ' visible' : '');
-      labelArea.id = 'hla-' + labelKey;
-
-      // Build label area via innerHTML (no SVGs here — added via DOM below)
-      labelArea.innerHTML =
-        '<div class="habit-label-prompt">What\'s your version of this habit?</div>' +
-        '<div class="habit-label-wrap" id="hlw-' + labelKey + '">' +
-          '<input class="habit-label-input" id="hli-' + labelKey + '" type="text" maxlength="60"' +
-            ' placeholder="e.g. ' + h.label.toLowerCase() + '..."' +
-            ' value="' + savedLabel.replace(/"/g, '&quot;') + '">' +
-          '<button class="habit-label-confirm" id="hlc-' + labelKey + '" title="Save"></button>' +
-        '</div>';
-
-      // Inject confirm SVG via createElementNS — avoids HTML parser mangling SVG
-      (function() {
-        var NS = 'http://www.w3.org/2000/svg';
-        var svg = document.createElementNS(NS, 'svg');
-        svg.setAttribute('width', '14'); svg.setAttribute('height', '14');
-        svg.setAttribute('viewBox', '0 0 14 14'); svg.setAttribute('fill', 'none');
-        var pl = document.createElementNS(NS, 'polyline');
-        pl.setAttribute('points', '2,7 5.5,10.5 12,3.5');
-        pl.setAttribute('stroke', 'white'); pl.setAttribute('stroke-width', '1.8');
-        pl.setAttribute('stroke-linecap', 'round'); pl.setAttribute('stroke-linejoin', 'round');
-        svg.appendChild(pl);
-        var btn = labelArea.querySelector('#hlc-' + labelKey);
-        if (btn) btn.appendChild(svg);
-      })();
-
-      // Build preview row (pencil button SVG also via createElementNS)
-      const previewEl = document.createElement('div');
-      previewEl.className = 'habit-label-preview' + (savedLabel ? ' show' : '');
-      previewEl.id = 'hlp-' + labelKey;
-      previewEl.innerHTML =
-        '<div class="habit-label-preview-dot"></div>' +
-        '<span>' + (savedLabel ? savedLabel.replace(/</g,'&lt;') : '') + '</span>' +
-        '<button class="habit-edit-btn" id="hleb-' + labelKey + '" title="Edit" style="' + (savedLabel ? '' : 'display:none') + '"></button>';
-
-      (function() {
-        var NS = 'http://www.w3.org/2000/svg';
-        var svg = document.createElementNS(NS, 'svg');
-        svg.setAttribute('width', '13'); svg.setAttribute('height', '13');
-        svg.setAttribute('viewBox', '0 0 18 18'); svg.setAttribute('fill', 'none');
-        svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '1.5');
-        svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
-        var path = document.createElementNS(NS, 'path');
-        path.setAttribute('d', 'M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z');
-        var line = document.createElementNS(NS, 'line');
-        line.setAttribute('x1', '11'); line.setAttribute('y1', '4.5');
-        line.setAttribute('x2', '13.5'); line.setAttribute('y2', '7');
-        svg.appendChild(path); svg.appendChild(line);
-        var btn = previewEl.querySelector('#hleb-' + labelKey);
-        if (btn) btn.appendChild(svg);
-      })();
-
-      const metaEl = row.querySelector('.habit-meta');
-      if (metaEl) metaEl.insertAdjacentElement('afterend', previewEl);
-
-      // Confirm button — saves and collapses
-      function doConfirm() {
-        const input = document.getElementById('hli-' + labelKey);
-        const val = input.value.trim();
-        if (val) { habitLabels[labelKey] = val; } else { delete habitLabels[labelKey]; }
-        localStorage.setItem(HBL, JSON.stringify(habitLabels)); cloudNoteChange(HBL);
-        const previewEl  = document.getElementById('hlp-' + labelKey);
-        const previewSpan = previewEl ? previewEl.querySelector('span') : null;
-        const editBtn    = document.getElementById('hleb-' + labelKey);
-        if (previewEl && previewSpan) {
-          if (val) {
-            previewSpan.textContent = val;
-            previewEl.classList.add('show');
-            if (editBtn) editBtn.style.display = '';
-          } else {
-            previewSpan.textContent = '';
-            previewEl.classList.remove('show');
-            if (editBtn) editBtn.style.display = 'none';
-          }
-        }
-        document.getElementById('hla-' + labelKey).classList.remove('visible');
-      }
-
-      const confirmBtn = labelArea.querySelector('.habit-label-confirm');
-      if (confirmBtn) confirmBtn.addEventListener('click', function(e) { e.stopPropagation(); doConfirm(); });
-
-      const input = labelArea.querySelector('.habit-label-input');
-      input.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); doConfirm(); } });
-      input.addEventListener('click', function(e) { e.stopPropagation(); });
-
-      // Pencil edit button — re-opens input
-      setTimeout(function() {
-        var editBtn = document.getElementById('hleb-' + labelKey);
-        if (editBtn) editBtn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var area = document.getElementById('hla-' + labelKey);
-          var inp  = document.getElementById('hli-' + labelKey);
-          if (area) area.classList.add('visible');
-          if (inp)  { inp.value = habitLabels[labelKey] || ''; setTimeout(function() { inp.focus(); }, 280); }
-        });
-      }, 0);
-
-      list.appendChild(labelArea);
-    }
   });
 
   updateCatUI(type);
@@ -3914,7 +3789,73 @@ function showHabitInfo(h) {
   } else {
     tp.style.display = 'none';
   }
+  renderInfoExtras(h);
   openModal('infoOverlay');
+}
+
+/* BUILD 76: what used to crowd each row lives here — points, your own name for
+   the habit, and remove/swap (or why it's locked). */
+function habitTypeOf(h) {
+  return Object.keys(HABITS).find(function (t) { return HABITS[t].habits.indexOf(h) !== -1; });
+}
+
+function renderInfoExtras(h) {
+  var zone = document.getElementById('infoNoteZone');
+  if (!zone) return;
+  zone.innerHTML = '';
+  var type = habitTypeOf(h);
+  if (!type) return;
+  var i = HABITS[type].habits.indexOf(h);
+  var key = type + '_' + i;
+  var catName = type.charAt(0).toUpperCase() + type.slice(1);
+  var selected = isSelected(type, h.id);
+
+  var pts;
+  if (h.flex && h.flex.multiSession) {
+    var ws = h.flex.tiers.map(function (t) { return t.weight; });
+    pts = 'Worth ' + Math.min.apply(null, ws) + ' to ' + Math.max.apply(null, ws) + ' points toward ' + catName + ', depending on how much you do.';
+  } else {
+    pts = 'Worth ' + h.weight + ' point' + (h.weight === 1 ? '' : 's') + ' toward ' + catName + '.';
+  }
+  if (h.foundational) pts += ' As a core habit, it also unlocks full points for ' + catName + '.';
+  var html = '<p class="info-points">' + pts + '</p>';
+
+  if (selected && (h.type === 'secondary' || h.type === 'bonus')) {
+    html += '<label class="info-own-label" for="infoOwnInput">Your version of this habit</label>' +
+      '<div class="info-own-row"><input class="info-own-input" id="infoOwnInput" maxlength="60" placeholder="e.g. ' + todayEsc(h.label.toLowerCase()) + '…">' +
+      '<button class="info-own-save" id="infoOwnSave">Save</button></div>';
+  }
+
+  if (selected) {
+    var action = null, note = null;
+    if (isInGracePeriod()) action = 'Remove from my set';
+    else if (isLockActive()) {
+      if (h.foundational) note = 'Core habits are locked for ' + daysUntilUnlock() + ' more days, so you can see whether they work for you.';
+      else action = 'Remove from my set';
+    } else action = h.foundational ? 'Swap for another core habit' : 'Swap this habit';
+    if (action) html += '<button class="info-action" id="infoAction">' + action + '</button>';
+    if (note) html += '<p class="info-lock-note">' + note + '</p>';
+  }
+  zone.innerHTML = html;
+
+  var inp = document.getElementById('infoOwnInput');
+  if (inp) {
+    inp.value = habitLabels[key] || '';
+    var save = function () {
+      var v = inp.value.trim();
+      if (v) habitLabels[key] = v; else delete habitLabels[key];
+      localStorage.setItem(HBL, JSON.stringify(habitLabels)); cloudNoteChange(HBL);
+      renderSection(type); renderCoach();
+      showToast(v ? 'Saved your version.' : 'Your version removed.', 'success', 2000);
+    };
+    document.getElementById('infoOwnSave').addEventListener('click', save);
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); save(); } });
+  }
+  var act = document.getElementById('infoAction');
+  if (act) act.addEventListener('click', function () {
+    closeModal('infoOverlay');
+    removeHabitFromSet(type, h.id);
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -4000,27 +3941,17 @@ function cycleTier(tierKey, type, idx, dir) {
    UPDATE CATEGORY UI
    ═══════════════════════════════════════════════════════════ */
 function updateCatUI(type) {
+  /* BUILD 76: one indicator — a single bar plus how many habits are done.
+     The cap message shows only when it applies: an extra ticked with no core done. */
   const effPct = catEffectivePct(type);
-  const rawPct = catRawPct(type);
   const fdnOk  = foundationDone(type);
-  const maxPts = catMaxPts(type);
-
-  document.getElementById(`gr-${type}`).style.width = rawPct + '%';
+  const sel    = getSelectedHabits(type);
+  const isDone = h => !!(appState[today] || {})[type + '_' + HABITS[type].habits.indexOf(h)];
+  const done   = sel.filter(isDone).length;
+  const extraDone = sel.some(h => !h.foundational && isDone(h));
   document.getElementById(`gf-${type}`).style.width = effPct + '%';
-  document.getElementById(`gm-${type}`).classList.toggle('show', !fdnOk);
-  document.getElementById(`gl-${type}`).textContent =
-    `${Math.round(effPct)}%${!fdnOk ? ' (capped)' : ''}`;
-  document.getElementById(`cb-${type}`).classList.toggle('show', !fdnOk);
-
-  const pipCount = Math.min(maxPts, 12);
-  const litCount = Math.round((effPct / 100) * pipCount);
-  const rawLit   = Math.round((rawPct / 100) * pipCount);
-  const pipEl    = document.getElementById(`pips-${type}`);
-  pipEl.innerHTML = Array.from({ length: pipCount }, (_, i) => {
-    let cls = i < litCount ? 'lit' : i < rawLit ? 'dim' : '';
-    return `<div class="pip-seg ${cls}"></div>`;
-  }).join('');
-
+  document.getElementById(`gl-${type}`).textContent = done + ' of ' + sel.length + ' done';
+  document.getElementById(`cb-${type}`).classList.toggle('show', extraDone && !fdnOk);
   document.getElementById(`mn-${type}`).classList.toggle('show', effPct >= 100);
 }
 
@@ -5536,16 +5467,16 @@ function renderAdvInsights() {
   if (score === 0) {
     insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h14"/><path d="M5 13A4 4 0 0113 13"/><line x1="9" y1="3" x2="9" y2="5"/><line x1="3.5" y1="6.5" x2="5" y2="8"/><line x1="14.5" y1="6.5" x2="13" y2="8"/></svg>', text: `Nothing logged yet today. Pick whichever category feels easiest right now — one habit is one pathway activated, and that is enough to start.` });
   } else if (score >= 80) {
-    insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h8v6a4 4 0 01-8 0V2z"/><path d="M5 5H3a2 2 0 000 4h2"/><path d="M13 5h2a2 2 0 010 4h-2"/><line x1="9" y1="12" x2="9" y2="15"/><line x1="6" y1="15" x2="12" y2="15"/></svg>', text: `${score}% today — that is a genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
+    insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h8v6a4 4 0 01-8 0V2z"/><path d="M5 5H3a2 2 0 000 4h2"/><path d="M13 5h2a2 2 0 010 4h-2"/><line x1="9" y1="12" x2="9" y2="15"/><line x1="6" y1="15" x2="12" y2="15"/></svg>', text: `A genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
   } else if (score >= 50) {
-    insights.push({ icon:'📈', text: `You are at ${score}% — streak is safe. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
+    insights.push({ icon:'📈', text: `Today already counts toward your streak. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
   } else {
-    insights.push({ icon:'⚠️', text: `You are at ${score}% today — just below the streak threshold. One thing can change that: your top ${catNames[weakest[0]]} habit. It is the highest-leverage move you have right now.` });
+    insights.push({ icon:'⚠️', text: `Today doesn\'t count toward your streak yet. One thing can change that: your top ${catNames[weakest[0]]} habit. It is the highest-leverage move you have right now.` });
   }
 
   // 2. Imbalance insight
   if (strongest[1] - weakest[1] > 35) {
-    insights.push({ icon:'⚖️', text: `You are strong on ${catNames[strongest[0]]} today but ${catNames[weakest[0]]} is barely active at ${weakest[1]}%. That gap is worth closing — even one small win there shifts your whole neurochemical balance.` });
+    insights.push({ icon:'⚖️', text: `You are strong on ${catNames[strongest[0]]} today but ${catNames[weakest[0]]} is barely active. That gap is worth closing — even one small win there shifts your whole neurochemical balance.` });
   }
 
   // 3. Streak insight
@@ -5557,10 +5488,10 @@ function renderAdvInsights() {
 
   // 4. Specific category nudge
   if (cats.serotonin < 40) {
-    insights.push({ icon:'🌸', text: `Your Serotonin is low today (${cats.serotonin}%) — that is your mood and steadiness system. Sleep is almost always the reason. Protect tonight and tomorrow will feel different.` });
+    insights.push({ icon:'🌸', text: `Your Serotonin is low today — that is your mood and steadiness system. Sleep is almost always the reason. Protect tonight and tomorrow will feel different.` });
   }
   if (cats.oxytocin < 30) {
-    insights.push({ icon:'🤝', text: `Oxytocin is at ${cats.oxytocin}% — connection has been missing today. Your body genuinely needs this. One real conversation before you sleep is enough to move the needle.` });
+    insights.push({ icon:'🤝', text: `Oxytocin is low — connection has been missing today. Your body genuinely needs this. One real conversation before you sleep is enough to move the needle.` });
   }
   if (cats.dopamine === 0) {
     insights.push({ icon:'⚡', text: `No Dopamine activity yet today. Your drive and reward system has nothing to run on. Twenty minutes on your most important task — that is all it takes to get it firing again.` });
