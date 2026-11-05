@@ -2060,7 +2060,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       <span class="modal-icon">✨</span>
       <div class="modal-title">What's new in NeuroHabit</div>
     </div>
-    <div style="font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Build 53 — today's update</div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">In this update</div>
     <div id="changelogList" style="display:flex;flex-direction:column;gap:12px;margin-bottom:4px">
       <!-- Items injected by JS so they can reference live CSS vars -->
     </div>
@@ -7235,27 +7235,27 @@ function initApp() {
 
 const CHANGELOG_BUILD_KEY = 'nh_last_seen_build';
 
+/* BUILD 78: "What's new" shows once per device when its list changes, never to new
+   installs. Bump CHANGELOG_VERSION only when you rewrite the list in showChangelog();
+   ordinary builds don't trigger it. */
+const CHANGELOG_VERSION = 78;
+
 function maybeShowChangelog() {
   try {
     var stored = localStorage.getItem(CHANGELOG_BUILD_KEY);
-    var storedBuild = stored !== null ? parseInt(stored, 10) : null;
-    // Show if: stored build is older, OR key is missing but user has existing app data
-    // (missing key = returning user from before build 30 who never had this key)
-    var hasExistingData = localStorage.getItem(SK) !== null || localStorage.getItem(UK) !== null;
-    var isReturningUser = storedBuild === null ? hasExistingData : storedBuild < APP_BUILD;
-    if (isReturningUser) {
-      setTimeout(showChangelog, 800);
-    }
-    // Always stamp current build so future updates trigger the modal
-    localStorage.setItem(CHANGELOG_BUILD_KEY, String(APP_BUILD));
+    var seen = stored !== null ? parseInt(stored, 10) : null;
+    if (seen !== null && seen < CHANGELOG_VERSION) setTimeout(showChangelog, 800);   // existing device: once
+    if (seen === null || seen < CHANGELOG_VERSION) localStorage.setItem(CHANGELOG_BUILD_KEY, String(CHANGELOG_VERSION));
   } catch(e) {}
 }
 
 function showChangelog() {
   var items = [
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7.5"/><path d="M6 9l2.5 2.5L12 6"/></svg>', title: 'Circle habit checkboxes', desc: 'Habit checkboxes are now circles — empty ring when unchecked, filled with your category colour and a tick when done. Cleaner and more satisfying to tap.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2l1.8 3.6 4 .6-2.9 2.8.7 4L9 11l-3.6 1.9.7-4L3.2 6.2l4-.6L9 2z"/></svg>', title: 'SVG premium icons', desc: 'Star and checkmark icons across the app are now crisp SVGs — no more emoji rendering inconsistencies on Android.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15.5s-6-4.2-6-8.2a4 4 0 0 1 6-3.46A4 4 0 0 1 15 7.3c0 4-6 8.2-6 8.2z"/></svg>', title: 'Your Big Why', desc: 'A new card on your Profile page lets you add the name of the person you\'re doing this for. A quiet anchor that reminds you why it matters every time you open the app.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="12" height="12" rx="2.5"/><polyline points="6,9 8,11 12,6.5"/></svg>', title: 'Today screen', desc: 'Every habit on one screen. Tick from Today; tap a category to learn about its habits or change them.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="9" height="7" rx="1.2"/><rect x="11.5" y="7" width="4.5" height="8" rx="1"/><line x1="4.5" y1="13.5" x2="8.5" y2="13.5"/></svg>', title: 'Sync across your devices', desc: 'Sign in with Google and your habits stay in step on your phone, tablet and laptop.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a5 5 0 0 1 10 0c0 3.5 1.5 5 1.5 5h-13S4 10.5 4 7z"/><path d="M7.5 14.5a1.6 1.6 0 0 0 3 0"/></svg>', title: 'Quieter ticking', desc: 'A habit\'s insight shows once, the first time you tick it. After that, ticking is silent.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg>', title: 'Committed or Flexible', desc: 'Choose in Profile: keep your core habits for 28 days, or change any habit at any time.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="5" x2="15" y2="5"/><line x1="3" y1="9" x2="15" y2="9"/><line x1="3" y1="13" x2="10" y2="13"/></svg>', title: 'Simpler pages', desc: 'One progress bar per category and tidier habit rows. Points, your own name for a habit, and remove are in each habit\'s info button.' },
   ];
 
   var list = document.getElementById('changelogList');
