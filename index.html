@@ -1623,6 +1623,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       Try without an account
     </button>
   </div>
+  <div id="loginSyncMsg" role="status" aria-live="polite" style="display:none;margin-top:16px;font-size:13px;color:var(--muted)"></div>
   <div id="loginVersionBadge" style="margin-top:20px;font-size:10px;color:var(--muted);letter-spacing:0.3px"></div>
 
 </div>
@@ -1852,7 +1853,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <span class="guest-signup-icon">🔒</span>
             <div>
               <div class="guest-signup-title">You're in guest mode</div>
-              <div class="guest-signup-sub">Your habits are saved on this device only. Sign in to keep your data safe.</div>
+              <div class="guest-signup-sub">Your habits are saved on this device only. Sign in to sync them across your phone, tablet and laptop.</div>
             </div>
           </div>
           <button class="guest-signup-btn" onclick="signUpFromGuest()">
@@ -2310,7 +2311,7 @@ const gprov = new firebase.auth.GoogleAuthProvider();
    Signed-in users only. localStorage stays the source of truth
    for the running app; every save is mirrored to Firestore:
      users/{uid}                 → profile (config, lock, avatar,
-                                   labels, streak, big why)
+                                   labels, big why)
      users/{uid}/days/{date}     → state (that day's ticks) + score
    Only changes since the last successful upload are sent, and a
    tick removed locally is deleted in the cloud too. Writes queue
@@ -2351,36 +2352,29 @@ function cloudProfile() {
     lock:   ld(HLK),
     avatar: ld(AVK),
     labels: ld(HBL) || {},
-    streak: ld(STK),
     bigWhy: localStorage.getItem('nh_big_why') || null
   });
 }
 
 /* Called by sv() and the two direct localStorage writes that matter */
 function cloudNoteChange(key) {
-  if (!cloudUid) return;
+  if (!cloudUid || !cloudReady) return;
   if (cloudWatchedKeys().indexOf(key) === -1) return;
   clearTimeout(cloudTimer);
   cloudTimer = setTimeout(cloudFlush, 1500);
 }
 
-function cloudStart(uid) {
-  if (cloudUid === uid) return;
-  cloudUid = uid;
-  setSyncStatus(navigator.onLine === false ? 'offline' : 'saving');
-  clearTimeout(cloudTimer);
-  cloudTimer = setTimeout(cloudFlush, 0);   // first run uploads everything the cloud doesn't have yet
-}
-
 function cloudStop() {
+  cloudUnlisten();
   cloudUid = null;
+  cloudReady = false;
   clearTimeout(cloudTimer);
   setSyncStatus('off');
 }
 
 function cloudFlush() {
   cloudTimer = null;
-  if (!cloudUid) return;
+  if (!cloudUid || !cloudReady) return;
   if (cloudBusy) { cloudAgain = true; return; }
 
   var uid  = cloudUid;
@@ -2458,6 +2452,7 @@ function setSyncStatus(state) {
   if (!el) return;
   if (state === 'off') { el.style.display = 'none'; el.textContent = ''; return; }
   var text = {
+    loading: 'Loading your account…',
     saving:  'Saving to your account…',
     offline: 'Offline — changes will upload when you reconnect',
     error:   'Couldn’t reach your account. Will retry on your next change.'
@@ -2471,8 +2466,358 @@ function setSyncStatus(state) {
   el.style.display = 'block';
 }
 
-window.addEventListener('online', function () { if (cloudUid) cloudFlush(); });
+window.addEventListener('online', function () {
+  if (cloudRetryUid) {                       // sign-in happened offline on an unpaired device: load the account now
+    var uid = cloudRetryUid; cloudRetryUid = null; cloudUid = null;
+    cloudStart(uid).then(function (changed) { if (changed) location.reload(); });
+    return;
+  }
+  if (cloudUid) cloudFlush();
+});
 window.addEventListener('offline', function () { if (cloudUid) setSyncStatus('offline'); });
+
+/* ── BUILD 70 (Sync Build B): load on another device ─────────────
+   On sign-in, read the account before the app opens:
+   · account empty            → upload this device (Build A path)
+   · this device empty        → download the account
+   · both have data, first time this device meets this account
+                              → ask: use the account, or add this
+                                device's days to it
+   · device already paired    → 3-way merge of what changed in the
+                                cloud since the last pull (only
+                                changed days are read)
+   ───────────────────────────────────────────────────────────── */
+let cloudReady = false;
+let cloudRetryUid = null;
+
+function cloudStoredMeta() {
+  try { return JSON.parse(localStorage.getItem(SYNC_META_KEY)); } catch (e) { return null; }
+}
+
+function cloudWithTimeout(p, ms) {
+  return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout')); }, ms); })]);
+}
+
+function cloudLocalDay(d) {
+  return { state: cloudClean(appState[d] || {}), score: (typeof weekData[d] === 'number') ? weekData[d] : null };
+}
+
+function cloudLocalHasData() {
+  return Object.keys(appState || {}).some(function (d) {
+    var s = appState[d] || {};
+    return Object.keys(s).some(function (k) { return s[k] === true; });
+  });
+}
+
+function cloudSetDay(d, day) {
+  if (day.state && Object.keys(day.state).length) appState[d] = day.state; else delete appState[d];
+  if (typeof day.score === 'number') weekData[d] = day.score; else delete weekData[d];
+}
+
+function cloudApplyProfile(p) {
+  if (!p) return;
+  function put(k, v) { if (v === null || v === undefined) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); }
+  if (p.config) put(HCK, p.config);
+  put(HLK, p.lock);
+  put(AVK, p.avatar);
+  put(HBL, p.labels || {});
+  if (p.bigWhy) localStorage.setItem('nh_big_why', p.bigWhy); else localStorage.removeItem('nh_big_why');
+}
+
+/* Re-read everything from localStorage into the running app */
+function cloudReloadLocals() {
+  localStorage.setItem(SK, JSON.stringify(appState));
+  localStorage.setItem(WK, JSON.stringify(weekData));
+  appState        = ld(SK)  || {};
+  weekData        = ld(WK)  || {};
+  streak          = ld(STK) || { count: 0, lastDate: null };
+  userHabitConfig = ld(HCK) || null;
+  habitLockMeta   = ld(HLK) || null;
+  habitLabels     = ld(HBL) || {};
+  userAvatar      = ld(AVK) || null;
+  if (!appState[today]) appState[today] = {};
+}
+
+function cloudAskPairChoice(accountDays, deviceDays) {
+  return new Promise(function (resolve) {
+    var overlay = document.createElement('div');
+    overlay.id = 'syncChoiceModal';
+    overlay.className = 'modal-overlay';
+    overlay.style.display = 'flex';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'syncChoiceTitle');
+    overlay.innerHTML =
+      '<div class="modal-card" style="max-width:420px">' +
+        '<div class="modal-handle"></div>' +
+        '<div class="modal-header"><div class="modal-title" id="syncChoiceTitle">This device has its own habits</div></div>' +
+        '<div class="modal-body" style="margin-bottom:12px">' +
+          '<p style="font-size:13px;line-height:1.6">Your account has <strong>' + accountDays + ' day' + (accountDays === 1 ? '' : 's') + '</strong> of habits. ' +
+          'This device has <strong>' + deviceDays + ' day' + (deviceDays === 1 ? '' : 's') + '</strong> logged before you signed in.</p>' +
+          '<p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px">Either way, your account’s habit set is kept.</p>' +
+        '</div>' +
+        '<button class="modal-close" id="syncUseAccount" style="background:var(--gold);color:var(--gold-ink);border-color:var(--gold);font-weight:600">Use my account</button>' +
+        '<p style="font-size:11.5px;color:var(--muted);text-align:center;margin:4px 0 10px">Replaces this device’s habits with your account’s.</p>' +
+        '<button class="modal-close" id="syncAddDevice">Add this device’s days to my account</button>' +
+        '<p style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:4px">On days both have, the ticks are combined.</p>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    function done(choice) { overlay.remove(); resolve(choice); }
+    document.getElementById('syncUseAccount').addEventListener('click', function () { done('account'); });
+    document.getElementById('syncAddDevice').addEventListener('click', function () { done('combine'); });
+    setTimeout(function () { var b = document.getElementById('syncUseAccount'); if (b) b.focus(); }, 50);
+  });
+}
+
+function cloudCombineState(a, b) {
+  var out = {};
+  Object.keys(a || {}).forEach(function (k) { out[k] = a[k]; });
+  Object.keys(b || {}).forEach(function (k) {
+    var v = b[k];
+    if (!(k in out)) out[k] = v;
+    else if (typeof v === 'boolean' || typeof out[k] === 'boolean') out[k] = !!(out[k] || v);
+    else if (typeof v === 'number' && typeof out[k] === 'number') out[k] = Math.max(out[k], v);
+    else if (out[k] === null) out[k] = v;
+  });
+  return out;
+}
+
+
+/* ── 3-way merge of cloud changes into this device ──────────────
+   For each changed day: if this device hasn't edited it since the
+   last sync, take the cloud copy; if both edited it, keep each
+   local edit and take everything else from the cloud. The profile
+   (habit set, labels, avatar, Big Why) follows the cloud unless this
+   device changed it first. Updates meta's baseline in place.
+   ───────────────────────────────────────────────────────────── */
+function cloudMergeRemote(meta, cloudDays, cloudProfileObj) {
+  var out = { days: false, profile: false };
+  Object.keys(cloudDays).forEach(function (d) {
+    var cloud = cloudDays[d];
+    var base = null;
+    try { base = meta.days[d] ? JSON.parse(meta.days[d]) : null; } catch (e) { base = null; }
+    var loc = cloudLocalDay(d);
+    var before = JSON.stringify(loc);
+    var localChanged = base ? before !== meta.days[d] : Object.keys(loc.state).length > 0;
+    if (!localChanged) {
+      cloudSetDay(d, cloud);
+    } else {
+      var baseState = (base && base.state) || {};
+      var merged = {};
+      var keys = {};
+      Object.keys(cloud.state).forEach(function (k) { keys[k] = 1; });
+      Object.keys(loc.state).forEach(function (k) { keys[k] = 1; });
+      Object.keys(baseState).forEach(function (k) { keys[k] = 1; });
+      Object.keys(keys).forEach(function (k) {
+        var localEdited = JSON.stringify(loc.state[k]) !== JSON.stringify(baseState[k]);
+        var src = localEdited ? loc.state : cloud.state;
+        if (k in src) merged[k] = src[k];
+      });
+      cloudSetDay(d, { state: merged, score: loc.score });
+    }
+    meta.days[d] = JSON.stringify(cloud);
+    if (JSON.stringify(cloudLocalDay(d)) !== before) out.days = true;
+  });
+  if (cloudProfileObj) {
+    var cloudProfJson = JSON.stringify(cloudClean(cloudProfileObj));
+    if (cloudProfJson !== meta.profile) {
+      var localProf = JSON.stringify(cloudProfile());
+      var localProfUnchanged = localProf === meta.profile;
+      if (localProfUnchanged && localProf !== cloudProfJson) { cloudApplyProfile(cloudProfileObj); out.profile = true; }
+      meta.profile = cloudProfJson;
+    }
+  }
+  return out;
+}
+
+/* ── BUILD 71 (Sync Build C): live updates between open devices ──
+   After the opening pull, listen for days and profile changes made
+   on other devices and merge them in as they arrive. Our own writes
+   echo back and merge to no change, so nothing loops.
+   ───────────────────────────────────────────────────────────── */
+let cloudUnsubs = [];
+let cloudRenderPending = false;
+
+function cloudUnlisten() {
+  cloudUnsubs.forEach(function (u) { try { u(); } catch (e) {} });
+  cloudUnsubs = [];
+}
+
+function cloudListen(uid) {
+  cloudUnlisten();
+  var userRef = db.collection('users').doc(uid);
+  var since = cloudMeta().pulledAt || 0;
+  var daysRef = userRef.collection('days');
+  var q = since ? daysRef.where('updatedAt', '>', firebase.firestore.Timestamp.fromMillis(since)) : daysRef;
+
+  cloudUnsubs.push(q.onSnapshot(function (snap) {
+    if (cloudUid !== uid || !cloudReady) return;
+    var days = {};
+    var maxTs = 0;
+    snap.docChanges().forEach(function (ch) {
+      if (ch.type === 'removed') return;
+      var doc = ch.doc;
+      if (doc.metadata && doc.metadata.hasPendingWrites) return;   // our own write, not yet confirmed
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.id)) return;
+      var x = doc.data();
+      days[doc.id] = cloudClean({ state: x.state || {}, score: (typeof x.score === 'number') ? x.score : null });
+      var ts = x.updatedAt && x.updatedAt.toMillis ? x.updatedAt.toMillis() : 0;
+      if (ts > maxTs) maxTs = ts;
+    });
+    if (!Object.keys(days).length) return;
+    var m = cloudMeta();
+    var r = cloudMergeRemote(m, days, null);
+    m.pulledAt = Math.max(m.pulledAt || 0, maxTs);
+    cloudSaveMeta(m);
+    if (r.days) cloudAfterRemoteChange();
+  }, function (err) { console.warn('[NeuroHabit sync] live days listener stopped', err && err.code); }));
+
+  cloudUnsubs.push(userRef.onSnapshot(function (doc) {
+    if (cloudUid !== uid || !cloudReady || !doc.exists) return;
+    if (doc.metadata && doc.metadata.hasPendingWrites) return;
+    var p = doc.data().profile;
+    if (!p) return;
+    var m = cloudMeta();
+    var r = cloudMergeRemote(m, {}, p);
+    cloudSaveMeta(m);
+    if (r.profile) cloudAfterRemoteChange();
+  }, function (err) { console.warn('[NeuroHabit sync] live profile listener stopped', err && err.code); }));
+}
+
+function cloudAfterRemoteChange() {
+  cloudReloadLocals();
+  clearTimeout(cloudTimer);
+  cloudTimer = setTimeout(cloudFlush, 1500);   // upload any local edits kept by the merge
+  cloudRender();
+}
+
+/* Re-draw with the merged data — but never while the person is typing */
+function cloudRender() {
+  if (!appLaunched) return;
+  var a = document.activeElement;
+  if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) {
+    if (!cloudRenderPending) {
+      cloudRenderPending = true;
+      a.addEventListener('blur', function () { cloudRenderPending = false; setTimeout(cloudRender, 0); }, { once: true });
+    }
+    return;
+  }
+  renderLockStatusBars();
+  Object.keys(HABITS).forEach(function (t) { renderSection(t); });
+  updateHeader(); renderCoach(); renderWeek(); checkStreak(); renderProfile();
+  setSyncStatus('saved');
+}
+
+async function cloudPull(uid) {
+  if (navigator.onLine === false) throw new Error('offline');
+  var stored = cloudStoredMeta();
+  var paired = !!(stored && stored.uid === uid);
+  var meta = paired ? stored : { uid: uid, days: {}, profile: null };
+  meta.days = meta.days || {};
+  var since = paired ? (meta.pulledAt || 0) : 0;
+
+  var userRef = db.collection('users').doc(uid);
+  var daysRef = userRef.collection('days');
+  var daysQuery = since ? daysRef.where('updatedAt', '>', firebase.firestore.Timestamp.fromMillis(since)) : daysRef;
+  var res = await cloudWithTimeout(Promise.all([userRef.get(), daysQuery.get()]), 8000);
+
+  var cloudProfileObj = res[0].exists ? (res[0].data().profile || null) : null;
+  var cloudDays = {};
+  var maxTs = since;
+  res[1].forEach(function (doc) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.id)) return;
+    var x = doc.data();
+    cloudDays[doc.id] = cloudClean({ state: x.state || {}, score: (typeof x.score === 'number') ? x.score : null });
+    var ts = x.updatedAt && x.updatedAt.toMillis ? x.updatedAt.toMillis() : 0;
+    if (ts > maxTs) maxTs = ts;
+  });
+  var cloudDayCount = Object.keys(cloudDays).length;
+  var changed = false;
+
+  if (!paired) {
+    var cloudHas = !!(cloudProfileObj && cloudProfileObj.config) || cloudDayCount > 0;
+    var localHas = cloudLocalHasData();
+    if (!cloudHas) {
+      /* New account: everything on this device uploads on the first flush */
+    } else {
+      var choice = localHas ? await cloudAskPairChoice(cloudDayCount, Object.keys(appState).filter(function (d) {
+        var s = appState[d] || {}; return Object.keys(s).some(function (k) { return s[k] === true; });
+      }).length) : 'account';
+      if (choice === 'account') {
+        appState = {}; weekData = {};
+        Object.keys(cloudDays).forEach(function (d) { cloudSetDay(d, cloudDays[d]); });
+      } else {
+        Object.keys(cloudDays).forEach(function (d) {
+          var loc = cloudLocalDay(d);
+          var score = Math.max(loc.score || 0, cloudDays[d].score || 0);
+          cloudSetDay(d, { state: cloudCombineState(cloudDays[d].state, loc.state), score: score || null });
+        });
+      }
+      if (cloudProfileObj) cloudApplyProfile(cloudProfileObj);
+      Object.keys(cloudDays).forEach(function (d) { meta.days[d] = JSON.stringify(cloudDays[d]); });
+      if (cloudProfileObj) meta.profile = JSON.stringify(cloudClean(cloudProfileObj));
+      changed = true;
+    }
+  } else {
+    /* Paired device: merge only what changed in the cloud since the last pull */
+    var r = cloudMergeRemote(meta, cloudDays, cloudProfileObj);
+    changed = r.days || r.profile;
+  }
+
+  meta.uid = uid;
+  meta.pulledAt = maxTs;
+  cloudSaveMeta(meta);
+  if (changed) cloudReloadLocals();
+  return changed;
+}
+
+function cloudStart(uid) {
+  if (cloudUid === uid) return Promise.resolve(false);
+  cloudUid = uid;
+  cloudReady = false;
+  clearTimeout(cloudTimer);
+  setSyncStatus('loading');
+  setLoginSyncMsg('Loading your habits…');
+  var stored = cloudStoredMeta();
+  var wasPaired = !!(stored && stored.uid === uid);
+  return cloudPull(uid).catch(function (err) {
+    console.warn('[NeuroHabit sync] could not load account', err && (err.code || err.message));
+    setSyncStatus(navigator.onLine === false ? 'offline' : 'error');
+    return 'failed';
+  }).then(function (r) {
+    setLoginSyncMsg('');
+    if (cloudUid !== uid) return false;
+    if (r === 'failed' && !wasPaired) { cloudRetryUid = uid; return false; }  // never upload into an account we couldn't check
+    cloudReady = true;
+    cloudTimer = setTimeout(cloudFlush, 0);   // upload anything this device has that the cloud doesn't
+    cloudListen(uid);
+    return r === true;
+  });
+}
+
+function setLoginSyncMsg(text) {
+  var el = document.getElementById('loginSyncMsg');
+  if (el) { el.textContent = text; el.style.display = text ? 'block' : 'none'; }
+}
+
+/* Sign-out: upload what's pending, then remove this account's data from the device */
+async function cloudSignOutAndClear() {
+  if (cloudUid && cloudReady) {
+    clearTimeout(cloudTimer);
+    cloudFlush();
+    try { await cloudWithTimeout(db.waitForPendingWrites(), 5000); }
+    catch (e) {
+      if (!confirm('Some changes haven’t uploaded yet (you may be offline). Sign out anyway? Those changes will be lost.')) return false;
+    }
+  }
+  [SK, WK, STK, HCK, HLK, AVK, HBL, RBK, SYNC_META_KEY, 'nh_big_why', 'nh_show_personalise_prompt'].forEach(function (k) {
+    try { localStorage.removeItem(k); } catch (e) {}
+  });
+  cloudStop();
+  try { await auth.signOut(); } catch (e) {}
+  try { await db.terminate(); await db.clearPersistence(); } catch (e) {}
+  return true;
+}
 
 /* ═══════════════════════════════════════════════════════════
    HABIT REGISTRY
@@ -2804,7 +3149,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 69;
+const APP_BUILD   = 71;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -5568,36 +5913,37 @@ function renderWeek() {
 /* ═══════════════════════════════════════════════════════════
    STREAK — with 1-day grace period
    ═══════════════════════════════════════════════════════════ */
+/* BUILD 71: the streak is calculated from the daily scores (synced per day),
+   so every device shows the same number. Same rules as before: a day counts
+   at a score of 50+, and a single missed day between two counted days is
+   bridged (grace). A streak whose last counted day is more than two days
+   ago has ended and shows 0. */
+function streakDayDiff(a, b) {
+  var pa = a.split('-').map(Number), pb = b.split('-').map(Number);
+  return Math.round((Date.UTC(pb[0], pb[1] - 1, pb[2]) - Date.UTC(pa[0], pa[1] - 1, pa[2])) / 86400000);
+}
+
+function deriveStreak() {
+  var days = Object.keys(weekData || {}).filter(function (d) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= today && weekData[d] >= 50;
+  }).sort();
+  var count = 0, last = null, graceUsed = false;
+  days.forEach(function (d) {
+    var gap = last ? streakDayDiff(last, d) : null;
+    if (gap === 1)      { count += 1; graceUsed = false; }
+    else if (gap === 2) { count += 1; graceUsed = true; }
+    else                { count = 1;  graceUsed = false; }
+    last = d;
+  });
+  if (last && streakDayDiff(last, today) > 2) { count = 0; graceUsed = false; }
+  return { count: count, lastDate: last, graceUsed: graceUsed };
+}
+
 function checkStreak() {
   const score = Math.round(heroScore());
   if (score > 0 || !(weekData[today] > 0)) { weekData[today] = score; sv(WK, weekData); }
-
-  if (score >= 50 && streak.lastDate !== today) {
-    const yest = new Date(); yest.setDate(yest.getDate() - 1);
-    const yKey  = localDateStr(yest);
-    const twoDaysAgo = new Date(); twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const twoKey = localDateStr(twoDaysAgo);
-    const prevDate = streak.lastDate;
-
-    /* BV-06: null lastDate means first ever use — treat as new streak start,
-       not a grace scenario. null === twoKey is always false so isGrace is
-       correctly false here, but we make this explicit for clarity. */
-    const isNormalDay = prevDate === yKey;
-    const isGrace     = !isNormalDay && prevDate === twoKey;
-
-    if (isNormalDay || isGrace) {
-      streak.count = streak.count + 1;
-    } else {
-      // Broken streak (gap > 1 grace day) or first ever use
-      streak.count = 1;
-    }
-
-    streak.lastDate  = today;
-    /* EG-06: Clear graceUsed on a normal (non-grace) day so the badge
-       disappears once the user is back to a regular daily cadence. */
-    streak.graceUsed = isGrace ? true : false;
-    sv(STK, streak);
-  }
+  const derived = deriveStreak();
+  if (JSON.stringify(derived) !== JSON.stringify(streak)) { streak = derived; sv(STK, streak); }
 
   const streakEl = document.getElementById('streakNum');
   streakEl.textContent = streak.count || 0;
@@ -6440,8 +6786,10 @@ auth.onAuthStateChanged((user) => {
     userData.photo    = user.photoURL || null;
     userData.skipAuth = false;
     sv(UK, userData);
-    cloudStart(user.uid);
-    if (!appLaunched) launchApp();
+    cloudStart(user.uid).then(function (changed) {
+      if (!appLaunched) launchApp();
+      else if (changed) location.reload();
+    });
   } else if (userData.skipAuth) {
     if (!appLaunched) launchApp(); // guest session continues as before
   }
@@ -6536,7 +6884,15 @@ function changePassword() {
     .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
-function handleSignOut() {
+async function handleSignOut() {
+  if (cloudUid) {
+    if (!confirm('Sign out of NeuroHabit? Your habits stay in your account and are removed from this device.')) return;
+    if (!(await cloudSignOutAndClear())) return;
+    userData = { name: null, email: null, skipAuth: false };
+    sv(UK, userData);
+    location.reload();
+    return;
+  }
   if (!confirm('Sign out of NeuroHabit?')) return;
   userData = { name: null, email: null, skipAuth: false };
   sv(UK, userData);
