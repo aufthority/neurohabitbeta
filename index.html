@@ -2385,6 +2385,7 @@ function cloudFlush() {
   var sentDays = {};
   var sentProfile = null;
 
+  var sentFrom = { days: {}, profile: meta.profile };   // baseline at send time
   var dates = {};
   Object.keys(appState || {}).forEach(function (d) { dates[d] = 1; });
   Object.keys(weekData || {}).forEach(function (d) { dates[d] = 1; });
@@ -2406,6 +2407,7 @@ function cloudFlush() {
     });
     ops.push({ ref: userRef.collection('days').doc(d), data: { state: state, score: cur.score, updatedAt: FV.serverTimestamp() }, opts: { merge: true } });
     sentDays[d] = curJson;
+    sentFrom.days[d] = meta.days[d];
   });
 
   var prof = cloudProfile();
@@ -2433,8 +2435,8 @@ function cloudFlush() {
   }, Promise.resolve()).then(function () {
     if (cloudUid !== uid) return;
     var m = cloudMeta();
-    Object.keys(sentDays).forEach(function (d) { m.days[d] = sentDays[d]; });
-    if (sentProfile !== null) m.profile = sentProfile;
+    Object.keys(sentDays).forEach(function (d) { if (m.days[d] === sentFrom.days[d]) m.days[d] = sentDays[d]; });
+    if (sentProfile !== null && m.profile === sentFrom.profile) m.profile = sentProfile;
     cloudSaveMeta(m);
     cloudLastSaved = new Date();
     setSyncStatus('saved');
@@ -2510,7 +2512,10 @@ function cloudLocalHasData() {
 }
 
 function cloudSetDay(d, day) {
-  if (day.state && Object.keys(day.state).length) appState[d] = day.state; else delete appState[d];
+  /* BUILD 72: today's entry must always exist (renderSection reads appState[today] directly) */
+  if (day.state && Object.keys(day.state).length) appState[d] = day.state;
+  else if (d === today) appState[d] = {};
+  else delete appState[d];
   if (typeof day.score === 'number') weekData[d] = day.score; else delete weekData[d];
 }
 
@@ -2714,6 +2719,9 @@ async function cloudPull(uid) {
   var paired = !!(stored && stored.uid === uid);
   var meta = paired ? stored : { uid: uid, days: {}, profile: null };
   meta.days = meta.days || {};
+  if (meta.profile && meta.profile.indexOf('"streak"') !== -1) {
+    try { var bp = JSON.parse(meta.profile); delete bp.streak; meta.profile = JSON.stringify(bp); } catch (e) {}
+  }
   var since = paired ? (meta.pulledAt || 0) : 0;
 
   var userRef = db.collection('users').doc(uid);
@@ -2768,6 +2776,7 @@ async function cloudPull(uid) {
   meta.pulledAt = maxTs;
   cloudSaveMeta(meta);
   if (changed) cloudReloadLocals();
+  if (!appState[today]) appState[today] = {};
   return changed;
 }
 
@@ -3149,7 +3158,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 71;
+const APP_BUILD   = 72;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
