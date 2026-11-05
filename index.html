@@ -212,6 +212,64 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .page { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); opacity: 0; pointer-events: none; transform: translateX(20px); transition: opacity 0.2s, transform 0.2s; }
 .page.page-active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
+/* ═══ TODAY PAGE — BUILD 74 ═════════════════════════════════
+   One screen to log every selected habit, grouped by chemical.
+   Category pages open from the group headers.
+   ════════════════════════════════════════════════════════════ */
+.nav-tab[data-tab="today"]     { --tc: var(--text); }
+.td-inner { padding: 14px 14px 8px; }
+.td-hero { background: var(--anchor); color: var(--anchor-txt); border: 1px solid var(--anchor-border); border-radius: var(--radius-lg); padding: 16px 16px 14px; }
+.light-theme .td-hero { border-color: transparent; }
+.td-hero-top { display: flex; align-items: center; gap: 12px; }
+.td-hero-brain { width: 64px; height: 64px; flex-shrink: 0; }
+.td-phase { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 22px; line-height: 1.15; }
+.td-phase-sub { font-size: 12.5px; color: var(--anchor-mut); margin-top: 3px; line-height: 1.4; }
+.td-goal { margin-top: 14px; }
+.td-goal-track { position: relative; height: 8px; border-radius: 99px; background: var(--anchor-2); }
+.td-goal-fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 99px; background: var(--serotonin); transition: width .35s ease; }
+.td-goal-mark { position: absolute; left: 50%; top: -4px; bottom: -4px; width: 2px; background: var(--anchor-txt); opacity: .55; border-radius: 2px; }
+.td-goal-meta { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11.5px; color: var(--anchor-mut); }
+.td-goal-meta b { color: var(--anchor-txt); font-weight: 500; }
+
+.td-next { margin-top: 12px; padding: 14px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--ac, var(--border2)); }
+.td-eye { font-size: 10px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); }
+.td-next-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.td-next-label { font-size: 16px; font-weight: 500; line-height: 1.3; }
+.td-next-why { font-size: 12px; color: var(--ac); margin-top: 2px; }
+.td-done-btn { background: var(--gold); color: var(--gold-ink); font-family: 'Geist', sans-serif; font-weight: 600; font-size: 14px; padding: 11px 16px; border-radius: var(--radius-sm); min-height: 44px; border: 0; cursor: pointer; white-space: nowrap; }
+.td-skip { background: none; border: 0; color: var(--muted); font-family: 'Geist', sans-serif; font-size: 12.5px; padding: 10px 2px; min-height: 44px; cursor: pointer; }
+.td-next-all { font-size: 14px; color: var(--muted); line-height: 1.5; margin-top: 6px; }
+
+.td-grp { margin-top: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.td-grp-head { width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 14px 10px; min-height: 52px; background: none; border: 0; color: var(--text); text-align: left; cursor: pointer; font-family: 'Geist', sans-serif; }
+.td-grp-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ac); flex-shrink: 0; }
+.td-grp-name { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 19px; line-height: 1; }
+.td-grp-desc { font-size: 11.5px; color: var(--muted); }
+.td-grp-count { margin-left: auto; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.td-grp-bar { height: 3px; margin: 0 14px; background: var(--surface3); border-radius: 99px; overflow: hidden; }
+.td-grp-bar i { display: block; height: 100%; background: var(--ac); border-radius: 99px; transition: width .35s ease; }
+.td-grp-hint { margin: 8px 14px 0; font-size: 12px; color: var(--ac); line-height: 1.4; }
+.td-rows { padding: 6px 6px 8px; }
+.td-row { display: flex; align-items: stretch; border-radius: var(--radius-sm); }
+.td-row-wrap + .td-row-wrap { border-top: 1px solid var(--border); }
+.td-row-main { flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: 12px; padding: 11px 8px; min-height: 52px; background: none; border: 0; color: var(--text); text-align: left; cursor: pointer; font-family: 'Geist', sans-serif; border-radius: var(--radius-sm); }
+.td-row-main:active { background: var(--surface2); }
+.td-chk { width: 24px; height: 24px; border-radius: 50%; border: 1.8px solid var(--border2); flex-shrink: 0; display: grid; place-items: center; margin-top: 1px; transition: background .18s, border-color .18s; }
+.td-chk svg { opacity: 0; transition: opacity .18s; }
+.td-row.done .td-chk { background: var(--ac); border-color: var(--ac); }
+.td-row.done .td-chk svg { opacity: 1; }
+.td-row-body { flex: 1; min-width: 0; display: block; }
+.td-row-label { display: block; font-size: 14.5px; line-height: 1.35; }
+.td-row-own { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.td-row-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--ac); margin-top: 3px; }
+.td-info { width: 44px; flex-shrink: 0; display: grid; place-items: center; background: none; border: 0; color: var(--subtle); cursor: pointer; border-radius: var(--radius-sm); }
+.td-tiers { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 8px 10px 44px; }
+.td-tier { font-family: 'Geist', sans-serif; font-size: 12px; padding: 7px 10px; min-height: 32px; border-radius: 999px; border: 1px solid var(--border2); background: none; color: var(--muted); cursor: pointer; }
+.td-tier.on { background: color-mix(in srgb, var(--ac) 18%, var(--surface)); border-color: var(--ac); color: var(--text); font-weight: 500; }
+.td-foot { text-align: center; font-size: 12px; color: var(--muted); margin: 18px 0 6px; line-height: 1.5; }
+
+.cat-back { display: inline-flex; align-items: center; gap: 4px; margin: 12px 0 0 14px; padding: 8px 10px 8px 4px; min-height: 40px; background: none; border: 0; color: var(--muted); font-family: 'Geist', sans-serif; font-size: 13px; cursor: pointer; }
+
 /* ═══ PAGE HERO ══════════════════════════════════════════════ */
 .page-hero { padding: 20px 18px 16px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
 .page-hero-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
@@ -1653,8 +1711,13 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 <div class="screen" id="screen-app" style="display:none">
   <div class="page-container">
 
+    <!-- TODAY PAGE (BUILD 74) — rendered by renderToday() -->
+    <div class="page page-active" id="page-today">
+      <div class="td-inner" id="todayContent"></div>
+    </div>
+
     <!-- COACH PAGE -->
-    <div class="page page-active" id="page-coach">
+    <div class="page" id="page-coach">
       <div class="coach-page-inner">
 
         <!-- Brain Phase Display + Thought Bubble -->
@@ -1757,6 +1820,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     </div>
     <!-- DOPAMINE PAGE -->
     <div class="page" id="page-dopamine">
+      <button class="cat-back" onclick="goToPage('today')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>Today</button>
       <div class="page-hero" style="--ac:var(--dopamine)">
         <div class="page-hero-top"><div class="accent-dot" style="background:var(--dopamine)"></div><h2>Dopamine</h2></div>
         <p>Drive, motivation & reward pathway.</p>
@@ -1779,6 +1843,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
     <!-- SEROTONIN PAGE -->
     <div class="page" id="page-serotonin">
+      <button class="cat-back" onclick="goToPage('today')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>Today</button>
       <div class="page-hero" style="--ac:var(--serotonin)">
         <div class="page-hero-top"><div class="accent-dot" style="background:var(--serotonin)"></div><h2>Serotonin</h2></div>
         <p>Mood stability, regulation & balance.</p>
@@ -1801,6 +1866,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
     <!-- OXYTOCIN PAGE -->
     <div class="page" id="page-oxytocin">
+      <button class="cat-back" onclick="goToPage('today')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>Today</button>
       <div class="page-hero" style="--ac:var(--oxytocin)">
         <div class="page-hero-top"><div class="accent-dot" style="background:var(--oxytocin)"></div><h2>Oxytocin</h2></div>
         <p>Connection, trust & social bonding.</p>
@@ -1823,6 +1889,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
     <!-- ENDORPHIN PAGE -->
     <div class="page" id="page-endorphin">
+      <button class="cat-back" onclick="goToPage('today')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>Today</button>
       <div class="page-hero" style="--ac:var(--endorphin)">
         <div class="page-hero-top"><div class="accent-dot" style="background:var(--endorphin)"></div><h2>Endorphin</h2></div>
         <p>Movement, stress relief & recovery.</p>
@@ -2164,11 +2231,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      ══════════════════════════════════════════════════════════ -->
 <nav class="bottom-nav" id="bottomNav" style="display:none">
   <div class="nav-tabs">
-    <button class="nav-tab active" data-tab="coach"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="1" x2="10" y2="3.5"/><line x1="10" y1="16.5" x2="10" y2="19"/><line x1="1" y1="10" x2="3.5" y2="10"/><line x1="16.5" y1="10" x2="19" y2="10"/></svg></span><span class="tab-label">Coach</span><span class="tab-pip"></span></button>
-    <button class="nav-tab" data-tab="dopamine"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="12,2 7,10.5 10.5,10.5 8,18 13,9.5 9.5,9.5 12,2"/></svg></span><span class="tab-label">Dopamine</span><span class="tab-pip"></span></button>
-    <button class="nav-tab" data-tab="serotonin"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17C10 17 3 13 3 7.5C3 4.5 6 2 10 2C14 2 17 4.5 17 7.5C17 13 10 17 10 17Z"/><line x1="10" y1="17" x2="10" y2="10"/><line x1="10" y1="12" x2="7" y2="9.5"/><line x1="10" y1="10" x2="13" y2="8"/></svg></span><span class="tab-label">Serotonin</span><span class="tab-pip"></span></button>
-    <button class="nav-tab" data-tab="oxytocin"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="7.5" cy="10" r="5"/><circle cx="12.5" cy="10" r="5"/></svg></span><span class="tab-label">Oxytocin</span><span class="tab-pip"></span></button>
-    <button class="nav-tab" data-tab="endorphin"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13C4 13 4 7 6 7C8 7 8 13 10 13C12 13 12 7 14 7C16 7 16 13 18 13"/><line x1="10" y1="17" x2="10" y2="15"/></svg></span><span class="tab-label">Endorphin</span><span class="tab-pip"></span></button>
+    <button class="nav-tab active" data-tab="today"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="3"/><polyline points="6.5,10 9,12.5 13.5,7.5"/></svg></span><span class="tab-label">Today</span><span class="tab-pip"></span></button>
+    <button class="nav-tab" data-tab="coach"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="1" x2="10" y2="3.5"/><line x1="10" y1="16.5" x2="10" y2="19"/><line x1="1" y1="10" x2="3.5" y2="10"/><line x1="16.5" y1="10" x2="19" y2="10"/></svg></span><span class="tab-label">Coach</span><span class="tab-pip"></span></button>
     <button class="nav-tab" data-tab="profile"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 18C3 14.5 6 12 10 12C14 12 17 14.5 17 18"/></svg></span><span class="tab-label">Profile</span><span class="tab-pip"></span></button>
   </div>
 </nav>
@@ -3172,7 +3236,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 73;
+const APP_BUILD   = 74;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4403,12 +4467,7 @@ function dismissPersonalisePrompt(navigate) {
   localStorage.removeItem('nh_show_personalise_prompt');
   if (navigate) {
     // Navigate to Dopamine tab so user can review habits
-    document.querySelectorAll('.nav-tab').forEach(function(b) { b.classList.remove('active'); });
-    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('page-active'); });
-    var dopTab = document.querySelector('[data-tab="dopamine"]');
-    if (dopTab) dopTab.classList.add('active');
-    var dopPage = document.getElementById('page-dopamine');
-    if (dopPage) dopPage.classList.add('page-active');
+    openCategory('dopamine');
   }
   renderCoach();
 }
@@ -4416,7 +4475,175 @@ function dismissPersonalisePrompt(navigate) {
 /* ═══════════════════════════════════════════════════════════
    MAIN COACH RENDER
    ═══════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════
+   TODAY PAGE — BUILD 74
+   Every selected habit on one screen, grouped by chemical.
+   Ticks go through the existing toggleHabit / cycleTier, so
+   scoring, streak, celebrations and sync behave as before.
+   ═══════════════════════════════════════════════════════════ */
+const TODAY_CATS = [
+  { key: 'dopamine',  name: 'Dopamine',  desc: 'Drive and focus' },
+  { key: 'serotonin', name: 'Serotonin', desc: 'Calm and stability' },
+  { key: 'oxytocin',  name: 'Oxytocin',  desc: 'Connection and trust' },
+  { key: 'endorphin', name: 'Endorphin', desc: 'Energy and resilience' }
+];
+let todaySkip = 0;
+let todayBound = false;
+
+function todayEsc(s) {
+  return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+}
+
+/* Show a page; nav highlights the given tab (category pages keep Today highlighted) */
+function goToPage(page, navTab) {
+  document.querySelectorAll('.nav-tab').forEach(function (b) { b.classList.remove('active'); });
+  document.querySelectorAll('.page').forEach(function (p) { p.classList.remove('page-active'); });
+  var tab = document.querySelector('.nav-tab[data-tab="' + (navTab || page) + '"]');
+  if (tab) tab.classList.add('active');
+  var el = document.getElementById('page-' + page);
+  if (el) { el.classList.add('page-active'); el.scrollTop = 0; }
+}
+
+function openCategory(type) { goToPage(type, 'today'); }
+
+function todayHabitsFor(type) {
+  return getSelectedHabits(type).slice().sort(function (a, b) {
+    return (b.foundational ? 1 : 0) - (a.foundational ? 1 : 0);
+  });
+}
+
+function todayIsDone(type, h) {
+  var i = HABITS[type].habits.indexOf(h);
+  return !!(appState[today] || {})[type + '_' + i];
+}
+
+/* Next core habit: categories with no core done come first */
+function todayNextCandidates() {
+  var unlock = [], deepen = [];
+  TODAY_CATS.forEach(function (c) {
+    getSelectedFoundationals(c.key).forEach(function (h) {
+      if (todayIsDone(c.key, h)) return;
+      (foundationDone(c.key) ? deepen : unlock).push({ h: h, cat: c });
+    });
+  });
+  return { list: unlock.concat(deepen), unlock: unlock.length };
+}
+
+function todayTick(type, idx, tierTarget) {
+  var h = HABITS[type].habits[idx];
+  var key = type + '_' + idx;
+  if (h.flex && h.flex.multiSession) {
+    var tierKey = key + '_tier';
+    var cur = (appState[today] || {})[tierKey] || 0;
+    var target = (tierTarget !== undefined) ? tierTarget : ((appState[today] || {})[key] ? 0 : 1);
+    if (target !== cur) cycleTier(tierKey, type, idx, target - cur);
+    else if (target === 0 && appState[today][key]) toggleHabit(key, type, idx);
+  } else {
+    toggleHabit(key, type, idx);
+  }
+}
+
+const TODAY_CHECK = '<svg width="12" height="10" viewBox="0 0 13 10" fill="none" aria-hidden="true"><path d="M1.5 5l3.5 3.5L11.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const TODAY_INFO  = '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><line x1="10" y1="9" x2="10" y2="14"/><circle cx="10" cy="6.3" r=".6" fill="currentColor"/></svg>';
+const TODAY_CHEV  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>';
+
+function renderToday() {
+  var root = document.getElementById('todayContent');
+  if (!root || !appState[today]) return;
+
+  /* Hero: brain phase and progress toward the daily goal (Foundation Active) */
+  var phase = brainPhase();
+  var cf = countFoundationals();
+  var sub = BRAIN_SUBS[phase];
+  if (phase > 0 && phase < 3 && cf.done * 2 >= cf.total) sub = 'Going longer on a session habit, like Exercise, moves you over the line.';
+  var pct = Math.round(cf.rate * 100);
+  var html =
+    '<section class="td-hero" aria-live="polite">' +
+      '<div class="td-hero-top"><svg class="td-hero-brain" id="todayBrainSvg" viewBox="0 0 96 96" aria-hidden="true"></svg>' +
+        '<div><div class="td-phase">' + BRAIN_LABELS[phase] + '</div><div class="td-phase-sub">' + todayEsc(sub) + '</div></div></div>' +
+      '<div class="td-goal"><div class="td-goal-track" role="progressbar" aria-label="Core habit progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '">' +
+        '<div class="td-goal-fill" style="width:' + pct + '%"></div><div class="td-goal-mark"></div></div>' +
+        '<div class="td-goal-meta"><span>' + cf.done + ' of ' + cf.total + ' core habits done</span><span><b>Daily goal</b> at the line</span></div></div>' +
+    '</section>';
+
+  /* Next core habit */
+  var nc = todayNextCandidates();
+  if (!nc.list.length) {
+    html += '<section class="td-next" style="--ac:var(--serotonin)"><div class="td-eye">Core habits</div>' +
+      '<div class="td-next-all">Every core habit is done. Anything else you tick deepens the day.</div></section>';
+  } else {
+    var pick = nc.list[todaySkip % nc.list.length];
+    var pIdx = HABITS[pick.cat.key].habits.indexOf(pick.h);
+    html += '<section class="td-next" style="--ac:var(--' + pick.cat.key + ')" aria-label="Next core habit"><div class="td-eye">Next core habit</div>' +
+      '<div class="td-next-row"><div style="flex:1;min-width:0"><div class="td-next-label">' + todayEsc(pick.h.label) + '</div>' +
+        '<div class="td-next-why">' + (nc.unlock ? 'Unlocks ' : 'Deepens ') + pick.cat.name + '</div></div>' +
+        '<button class="td-done-btn" data-td="next" data-type="' + pick.cat.key + '" data-idx="' + pIdx + '">Done</button></div>' +
+      (nc.list.length > 1 ? '<button class="td-skip" data-td="skip">Not now — show another</button>' : '') +
+    '</section>';
+  }
+
+  /* Category groups */
+  TODAY_CATS.forEach(function (c) {
+    var list = todayHabitsFor(c.key);
+    var done = list.filter(function (h) { return todayIsDone(c.key, h); }).length;
+    var extraDone = list.some(function (h) { return !h.foundational && todayIsDone(c.key, h); });
+    html += '<section class="td-grp" style="--ac:var(--' + c.key + ')" aria-label="' + c.name + '">' +
+      '<button class="td-grp-head" data-td="cat" data-type="' + c.key + '" aria-label="Open ' + c.name + ' page">' +
+        '<span class="td-grp-dot"></span><span class="td-grp-name">' + c.name + '</span><span class="td-grp-desc">' + c.desc + '</span>' +
+        '<span class="td-grp-count">' + done + ' of ' + list.length + TODAY_CHEV + '</span></button>' +
+      '<div class="td-grp-bar"><i style="width:' + Math.round(catEffectivePct(c.key)) + '%"></i></div>' +
+      (extraDone && !foundationDone(c.key) ? '<div class="td-grp-hint">Do a core habit to unlock full points for ' + c.name + '.</div>' : '') +
+      '<div class="td-rows">' + list.map(function (h) { return todayRowHTML(c.key, h); }).join('') + '</div>' +
+    '</section>';
+  });
+  html += '<p class="td-foot">Tap a category to learn about its habits, or to add and swap them.</p>';
+  root.innerHTML = html;
+  drawBrainSvg(document.getElementById('todayBrainSvg'), phase);
+  todayBind();
+}
+
+function todayRowHTML(type, h) {
+  var i = HABITS[type].habits.indexOf(h);
+  var key = type + '_' + i;
+  var st = appState[today] || {};
+  var done = !!st[key];
+  var own = habitLabels[key];
+  var tiers = '';
+  if (done && h.flex && h.flex.multiSession) {
+    var cur = st[key + '_tier'] || 0;
+    tiers = '<div class="td-tiers" role="group" aria-label="How much">' + h.flex.tiers.map(function (t, n) {
+      return '<button class="td-tier' + (cur === n + 1 ? ' on' : '') + '" data-td="tier" data-type="' + type + '" data-idx="' + i + '" data-tier="' + (n + 1) + '">' + todayEsc(t.label) + '</button>';
+    }).join('') + '</div>';
+  }
+  return '<div class="td-row-wrap"><div class="td-row' + (done ? ' done' : '') + '">' +
+      '<button class="td-row-main" data-td="tick" data-type="' + type + '" data-idx="' + i + '" aria-pressed="' + done + '">' +
+        '<span class="td-chk">' + TODAY_CHECK + '</span>' +
+        '<span class="td-row-body"><span class="td-row-label">' + todayEsc(h.label) + '</span>' +
+          (own ? '<span class="td-row-own">' + todayEsc(own) + '</span>' : '') +
+          (h.foundational ? '<span class="td-row-tag">Core</span>' : '') + '</span>' +
+      '</button>' +
+      '<button class="td-info" data-td="info" data-type="' + type + '" data-idx="' + i + '" aria-label="How ' + todayEsc(h.label) + ' works">' + TODAY_INFO + '</button>' +
+    '</div>' + tiers + '</div>';
+}
+
+function todayBind() {
+  if (todayBound) return;
+  todayBound = true;
+  document.getElementById('todayContent').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-td]');
+    if (!b) return;
+    var act = b.dataset.td, type = b.dataset.type, idx = parseInt(b.dataset.idx, 10);
+    if (act === 'tick' || act === 'next') { if (act === 'next') todaySkip = 0; todayTick(type, idx); }
+    else if (act === 'tier') todayTick(type, idx, parseInt(b.dataset.tier, 10));
+    else if (act === 'info') showHabitInfo(HABITS[type].habits[idx]);
+    else if (act === 'cat') openCategory(type);
+    else if (act === 'skip') { todaySkip++; renderToday(); }
+  });
+}
+
 function renderCoach() {
+  renderToday();
   // Brain phase
   const phase = brainPhase();
   drawBrainSvg(document.getElementById('brainvatarSvg'), phase);
@@ -6934,10 +7161,7 @@ async function handleSignOut() {
   document.getElementById('screen-login').style.display = 'flex';
   document.getElementById('screen-login').classList.add('screen-active');
   // Reset nav to Coach tab
-  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  document.querySelector('[data-tab="coach"]').classList.add('active');
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('page-active'));
-  document.getElementById('page-coach').classList.add('page-active');
+  goToPage('today');
 }
 
 /* ═══════════════════════════════════════════════════════════
