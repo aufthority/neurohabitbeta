@@ -1187,6 +1187,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .history-entry-chevron { color: var(--muted); font-size: 18px; line-height: 1; }
 
 /* ═══ THEME TOGGLE ══════════════════════════════════════════ */
+#modeDesc { display: block; }
+.mode-switch { display: flex; width: fit-content; margin-top: 10px; padding: 3px; border-radius: 999px; background: var(--surface2); border: 1px solid var(--border); }
+.mode-opt { min-height: 34px; padding: 0 16px; border-radius: 999px; border: 0; background: none; color: var(--muted); font-family: 'Geist', sans-serif; font-size: 13px; cursor: pointer; }
+.mode-opt.on { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
 .theme-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
 .theme-toggle-left { display: flex; align-items: center; gap: 12px; }
 .theme-toggle-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -2009,6 +2013,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             </div>
             <button class="theme-pill" id="themePill" onclick="toggleTheme()" aria-label="Toggle light mode"></button>
           </div>
+          <!-- BUILD 77: habit change mode -->
+          <div class="profile-row mode-row" style="cursor:default">
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg></div>
+            <div class="profile-row-body">
+              <strong>Habit changes</strong>
+              <span id="modeDesc"></span>
+              <div class="mode-switch" role="radiogroup" aria-label="Habit changes">
+                <button class="mode-opt" data-mode="science" role="radio" onclick="setChangeMode('science')">Science</button>
+                <button class="mode-opt" data-mode="casual" role="radio" onclick="setChangeMode('casual')">Casual</button>
+              </div>
+            </div>
+          </div>
           <div class="profile-row" onclick="openShareModal()">
             <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v9"/><polyline points="5.5,5.5 9,2 12.5,5.5"/><path d="M4 10v5a1 1 0 001 1h8a1 1 0 001-1v-5"/></svg></div>
             <div class="profile-row-body">
@@ -2403,7 +2419,7 @@ let cloudAgain = false;
 let cloudLastSaved = null;
 
 function cloudWatchedKeys() {
-  return [SK, WK, HCK, HLK, AVK, HBL, STK, 'nh_big_why'];
+  return [SK, WK, HCK, HLK, AVK, HBL, STK, 'nh_big_why', 'nh_change_mode'];
 }
 
 function cloudMeta() {
@@ -2437,7 +2453,8 @@ function cloudProfile() {
     lock:   ld(HLK),
     avatar: ld(AVK),
     labels: ld(HBL) || {},
-    bigWhy: localStorage.getItem('nh_big_why') || null
+    bigWhy: localStorage.getItem('nh_big_why') || null,
+    mode:   localStorage.getItem('nh_change_mode') || 'science'
   });
 }
 
@@ -2612,6 +2629,7 @@ function cloudApplyProfile(p) {
   put(AVK, p.avatar);
   put(HBL, p.labels || {});
   if (p.bigWhy) localStorage.setItem('nh_big_why', p.bigWhy); else localStorage.removeItem('nh_big_why');
+  if (p.mode) localStorage.setItem('nh_change_mode', p.mode);
 }
 
 /* Re-read everything from localStorage into the running app */
@@ -2805,7 +2823,9 @@ async function cloudPull(uid) {
   var meta = paired ? stored : { uid: uid, days: {}, profile: null };
   meta.days = meta.days || {};
   if (meta.profile) {
-    try { var bp = JSON.parse(meta.profile); delete bp.streak; meta.profile = cloudStable(bp); } catch (e) {}
+    try { var bp = JSON.parse(meta.profile); delete bp.streak;
+      if (bp.mode === undefined) bp.mode = localStorage.getItem('nh_change_mode') || 'science';
+      meta.profile = cloudStable(bp); } catch (e) {}
   }
   Object.keys(meta.days).forEach(function (d) {
     try { meta.days[d] = cloudStable(JSON.parse(meta.days[d])); } catch (e) {}
@@ -3246,7 +3266,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 76;
+const APP_BUILD   = 77;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3435,7 +3455,15 @@ function hoursUntilGraceEnd() {
   return Math.max(0, Math.ceil(ms / (60 * 60 * 1000)));
 }
 
+/* BUILD 77: two ways to manage the habit set (Profile → Habit changes).
+   Science (default): core habits stay for 28 days so you can see what works;
+     habits can be added, and extras removed, any time; after day 28, changes are swaps.
+   Casual: add or remove any habit any time (each category still keeps one core habit). */
+const MODE_KEY = 'nh_change_mode';
+function isCasualMode() { return localStorage.getItem(MODE_KEY) === 'casual'; }
+
 function isLockActive() {
+  if (isCasualMode()) return false;
   if (!habitLockMeta) return false;
   if (isInGracePeriod()) return false; // grace window: lock not yet active
   return today <= habitLockMeta.lockUntil;
@@ -3458,6 +3486,7 @@ function canAddHabit(type, habitId) {
 }
 
 function canRemoveHabit(type, habitId) {
+  if (isCasualMode()) return true;     // casual mode: change freely
   if (isInGracePeriod()) return true;  // grace window: free adjustment
   if (isLockActive()) return false;    // locked: nothing moves
   // Post-grace, post-lock: swap is always required — never outright removal
@@ -3665,7 +3694,7 @@ function renderSection(type) {
     row.setAttribute('aria-label', displayLabel);
     row.setAttribute('tabindex', '0');
     row.addEventListener('keydown', function(e) {
-      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleHabit(key, type, i); }
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); todayTick(type, i); }
     });
 
     let flexCtrlHTML = '';
@@ -3703,7 +3732,7 @@ function renderSection(type) {
     row.addEventListener('click', function(e) {
       if (e.target.closest('.habit-info-btn') || e.target.closest('.flex-toggle-btn') ||
           e.target.closest('.session-flex-ctrl')) return;
-      toggleHabit(key, type, i);
+      todayTick(type, i);   // BUILD 77: same as Today — session habits start at their first level
     });
 
     /* BUILD 75: long-press popup removed — "How it works" shows the same information */
@@ -3828,7 +3857,7 @@ function renderInfoExtras(h) {
 
   if (selected) {
     var action = null, note = null;
-    if (isInGracePeriod()) action = 'Remove from my set';
+    if (isCasualMode() || isInGracePeriod()) action = 'Remove from my set';
     else if (isLockActive()) {
       if (h.foundational) note = 'Core habits are locked for ' + daysUntilUnlock() + ' more days, so you can see whether they work for you.';
       else action = 'Remove from my set';
@@ -6966,6 +6995,17 @@ function removeHabitFromSet(type, hid) {
   var h = HABITS[type].habits.find(function(x) { return x.id === hid; });
   if (!h) return;
 
+  // BUILD 77: casual mode — remove freely, but every category keeps one core habit
+  if (isCasualMode()) {
+    if (h.foundational && getSelectedFoundationals(type).length <= 1) { showCoreReplaceModal(type, hid); return; }
+    if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
+    userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
+    sv(HCK, userHabitConfig);
+    renderSection(type); updateCatUI(type); renderCoach();
+    showToast(h.label + ' removed. You can add it back any time.', 'success');
+    return;
+  }
+
   // Grace period — free removal allowed, but core minimum enforced
   if (isInGracePeriod()) {
     if (h.foundational && getSelectedFoundationals(type).length <= 1) {
@@ -6993,7 +7033,7 @@ function removeHabitFromSet(type, hid) {
     userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
     sv(HCK, userHabitConfig);
     renderSection(type); updateCatUI(type); renderCoach();
-    showToast(h.label + ' removed. You can add it back after the lock ends in ' + daysUntilUnlock() + ' days.', 'success');
+    showToast(h.label + ' removed. You can add it back any time.', 'success');
     return;
   }
 
@@ -7066,7 +7106,36 @@ function signUpFromGuest() {
 /* ═══════════════════════════════════════════════════════════
    PROFILE PAGE
    ═══════════════════════════════════════════════════════════ */
+function renderModeUI() {
+  var casual = isCasualMode();
+  document.querySelectorAll('.mode-opt').forEach(function (b) {
+    var on = b.dataset.mode === (casual ? 'casual' : 'science');
+    b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false');
+  });
+  var d = document.getElementById('modeDesc');
+  if (d) d.textContent = casual
+    ? 'Casual: add and remove any habit, any time.'
+    : 'Science: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works.';
+}
+
+function setChangeMode(mode) {
+  if (mode === (isCasualMode() ? 'casual' : 'science')) return;
+  localStorage.setItem(MODE_KEY, mode);
+  cloudNoteChange(MODE_KEY);
+  if (mode === 'science') {
+    initHabitLock(JSON.parse(JSON.stringify(getConfig())));   // a fresh 28 days from today
+    showToast('Science mode on. Your core habits stay for the next ' + LOCK_MIN_DAYS + ' days.', 'success');
+  } else {
+    showToast('Casual mode on. Add and remove habits any time.', 'success');
+  }
+  renderLockStatusBars();
+  Object.keys(HABITS).forEach(function (t) { renderSection(t); });
+  renderCoach();
+  renderModeUI();
+}
+
 function renderProfile() {
+  renderModeUI();
   const name   = userData.name || 'Guest';
   const email  = userData.skipAuth ? 'No account — guest session' : (userData.email || userData.name || '—');
   const initials = name.slice(0, 2).toUpperCase();
@@ -7264,9 +7333,8 @@ function renderLockStatusBars() {
     const bar = document.createElement('div');
     bar.id = 'lockbar-' + type;
     bar.className = 'lock-status-bar';
-    const d = daysIntoLock();
-    const rec = LOCK_REC_DAYS;
-    bar.innerHTML = '<strong>Day ' + d + ' of ' + rec + '</strong> — habit set locked. You can add habits freely. Removals unlock after day ' + LOCK_MIN_DAYS + '.';
+    const d = Math.min(LOCK_MIN_DAYS, daysIntoLock() + 1);
+    bar.innerHTML = '<strong>Day ' + d + ' of ' + LOCK_MIN_DAYS + '</strong> — Science mode: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works. You can add habits, and remove extras, any time.';
     listEl.parentNode.insertBefore(bar, listEl);
   });
 }
