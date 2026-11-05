@@ -3715,14 +3715,7 @@ function renderSection(type) {
       toggleHabit(key, type, i);
     });
 
-    let pressTimer;
-    row.addEventListener('pointerdown', function(e) {
-      if (e.target.closest('.habit-learn-btn') || e.target.closest('.flex-toggle-btn') ||
-          e.target.closest('.session-flex-ctrl') || e.target.closest('.habit-rem-btn')) return;
-      pressTimer = setTimeout(function() { showTooltip(h.tooltip); }, 500);
-    });
-    row.addEventListener('pointerup',    function() { clearTimeout(pressTimer); });
-    row.addEventListener('pointerleave', function() { clearTimeout(pressTimer); });
+    /* BUILD 75: long-press popup removed — "How it works" shows the same information */
 
     const flexBtn = row.querySelector('.flex-toggle-btn');
     if (flexBtn) flexBtn.addEventListener('click', function(e) {
