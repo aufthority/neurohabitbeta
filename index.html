@@ -26,9 +26,10 @@
   }
 })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
@@ -129,7 +130,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 #screen-login { align-items: center; justify-content: center; padding: 40px 28px; }
 .login-logo { font-size: 60px; margin-bottom: 16px; animation: floatBrain 3s ease-in-out infinite; }
 @keyframes floatBrain { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-.login-title { font-family: 'Instrument Serif', serif; font-size: 34px; font-weight: 400; letter-spacing: -0.5px; text-align: center; line-height: 1; }
+.login-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 34px; font-weight: 400; letter-spacing: -0.5px; text-align: center; line-height: 1; }
 /* ── REVISION 1: Brand subtitle — constrained to title width ── */
 .login-brand-sub {
   font-size: 7.5px;
@@ -158,11 +159,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* ═══ PERSISTENT HEADER ══════════════════════════════════════ */
 .app-header { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t)) 18px 0; height: calc(var(--safe-t) + var(--header-h)); display: flex; align-items: flex-end; padding-bottom: 11px; }
 .header-brand { flex: 1; min-width: 0; }
-.header-brand h1 { font-family: 'Instrument Serif', serif; font-size: 18px; font-weight: 400; letter-spacing: -0.3px; line-height: 1; color: var(--text); }
+.header-brand h1 { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 18px; font-weight: 400; letter-spacing: -0.3px; line-height: 1; color: var(--text); }
 /* ── REVISION 1: header brand subtitle — must not exceed h1 width ── */
 .header-brand-sub {
-  font-size: 6.5px;
-  /* letter-spacing tuned so "BY AUFTHORITY" ≈ width of "NeuroHabit" at 18px Instrument Serif */
+  font-size: 9.5px;
+  /* font-size + letter-spacing tuned so "BY AUFTHORITY" ≈ width of "NeuroHabit" at 18px Bricolage Grotesque */
   letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--muted);
@@ -185,7 +186,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .score-ring-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text); }
 .score-pill-info .val { font-size: 13px; font-weight: 600; line-height: 1; color: var(--text); }
 .score-pill-info .lbl { font-size: 10px; color: var(--muted); margin-top: 1px; }
-.grade-chip { width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', serif; font-size: 16px; transition: all 0.35s; flex-shrink: 0; cursor: pointer; color: var(--muted); }
+.grade-chip { width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 16px; transition: all 0.35s; flex-shrink: 0; cursor: pointer; color: var(--muted); }
 
 /* ═══ BOTTOM NAV ══════════════════════════════════════════════ */
 .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--surface); border-top: 1px solid var(--border); padding-bottom: var(--safe-b); height: calc(var(--nav-h) + var(--safe-b)); }
@@ -215,7 +216,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .page-hero { padding: 20px 18px 16px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
 .page-hero-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
 .accent-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.page-hero h2 { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.4px; color: var(--text); }
+.page-hero h2 { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 22px; font-weight: 400; letter-spacing: -0.4px; color: var(--text); }
 .page-hero p { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
 
 /* Gauge */
@@ -358,7 +359,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .modal-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border2); margin: 0 auto 16px; }
 .modal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .modal-icon  { font-size: 20px; }
-.modal-title { font-family: 'Instrument Serif', serif; font-size: 18px; font-weight: 400; }
+.modal-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 18px; font-weight: 400; }
 .modal-body  { font-size: 13px; color: var(--muted); line-height: 1.65; }
 .modal-close { margin-top: 16px; width: 100%; padding: 11px; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--muted); font-family: 'Geist', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
 .modal-close:hover { color: var(--text); }
@@ -390,11 +391,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 14px;
 }
-.share-card-brand { font-family: 'Instrument Serif', serif; font-size: 16px; }
+.share-card-brand { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 16px; }
 .share-card-brand span { display: block; font-family: 'Geist', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 1px; }
 .share-card-date { font-size: 11px; color: var(--muted); }
 .share-hero-score { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
-.share-hero-num { font-family: 'Instrument Serif', serif; font-size: 52px; font-weight: 400; line-height: 1; }
+.share-hero-num { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 52px; font-weight: 400; line-height: 1; }
 .share-hero-pct { font-size: 22px; color: var(--muted); }
 .share-grade { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 /* Brain balance bar (Revision 6) */
@@ -412,7 +413,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .share-cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 12px; }
 .share-cat { background: var(--surface2); border-radius: 8px; padding: 8px 10px; }
 .share-cat-name { font-size: 9.5px; color: var(--muted); margin-bottom: 3px; letter-spacing: 0.3px; }
-.share-cat-score { font-size: 16px; font-weight: 600; font-family: 'Instrument Serif', serif; }
+.share-cat-score { font-size: 16px; font-weight: 600; font-family: 'Bricolage Grotesque', 'Geist', sans-serif; }
 .share-tagline { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; letter-spacing: 0.5px; }
 .share-actions { display: flex; gap: 8px; }
 .share-action-btn { flex: 1; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-family: 'Geist', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-align: center; }
@@ -426,7 +427,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .share-insight-body { font-size: 12px; color: var(--text); line-height: 1.65; font-style: italic; }
 .share-perf-row { display: flex; gap: 6px; margin-bottom: 10px; }
 .share-perf-cell { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; text-align: center; }
-.share-perf-val { font-family: 'Instrument Serif', serif; font-size: 18px; font-weight: 400; color: var(--text); line-height: 1; }
+.share-perf-val { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 18px; font-weight: 400; color: var(--text); line-height: 1; }
 .share-perf-lbl { font-size: 9px; color: var(--muted); margin-top: 2px; letter-spacing: 0.3px; }
 
 /* ═══ COACH PAGE ═════════════════════════════════════════════ */
@@ -434,7 +435,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .coach-page-inner { padding: 20px 18px 0; }
 .brain-phase-block { display: flex; flex-direction: column; align-items: center; padding: 18px 0 10px; margin-bottom: 8px; }
 .brain-phase-svg { margin-bottom: 10px; }
-.brain-phase-label { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; color: var(--text); text-align: center; line-height: 1.2; margin-bottom: 3px; }
+.brain-phase-label { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 20px; font-weight: 400; color: var(--text); text-align: center; line-height: 1.2; margin-bottom: 3px; }
 .brain-phase-label-row { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; }
 .brain-phase-label-row .brain-phase-label { margin-bottom: 0; }
 .phase-info-btn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border2); background: var(--surface2); color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; font-weight: 700; font-family: 'Geist', sans-serif; transition: all 0.2s; flex-shrink: 0; line-height: 1; }
@@ -484,7 +485,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .coach-hero-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; position: relative; overflow: hidden; }
 .coach-hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--dopamine), var(--oxytocin), var(--serotonin), var(--endorphin)); }
 .coach-hero-top { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-.coach-big-score { font-family: 'Instrument Serif', serif; font-size: 42px; font-weight: 400; line-height: 1; letter-spacing: -1px; }
+.coach-big-score { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 42px; font-weight: 400; line-height: 1; letter-spacing: -1px; }
 .coach-big-score span { font-size: 18px; color: var(--muted); }
 .coach-score-info strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 3px; }
 .coach-score-info em { font-size: 12px; color: var(--muted); font-style: normal; line-height: 1.4; }
@@ -508,7 +509,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .improve-body { flex: 1; min-width: 0; }
 .improve-body strong { display: block; font-size: 12.5px; font-weight: 600; color: var(--text); line-height: 1.2; }
 .improve-body span { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
-.improve-pct { font-family: 'Instrument Serif', serif; font-size: 16px; font-weight: 400; flex-shrink: 0; }
+.improve-pct { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 16px; font-weight: 400; flex-shrink: 0; }
 .improve-done { opacity: 0.45; }
 .improve-done .improve-body strong { opacity: 0.5; }
 
@@ -532,9 +533,9 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .grade-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 12px) 18px 12px; display: flex; align-items: center; gap: 10px; }
 .grade-back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; font-family: 'Geist', sans-serif; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; padding: 6px 0; transition: opacity 0.2s; }
 .grade-back-btn:hover { opacity: 0.7; }
-.grade-screen-title { font-family: 'Instrument Serif', serif; font-size: 15px; font-weight: 400; color: var(--muted); }
+.grade-screen-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 15px; font-weight: 400; color: var(--muted); }
 .grade-screen-content { padding: 24px 20px 60px; }
-.grade-screen-content h2 { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; letter-spacing: -0.4px; }
+.grade-screen-content h2 { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; letter-spacing: -0.4px; }
 .grade-screen-content > p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
 
 .scoring-explainer { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; margin-top: 18px; }
@@ -556,7 +557,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .ios-install-sheet { position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,0.6); display: flex; align-items: flex-end; justify-content: center; padding-bottom: var(--safe-b); animation: fadeIn 0.18s ease; }
 .ios-install-card { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-sm); padding: 20px 20px 24px; width: 100%; max-width: 480px; animation: slideUp 0.22s cubic-bezier(.4,0,.2,1); }
 .ios-install-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 18px; }
-.ios-install-title { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; margin-bottom: 16px; }
+.ios-install-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 20px; font-weight: 400; margin-bottom: 16px; }
 .ios-install-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 .ios-step { display: flex; align-items: flex-start; gap: 12px; font-size: 13.5px; color: var(--text); line-height: 1.5; }
 .ios-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--coach); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
@@ -620,11 +621,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   background: linear-gradient(135deg, var(--coach), var(--dopamine));
   display: flex; align-items: center; justify-content: center;
   font-size: 24px; flex-shrink: 0; color: #fff;
-  font-family: 'Instrument Serif', serif; font-weight: 400;
+  font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-weight: 400;
 }
 .profile-name { font-family: 'Geist', sans-serif; font-size: 13px; font-weight: 400; line-height: 1.1; color: var(--muted); letter-spacing: 0; }
 .profile-name strong { display: block; font-size: 18px; font-weight: 600; color: var(--text); margin-top: 1px; }
 .profile-email { font-size: 12px; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-sync { font-size: 11px; color: var(--serotonin); margin-top: 3px; line-height: 1.35; }
+.profile-sync[data-state="error"] { color: var(--oxytocin); }
+.profile-sync[data-state="offline"], .profile-sync[data-state="saving"] { color: var(--muted); }
 .profile-badge {
   margin-left: auto; flex-shrink: 0;
   font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
@@ -697,7 +701,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   background: linear-gradient(90deg, var(--dopamine), var(--coach), var(--serotonin));
 }
 .premium-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
-.premium-card-title { font-family: 'Instrument Serif', serif; font-size: 18px; font-weight: 400; }
+.premium-card-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 18px; font-weight: 400; }
 .premium-card-tag {
   font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
   padding: 3px 8px; border-radius: 20px;
@@ -812,7 +816,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .live-streak-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .live-streak-name { font-size: 13px; color: var(--text); flex: 1; }
 .live-streak-count {
-  font-family: 'Instrument Serif', serif; font-size: 20px;
+  font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 20px;
   line-height: 1; font-weight: 400;
 }
 .live-streak-label { font-size: 10px; color: var(--muted); margin-left: 3px; }
@@ -839,7 +843,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .live-milestone-body strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.2; }
 .live-milestone-body span  { font-size: 11px; color: var(--muted); }
 .live-milestone-val {
-  font-family: 'Instrument Serif', serif; font-size: 20px;
+  font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 20px;
   color: var(--text); font-weight: 400;
 }
 
@@ -950,7 +954,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   align-items: center; justify-content: center; pointer-events: none;
 }
 .brainvatar-score-num {
-  font-family: 'Instrument Serif', serif; font-size: 28px; font-weight: 400;
+  font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 28px; font-weight: 400;
   line-height: 1; letter-spacing: -1px; color: var(--text);
 }
 .brainvatar-score-num span { font-size: 13px; color: var(--muted); }
@@ -1072,7 +1076,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* ═══ HISTORY SCREEN ════════════════════════════════════════ */
 .history-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 48px) 18px 12px; display: flex; align-items: center; gap: 10px; }
 .history-screen-content { overflow-y: auto; flex: 1; padding: 24px 20px 80px; }
-.history-screen-title { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 4px; }
+.history-screen-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 22px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 4px; }
 .history-screen-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
 .history-grid-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 20px; }
 .history-grid-card-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
@@ -1146,8 +1150,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .intro-back svg { flex-shrink: 0; }
 
 .intro-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--coach); margin-bottom: 12px; }
-.intro-title { font-family: 'Instrument Serif', serif; font-size: 28px; font-weight: 400; line-height: 1.28; color: var(--text); margin-bottom: 14px; }
-.intro-title em { font-style: italic; color: var(--coach); }
+.intro-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 28px; font-weight: 400; line-height: 1.28; color: var(--text); margin-bottom: 14px; }
+.intro-title em { font-style: normal; color: var(--coach); }
 .intro-body { font-size: 13.5px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
 .intro-body strong { color: var(--text); font-weight: 500; }
 
@@ -1184,7 +1188,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 /* Quiz */
 .quiz-q-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.quiz-q-title { font-family: 'Instrument Serif', serif; font-size: 23px; font-weight: 400; line-height: 1.3; color: var(--text); margin-bottom: 6px; }
+.quiz-q-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 23px; font-weight: 400; line-height: 1.3; color: var(--text); margin-bottom: 6px; }
 .quiz-q-sub   { font-size: 12.5px; color: var(--muted); line-height: 1.65; margin-bottom: 22px; }
 .quiz-opts    { display: flex; flex-direction: column; gap: 9px; }
 .quiz-opt {
@@ -1211,7 +1215,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .onboard-inner { max-width: 480px; margin: 0 auto; padding: 32px 20px 60px; }
 .onboard-header { text-align: center; margin-bottom: 28px; }
 .onboard-logo { font-size: 44px; margin-bottom: 10px; }
-.onboard-title { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; }
+.onboard-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; }
 .onboard-sub { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 300px; margin: 0 auto; }
 .onboard-step { margin-bottom: 28px; }
 .onboard-step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -1270,7 +1274,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* ── Patterns Report (screen-history rebuild, build 38) ─────────────── */
 .pr-content { overflow-y: auto; flex: 1; padding: 20px 18px 100px; }
 .pr-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
-.pr-title { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; color: var(--text); line-height: 1.2; margin-bottom: 3px; }
+.pr-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 22px; font-weight: 400; color: var(--text); line-height: 1.2; margin-bottom: 3px; }
 .pr-sub { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 .pr-selfmon { font-size: 11px; color: var(--muted); line-height: 1.5; padding: 8px 12px; border-left: 2px solid var(--border2); margin-bottom: 14px; }
 .pr-range-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -1302,7 +1306,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .pr-glance-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-bottom: 18px; }
 .pr-glance-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 10px; }
 .pr-glance-label { font-size: 10px; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-.pr-glance-num { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; color: var(--text); line-height: 1; }
+.pr-glance-num { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 26px; font-weight: 400; color: var(--text); line-height: 1; }
 .pr-glance-ctx { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
 
 /* Chart */
@@ -1345,7 +1349,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* Nudge */
 .pr-nudge { border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 18px; }
 .pr-nudge-eye { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; }
-.pr-nudge-ifthen { font-family: 'Instrument Serif', serif; font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.6; }
+.pr-nudge-ifthen { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.6; }
 .pr-nudge-sub { font-size: 11px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
 /* Footer */
 .pr-footer { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.7; padding-top: 8px; }
@@ -1862,6 +1866,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <div class="profile-name" id="profileName"><strong>Guest</strong></div>
             <div id="profileAvatarLabel" style="font-size:11px;color:var(--coach);font-weight:500;margin-top:1px;display:none"></div>
             <div class="profile-email" id="profileEmail">Not signed in</div>
+            <div class="profile-sync" id="syncStatus" role="status" aria-live="polite" style="display:none"></div>
           </div>
           <div class="profile-badge" id="profilePlanBadge">Free</div>
         </div>
@@ -2215,7 +2220,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       <div id="shareBrainvatarSection">
         <div style="display:flex;flex-direction:column;align-items:center;padding:16px 0 8px">
           <svg id="shareBrainSvg" width="80" height="80" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
-          <div id="sharePhaseLabel" style="font-family:'Instrument Serif',serif;font-size:20px;font-weight:400;margin-top:8px;color:var(--text)"></div>
+          <div id="sharePhaseLabel" style="font-family:'Bricolage Grotesque', 'Geist', sans-serif;font-size:20px;font-weight:400;margin-top:8px;color:var(--text)"></div>
           <div id="shareGrade" style="font-size:12px;color:var(--muted);margin-top:3px"></div>
         </div>
         <div style="display:flex;justify-content:center;gap:6px;margin-bottom:12px" id="sharePipsRow"></div>
@@ -2299,6 +2304,175 @@ firebase.initializeApp(firebaseConfig);
 const analytics = firebase.analytics();
 const auth  = firebase.auth();
 const gprov = new firebase.auth.GoogleAuthProvider();
+
+/* ═══════════════════════════════════════════════════════════
+   CLOUD SYNC — BUILD 69 (Sync Build A: save to the cloud)
+   Signed-in users only. localStorage stays the source of truth
+   for the running app; every save is mirrored to Firestore:
+     users/{uid}                 → profile (config, lock, avatar,
+                                   labels, streak, big why)
+     users/{uid}/days/{date}     → state (that day's ticks) + score
+   Only changes since the last successful upload are sent, and a
+   tick removed locally is deleted in the cloud too. Writes queue
+   offline (IndexedDB persistence) and upload on reconnect.
+   Loading on another device = Build B. Live updates = Build C.
+   ═══════════════════════════════════════════════════════════ */
+const db = firebase.firestore();
+db.enablePersistence({ synchronizeTabs: true }).catch(function () { /* unsupported browser or private mode: writes still work, just not queued across reloads */ });
+
+const SYNC_META_KEY = 'nh_sync_meta';   // { uid, days: { date: json }, profile: json } — what the cloud already has
+let cloudUid = null;
+let cloudTimer = null;
+let cloudBusy = false;
+let cloudAgain = false;
+let cloudLastSaved = null;
+
+function cloudWatchedKeys() {
+  return [SK, WK, HCK, HLK, AVK, HBL, STK, 'nh_big_why'];
+}
+
+function cloudMeta() {
+  var m = null;
+  try { m = JSON.parse(localStorage.getItem(SYNC_META_KEY)); } catch (e) { m = null; }
+  return (m && m.uid === cloudUid) ? m : { uid: cloudUid, days: {}, profile: null };
+}
+
+function cloudSaveMeta(m) {
+  try { localStorage.setItem(SYNC_META_KEY, JSON.stringify(m)); } catch (e) {}
+}
+
+function cloudClean(v) {
+  return v === undefined ? null : JSON.parse(JSON.stringify(v));
+}
+
+function cloudProfile() {
+  return cloudClean({
+    config: ld(HCK),
+    lock:   ld(HLK),
+    avatar: ld(AVK),
+    labels: ld(HBL) || {},
+    streak: ld(STK),
+    bigWhy: localStorage.getItem('nh_big_why') || null
+  });
+}
+
+/* Called by sv() and the two direct localStorage writes that matter */
+function cloudNoteChange(key) {
+  if (!cloudUid) return;
+  if (cloudWatchedKeys().indexOf(key) === -1) return;
+  clearTimeout(cloudTimer);
+  cloudTimer = setTimeout(cloudFlush, 1500);
+}
+
+function cloudStart(uid) {
+  if (cloudUid === uid) return;
+  cloudUid = uid;
+  setSyncStatus(navigator.onLine === false ? 'offline' : 'saving');
+  clearTimeout(cloudTimer);
+  cloudTimer = setTimeout(cloudFlush, 0);   // first run uploads everything the cloud doesn't have yet
+}
+
+function cloudStop() {
+  cloudUid = null;
+  clearTimeout(cloudTimer);
+  setSyncStatus('off');
+}
+
+function cloudFlush() {
+  cloudTimer = null;
+  if (!cloudUid) return;
+  if (cloudBusy) { cloudAgain = true; return; }
+
+  var uid  = cloudUid;
+  var meta = cloudMeta();
+  var userRef = db.collection('users').doc(uid);
+  var FV = firebase.firestore.FieldValue;
+  var ops = [];
+  var sentDays = {};
+  var sentProfile = null;
+
+  var dates = {};
+  Object.keys(appState || {}).forEach(function (d) { dates[d] = 1; });
+  Object.keys(weekData || {}).forEach(function (d) { dates[d] = 1; });
+
+  Object.keys(dates).forEach(function (d) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+    var cur = {
+      state: cloudClean(appState[d] || {}),
+      score: (typeof weekData[d] === 'number') ? weekData[d] : null
+    };
+    var curJson = JSON.stringify(cur);
+    if (meta.days[d] === curJson) return;
+    var prev = { state: {} };
+    try { if (meta.days[d]) prev = JSON.parse(meta.days[d]); } catch (e) {}
+    var state = {};
+    Object.keys(cur.state).forEach(function (k) { state[k] = cur.state[k]; });
+    Object.keys(prev.state || {}).forEach(function (k) {
+      if (!(k in cur.state)) state[k] = FV.delete();
+    });
+    ops.push({ ref: userRef.collection('days').doc(d), data: { state: state, score: cur.score, updatedAt: FV.serverTimestamp() }, opts: { merge: true } });
+    sentDays[d] = curJson;
+  });
+
+  var prof = cloudProfile();
+  var profJson = JSON.stringify(prof);
+  if (meta.profile !== profJson) {
+    ops.push({ ref: userRef, data: { profile: prof, updatedAt: FV.serverTimestamp() }, opts: { mergeFields: ['profile', 'updatedAt'] } });
+    sentProfile = profJson;
+  }
+
+  if (!ops.length) { setSyncStatus('saved'); return; }
+
+  cloudBusy = true;
+  setSyncStatus(navigator.onLine === false ? 'offline' : 'saving');
+
+  /* Firestore batches hold up to 500 writes; stay well under */
+  var chunks = [];
+  for (var i = 0; i < ops.length; i += 400) chunks.push(ops.slice(i, i + 400));
+
+  chunks.reduce(function (p, chunk) {
+    return p.then(function () {
+      var b = db.batch();
+      chunk.forEach(function (o) { b.set(o.ref, o.data, o.opts); });
+      return b.commit();
+    });
+  }, Promise.resolve()).then(function () {
+    if (cloudUid !== uid) return;
+    var m = cloudMeta();
+    Object.keys(sentDays).forEach(function (d) { m.days[d] = sentDays[d]; });
+    if (sentProfile !== null) m.profile = sentProfile;
+    cloudSaveMeta(m);
+    cloudLastSaved = new Date();
+    setSyncStatus('saved');
+  }).catch(function (err) {
+    console.warn('[NeuroHabit sync] upload failed', err && err.code, err && err.message);
+    if (cloudUid === uid) setSyncStatus('error');
+  }).then(function () {
+    cloudBusy = false;
+    if (cloudAgain) { cloudAgain = false; cloudFlush(); }
+  });
+}
+
+function setSyncStatus(state) {
+  var el = document.getElementById('syncStatus');
+  if (!el) return;
+  if (state === 'off') { el.style.display = 'none'; el.textContent = ''; return; }
+  var text = {
+    saving:  'Saving to your account…',
+    offline: 'Offline — changes will upload when you reconnect',
+    error:   'Couldn’t reach your account. Will retry on your next change.'
+  }[state];
+  if (state === 'saved') {
+    var t = cloudLastSaved || new Date();
+    text = 'Saved to your account · ' + t.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+  el.textContent = text;
+  el.dataset.state = state;
+  el.style.display = 'block';
+}
+
+window.addEventListener('online', function () { if (cloudUid) cloudFlush(); });
+window.addEventListener('offline', function () { if (cloudUid) setSyncStatus('offline'); });
 
 /* ═══════════════════════════════════════════════════════════
    HABIT REGISTRY
@@ -2630,7 +2804,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 67;
+const APP_BUILD   = 69;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2643,7 +2817,7 @@ const HLK = 'nh_pwa_habitlock';    // habit lock metadata
 const HBL = 'nh_habit_labels';     // BUILD 44: persistent habit personalisation labels
 
 const ld = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
-const sv = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const sv = (k, v) => { localStorage.setItem(k, JSON.stringify(v)); cloudNoteChange(k); };
 
 let appState       = ld(SK)  || {};
 let streak         = ld(STK) || { count: 0, lastDate: null };
@@ -3203,7 +3377,7 @@ function renderSection(type) {
         const input = document.getElementById('hli-' + labelKey);
         const val = input.value.trim();
         if (val) { habitLabels[labelKey] = val; } else { delete habitLabels[labelKey]; }
-        localStorage.setItem(HBL, JSON.stringify(habitLabels));
+        localStorage.setItem(HBL, JSON.stringify(habitLabels)); cloudNoteChange(HBL);
         const previewEl  = document.getElementById('hlp-' + labelKey);
         const previewSpan = previewEl ? previewEl.querySelector('span') : null;
         const editBtn    = document.getElementById('hleb-' + labelKey);
@@ -5674,7 +5848,7 @@ function saveBigWhy(e) {
   var inp = document.getElementById('bigWhyInput');
   if (!inp) return;
   var val = inp.value.trim();
-  if (val) localStorage.setItem('nh_big_why', val);
+  if (val) { localStorage.setItem('nh_big_why', val); cloudNoteChange('nh_big_why'); }
   var wrap = document.getElementById('bigWhyInputWrap');
   if (wrap) wrap.classList.remove('visible');
   renderBigWhy();
@@ -6259,12 +6433,14 @@ function removeHabitFromSet(type, hid) {
 }
 
 auth.onAuthStateChanged((user) => {
+  if (!user) cloudStop();
   if (user) {
     userData.name     = user.displayName || user.email.split('@')[0];
     userData.email    = user.email;
     userData.photo    = user.photoURL || null;
     userData.skipAuth = false;
     sv(UK, userData);
+    cloudStart(user.uid);
     if (!appLaunched) launchApp();
   } else if (userData.skipAuth) {
     if (!appLaunched) launchApp(); // guest session continues as before
@@ -6763,7 +6939,7 @@ function quizFinish() {
     }).join('');
     card.innerHTML =
       '<div style="font-size:52px;line-height:1;margin-bottom:12px">' + matched.emoji + '</div>' +
-      '<div style="font-family:\'Instrument Serif\',serif;font-size:24px;font-weight:400;' +
+      '<div style="font-family:\'Bricolage Grotesque\',\'Geist\',sans-serif;font-size:24px;font-weight:400;' +
            'color:var(--text);margin-bottom:5px">' + matched.label + '</div>' +
       '<div style="font-size:13px;color:var(--muted);margin-bottom:14px">' + matched.desc + '</div>' +
       (traitHTML ? '<div style="margin-bottom:16px">' + traitHTML + '</div>' : '') +

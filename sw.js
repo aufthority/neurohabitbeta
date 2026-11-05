@@ -5,7 +5,7 @@
    — Firebase/Fonts cached for offline use
    ═══════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'neurohabit-v67';
+const CACHE_NAME = 'neurohabit-v69';
 
 const PRECACHE = [
   '/neurohabitbeta/manifest.json',
@@ -13,8 +13,9 @@ const PRECACHE = [
   '/neurohabitbeta/icon-512.png',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js',
-  'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap',
+  'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Geist:wght@300;400;500;600&display=swap',
 ];
 
 /* Install — cache everything except index.html */
@@ -38,6 +39,9 @@ self.addEventListener('activate', event => {
 /* Fetch strategy */
 self.addEventListener('fetch', event => {
   const url = event.request.url;
+
+  /* Firestore sync traffic (long-lived streaming connections) — never intercept */
+  if (url.includes('firestore.googleapis.com')) return;
 
   /* index.html — ALWAYS network-first. cache:'no-store' forces
      a real network round-trip instead of letting the browser's
