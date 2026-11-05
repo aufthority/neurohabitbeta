@@ -1521,7 +1521,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      INTRO SCREEN 1 — Brain phases
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-intro-1" style="display:none">
-  <div class="intro-progress"><div class="intro-progress-fill" style="width:14%"></div></div>
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:17%"></div></div>
   <div class="intro-inner">
     <button class="intro-back" onclick="introGoTo('screen-intro-0', 0, 7)">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -1536,51 +1536,23 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--coach)"></div><div class="intro-phase-name">Thriving</div><div class="intro-phase-desc">All systems firing</div></div>
     </div>
     <p class="intro-body" style="margin-bottom:0"><strong style="color:var(--serotonin)">Foundation Active</strong> is your daily goal — the point where science says it is already working. Everything above it is a bonus.</p>
+    <p class="intro-body" style="margin:10px 0 0;font-size:13px;color:var(--muted)">Two more phases bookend these: <strong>Ready</strong> before your first tick, and <strong>Enlightened</strong> when every core habit is done in full.</p>
     <div class="intro-spacer"></div>
-    <button class="intro-cta" onclick="introGoTo('screen-intro-2', 2, 7)">Got it →</button>
+    <button class="intro-cta" onclick="introGoTo('screen-quiz-1', 2, 6)">Got it — let’s build your set →</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
      INTRO SCREEN 2 — Streaks and grace
      ══════════════════════════════════════════════════════════ -->
-<div class="screen" id="screen-intro-2" style="display:none">
-  <div class="intro-progress"><div class="intro-progress-fill" style="width:28%"></div></div>
-  <div class="intro-inner">
-    <button class="intro-back" onclick="introGoTo('screen-intro-1', 1, 7)">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-      Back
-    </button>
-    <div class="intro-eyebrow">Miss a day</div>
-    <h1 class="intro-title">Your streak gets one <em>grace day</em> a week. Life happens.</h1>
-    <div class="intro-streak-row">
-      <div class="intro-s-day done">M</div>
-      <div class="intro-s-day done">T</div>
-      <div class="intro-s-day done">W</div>
-      <div class="intro-s-day grace">T</div>
-      <div class="intro-s-day done">F</div>
-      <div class="intro-s-day done">S</div>
-      <div class="intro-s-day today">S</div>
-    </div>
-    <div class="intro-streak-legend">
-      <div class="intro-sl-item"><div class="intro-sl-dot" style="background:var(--serotonin)"></div>Done</div>
-      <div class="intro-sl-item"><div class="intro-sl-dot" style="background:var(--dopamine)"></div>Grace</div>
-      <div class="intro-sl-item"><div class="intro-sl-dot" style="border:1.5px solid var(--text)"></div>Today</div>
-    </div>
-    <p class="intro-body" style="margin-bottom:0">Habits older than 14 days get locked automatically — a rough week cannot undo what your brain already built.</p>
-    <div class="intro-spacer"></div>
-    <button class="intro-cta" onclick="introGoTo('screen-quiz-1', 3, 7)">Now let’s build your set →</button>
-    <div class="intro-cta-note">Four quick questions. We will do the matching.</div>
-  </div>
-</div>
 
 <!-- ══════════════════════════════════════════════════════════
      QUIZ SCREEN 1 — Life right now
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-quiz-1" style="display:none">
-  <div class="intro-progress"><div class="intro-progress-fill" style="width:42%"></div></div>
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:33%"></div></div>
   <div class="intro-inner">
-    <button class="intro-back" onclick="introGoTo('screen-intro-2', 2, 7)">
+    <button class="intro-back" onclick="introGoTo('screen-intro-1', 1, 6)">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
       Back
     </button>
@@ -1602,7 +1574,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      QUIZ SCREEN 2 — Social world
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-quiz-2" style="display:none">
-  <div class="intro-progress"><div class="intro-progress-fill" style="width:57%"></div></div>
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:50%"></div></div>
   <div class="intro-inner">
     <button class="intro-back" onclick="introGoTo('screen-quiz-1', 3, 7)">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -1626,7 +1598,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      QUIZ SCREEN 3 — What gets in the way
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-quiz-3" style="display:none">
-  <div class="intro-progress"><div class="intro-progress-fill" style="width:71%"></div></div>
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:67%"></div></div>
   <div class="intro-inner">
     <button class="intro-back" onclick="introGoTo('screen-quiz-2', 4, 7)">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -1650,7 +1622,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      QUIZ SCREEN 4 — Body right now
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-quiz-4" style="display:none">
-  <div class="intro-progress"><div class="intro-progress-fill" style="width:85%"></div></div>
+  <div class="intro-progress"><div class="intro-progress-fill" style="width:83%"></div></div>
   <div class="intro-inner">
     <button class="intro-back" onclick="introGoTo('screen-quiz-3', 5, 7)">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -1742,6 +1714,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     <div class="page" id="page-coach">
       <div class="coach-page-inner">
 
+        <!-- BUILD 78: Journey entry leads the Coach page -->
+        <div class="history-entry-row" style="margin-bottom:16px" onclick="showHistoryScreen()">
+          <div class="history-entry-left">
+            <span class="history-entry-label">What your habits are showing</span>
+            <span class="history-entry-sub">Patterns, insights, and your journey so far</span>
+          </div>
+          <span class="history-entry-chevron">›</span>
+        </div>
+
         <!-- Brain Phase Display + Thought Bubble -->
         <div class="brain-phase-block">
           <svg id="brainvatarSvg" class="brain-phase-svg" width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -1781,14 +1762,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           <div id="weeklyTrendChart"></div>
         </div>
 
-        <!-- Journey entry point -->
-        <div class="history-entry-row" onclick="showHistoryScreen()">
-          <div class="history-entry-left">
-            <span class="history-entry-label">What your habits are showing</span>
-            <span class="history-entry-sub">Patterns, insights, and your journey so far</span>
-          </div>
-          <span class="history-entry-chevron">›</span>
-        </div>
 
         <!-- Premium Insights (collapsed) -->
         <div class="premium-collapse-wrap">
@@ -2020,8 +1993,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
               <strong>Habit changes</strong>
               <span id="modeDesc"></span>
               <div class="mode-switch" role="radiogroup" aria-label="Habit changes">
-                <button class="mode-opt" data-mode="science" role="radio" onclick="setChangeMode('science')">Science</button>
-                <button class="mode-opt" data-mode="casual" role="radio" onclick="setChangeMode('casual')">Casual</button>
+                <button class="mode-opt" data-mode="science" role="radio" onclick="setChangeMode('science')">Committed</button>
+                <button class="mode-opt" data-mode="casual" role="radio" onclick="setChangeMode('casual')">Flexible</button>
               </div>
             </div>
           </div>
@@ -2041,19 +2014,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             </div>
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <div class="profile-row" onclick="confirmNewDay()">
-            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10A5.5 5.5 0 1014.5 10"/><polyline points="3.5,6.5 3.5,10 7,10"/><line x1="9" y1="4" x2="9" y2="2"/></svg></div>
-            <div class="profile-row-body">
-              <strong>New Day — Reset Today</strong>
-              <span>Clear all of today's habits</span>
-            </div>
-            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
         </div>
 
         <!-- Danger section -->
         <div class="profile-section-label">Session</div>
         <div class="profile-rows">
+          <div class="profile-row danger" onclick="confirmNewDay()">
+            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10A5.5 5.5 0 1014.5 10"/><polyline points="3.5,6.5 3.5,10 7,10"/><line x1="9" y1="4" x2="9" y2="2"/></svg></div>
+            <div class="profile-row-body">
+              <strong>Clear today’s ticks</strong>
+              <span>Unticks everything logged today, on all your devices</span>
+            </div>
+            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
           <div class="profile-row danger" onclick="handleSignOut()">
             <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3a1 1 0 00-1 1v10a1 1 0 001 1h4"/><line x1="12" y1="9" x2="17" y2="9"/><polyline points="14,6 17,9 14,12"/></svg></div>
             <div class="profile-row-body">
@@ -2119,33 +2092,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 <!-- ══════════════════════════════════════════════════════════
      GRADE SCREEN
      ══════════════════════════════════════════════════════════ -->
-<div class="screen" id="screen-grade" style="display:none">
-  <div class="grade-back-bar">
-    <button class="grade-back-btn" onclick="hideScreen('screen-grade')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back
-    </button>
-    <span class="grade-screen-title">Your Brain State</span>
-  </div>
-  <div class="grade-screen-content">
-    <h2>Your Brain Phases</h2>
-    <p>Your brain phase reflects how much of your core foundation is active today. It is not a grade — it is a mirror. Every phase is valid.</p>
-    <!-- Layer 2: goal callout — rendered by renderPhaseGuide() -->
-    <div id="gradeGoalCallout" class="grade-goal-callout not-yet" style="margin-top:14px">
-      <span class="grade-goal-icon">🎯</span>
-      <div id="gradeGoalCalloutText">Your daily goal is <strong>Phase 3 — Foundation Active</strong>. Everything above that is a bonus. The science says reaching Phase 3 is a genuinely good day for your brain.</div>
-    </div>
-    <div class="phase-guide" id="phaseGuideEl"></div>
-    <div class="scoring-explainer" style="margin-top:20px">
-      <h3>How the phases work</h3>
-      <p>Each of your four neurochemical categories has at least one <strong>core habit</strong> — the habit with the strongest scientific evidence for that system. Your brain phase rises as you complete more of your chosen core habits across categories.</p>
-      <p><strong>Phase 3 — Foundation Active</strong> is the key threshold. At least 50% of your core habits across all four categories are done. The evidence says this is a genuinely good day for your brain.</p>
-      <p>Secondary and bonus habits deepen each category further — they do not change your brain phase. The phase is driven purely by your core habits.</p>
-
-    </div>
-  </div>
-</div>
-
 <!-- ══════════════════════════════════════════════════════════
      HISTORY SCREEN
      ══════════════════════════════════════════════════════════ -->
@@ -3266,7 +3212,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 77;
+const APP_BUILD   = 78;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3456,9 +3402,10 @@ function hoursUntilGraceEnd() {
 }
 
 /* BUILD 77: two ways to manage the habit set (Profile → Habit changes).
-   Science (default): core habits stay for 28 days so you can see what works;
+   Committed (default; stored as 'science'): core habits stay for 28 days so you can see what works;
      habits can be added, and extras removed, any time; after day 28, changes are swaps.
-   Casual: add or remove any habit any time (each category still keeps one core habit). */
+   Flexible (stored as 'casual'): add or remove any habit any time (each category keeps one core habit).
+   BUILD 78: renamed from Science / Casual. */
 const MODE_KEY = 'nh_change_mode';
 function isCasualMode() { return localStorage.getItem(MODE_KEY) === 'casual'; }
 
@@ -3630,7 +3577,7 @@ function renderSection(type) {
       separatorAdded = true;
       const sep = document.createElement('div');
       sep.style.cssText = 'margin:10px 0 6px;font-size:10px;font-weight:600;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted);opacity:0.6';
-      sep.textContent = 'Discover more habits';
+      sep.textContent = 'Add more habits';
       list.appendChild(sep);
     }
     const key      = type + '_' + i;
@@ -3762,29 +3709,26 @@ function renderSection(type) {
 
   updateCatUI(type);
 
-  // Progressive disclosure — hide non-foundational habits by default
-  // BUILD 73: remember an opened list, so a redraw (a tick, or a change synced from another device) keeps it open
-  const allRows = list.querySelectorAll('.habit-row');
-  const extras  = Array.from(allRows).filter(r => !r.classList.contains('foundational'));
+  /* BUILD 78: every habit in your set stays visible (you log them here and on Today).
+     Habits you haven't added form a separate library, collapsed behind one button.
+     An opened library stays open through redraws (BUILD 73). */
+  const library = Array.from(list.querySelectorAll('.habit-row.habit-unselected'));
   const existing = list.querySelector('.show-more-btn');
   if (existing) existing.remove();
-  if (extras.length) {
-    const anyDone = extras.some(r => r.classList.contains('done'));
-    // Show extras if any are done (so ticked items don't disappear)
-    if (!anyDone) {
-      const open = !!expandedSections[type];
-      extras.forEach(r => r.classList.toggle('hidden-habit', !open));
-      const btn = document.createElement('button');
-      btn.className = 'show-more-btn';
-      btn.textContent = open ? `Hide extra habits ↑` : `Show ${extras.length} more habits ↓`;
-      btn.addEventListener('click', () => {
-        const hidden = extras[0].classList.contains('hidden-habit');
-        expandedSections[type] = hidden;
-        extras.forEach(r => r.classList.toggle('hidden-habit', !hidden));
-        btn.textContent = hidden ? `Hide extra habits ↑` : `Show ${extras.length} more habits ↓`;
-      });
-      list.appendChild(btn);
-    }
+  if (library.length) {
+    const open = !!expandedSections[type];
+    library.forEach(r => r.classList.toggle('hidden-habit', !open));
+    const btn = document.createElement('button');
+    btn.className = 'show-more-btn';
+    const closedText = `Browse ${library.length} habit${library.length === 1 ? '' : 's'} you can add ↓`;
+    btn.textContent = open ? 'Hide habits you can add ↑' : closedText;
+    btn.addEventListener('click', () => {
+      const hidden = library[0].classList.contains('hidden-habit');
+      expandedSections[type] = hidden;
+      library.forEach(r => r.classList.toggle('hidden-habit', !hidden));
+      btn.textContent = hidden ? 'Hide habits you can add ↑' : closedText;
+    });
+    list.appendChild(btn);
   }
 }
 
@@ -4386,10 +4330,21 @@ var _catTapIdx = Math.floor(Math.random() * 1000);
   });
 }());
 
+/* BUILD 78: research cards wait until someone has a week of logging behind them */
+function daysSinceFirstLog() {
+  var first = Object.keys(appState || {}).filter(function (d) {
+    var st = appState[d] || {};
+    return /^\d{4}-\d{2}-\d{2}$/.test(d) && Object.keys(st).some(function (k) { return st[k] === true; });
+  }).sort()[0];
+  if (!first) return 0;
+  return Math.round((new Date(today) - new Date(first)) / 86400000);
+}
+
 function renderThoughtBubble() {
   var wrap = document.getElementById('brainThoughtWrap');
   var bubble = document.getElementById('thoughtBubbleContent');
   if (!wrap || !bubble) return;
+  if (daysSinceFirstLog() < 7) { wrap.style.display = 'none'; return; }
   wrap.style.display = 'block';
 
   /* Pick category in rotation order */
@@ -6268,7 +6223,6 @@ function haptic(style = 'light') {
    SCREEN MANAGEMENT
    ═══════════════════════════════════════════════════════════ */
 function showScreen(id) {
-  if (id === 'screen-grade') { setTimeout(renderPhaseGuide, 50); }
   document.querySelectorAll('.screen').forEach(s => { s.style.display = 'flex'; s.classList.remove('screen-active','screen-left'); s.classList.add('screen-left'); });
   const t = document.getElementById(id); t.style.display = 'flex'; t.classList.remove('screen-left'); t.classList.add('screen-active');
 }
@@ -6288,10 +6242,7 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
     // If the grade screen is open, close it first and return to app
-    const gradeScreen = document.getElementById('screen-grade');
-    if (gradeScreen.classList.contains('screen-active')) {
-      hideScreen('screen-grade');
-    }
+
     const histScreen = document.getElementById('screen-history');
     if (histScreen && histScreen.classList.contains('screen-active')) {
       hideScreen('screen-history');
@@ -6730,7 +6681,9 @@ function finishOnboarding() {
    PHASE GUIDE — rendered on the "How You're Graded" screen
    ═══════════════════════════════════════════════════════════ */
 function renderPhaseGuide() {
+  /* BUILD 78: the Grade screen this filled was removed; the Phase sheet (openPhaseModal) is the one explainer */
   const el = document.getElementById('phaseGuideEl');
+  if (!el) return;
   if (!el) return;
   const currentPhase = brainPhase();
   const phases = [
@@ -7114,8 +7067,8 @@ function renderModeUI() {
   });
   var d = document.getElementById('modeDesc');
   if (d) d.textContent = casual
-    ? 'Casual: add and remove any habit, any time.'
-    : 'Science: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works.';
+    ? 'Flexible: add and remove any habit, any time.'
+    : 'Committed: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works.';
 }
 
 function setChangeMode(mode) {
@@ -7124,9 +7077,9 @@ function setChangeMode(mode) {
   cloudNoteChange(MODE_KEY);
   if (mode === 'science') {
     initHabitLock(JSON.parse(JSON.stringify(getConfig())));   // a fresh 28 days from today
-    showToast('Science mode on. Your core habits stay for the next ' + LOCK_MIN_DAYS + ' days.', 'success');
+    showToast('Committed mode on. Your core habits stay for the next ' + LOCK_MIN_DAYS + ' days.', 'success');
   } else {
-    showToast('Casual mode on. Add and remove habits any time.', 'success');
+    showToast('Flexible mode on. Add and remove habits any time.', 'success');
   }
   renderLockStatusBars();
   Object.keys(HABITS).forEach(function (t) { renderSection(t); });
@@ -7334,13 +7287,13 @@ function renderLockStatusBars() {
     bar.id = 'lockbar-' + type;
     bar.className = 'lock-status-bar';
     const d = Math.min(LOCK_MIN_DAYS, daysIntoLock() + 1);
-    bar.innerHTML = '<strong>Day ' + d + ' of ' + LOCK_MIN_DAYS + '</strong> — Science mode: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works. You can add habits, and remove extras, any time.';
+    bar.innerHTML = '<strong>Day ' + d + ' of ' + LOCK_MIN_DAYS + '</strong> — Committed mode: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works. You can add habits, and remove extras, any time.';
     listEl.parentNode.insertBefore(bar, listEl);
   });
 }
 
 function confirmNewDay() {
-  if (!confirm('Start a fresh day? Clears all of today\'s completions.')) return;
+  if (!confirm('Clear today\'s ticks? This unticks everything logged today, on all your devices.')) return;
   appState[today] = {}; weekData[today] = 0;
   sv(SK, appState); sv(WK, weekData);
   Object.keys(HABITS).forEach(t => { renderSection(t); });
@@ -7594,9 +7547,27 @@ function quizFinish() {
       '<div style="font-size:13px;color:var(--muted);margin-bottom:14px">' + matched.desc + '</div>' +
       (traitHTML ? '<div style="margin-bottom:16px">' + traitHTML + '</div>' : '') +
       (matched.note ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.7;' +
-                      'max-width:290px;margin:0 auto">' + matched.note + '</p>' : '');
+                      'max-width:290px;margin:0 auto">' + matched.note + '</p>' : '') +
+      quizCoreListHTML(AVATAR_HABIT_CONFIGS[matched.id] || DEFAULT_HABIT_CONFIG);
   }
-  introGoTo('screen-quiz-result', 7, 8);
+  introGoTo('screen-quiz-result', 6, 6);
+}
+
+/* BUILD 78: list the core habits this match starts you with, so "Yes, this is me" is an informed yes */
+function quizCoreListHTML(cfg) {
+  var names = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
+  var rows = Object.keys(names).map(function (t) {
+    var core = HABITS[t].habits.filter(function (h) { return h.foundational && cfg[t] && cfg[t].selected.indexOf(h.id) !== -1; })
+      .map(function (h) { return h.label; });
+    if (!core.length) return '';
+    return '<li style="display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--border)">' +
+      '<span style="width:8px;height:8px;border-radius:50%;background:var(--' + t + ');margin-top:6px;flex-shrink:0"></span>' +
+      '<span style="text-align:left;font-size:13px;line-height:1.45;color:var(--text)"><span style="color:var(--' + t + ');font-weight:600">' + names[t] + '</span> · ' + core.join(', ') + '</span></li>';
+  }).join('');
+  return '<div style="margin:18px auto 0;max-width:320px;text-align:left">' +
+    '<div style="font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Your core habits</div>' +
+    '<ul style="list-style:none;margin:0;padding:0">' + rows + '</ul>' +
+    '<div style="font-size:11.5px;color:var(--muted);margin-top:6px">Plus a few extras in each category. You can change any of them in the app.</div></div>';
 }
 
 function quizConfirmMatch() {
