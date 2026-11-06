@@ -265,7 +265,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .td-row-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--ac); margin-top: 3px; }
 .td-info { width: 44px; flex-shrink: 0; display: grid; place-items: center; background: none; border: 0; color: var(--subtle); cursor: pointer; border-radius: var(--radius-sm); }
 .td-tiers { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 8px 10px 44px; }
-.td-tier { font-family: 'Geist', sans-serif; font-size: 12px; padding: 7px 10px; min-height: 32px; border-radius: 999px; border: 1px solid var(--border2); background: none; color: var(--muted); cursor: pointer; }
+.td-tier { font-family: 'Geist', sans-serif; font-size: 12px; line-height: 1.2; padding: 6px 11px; min-height: 32px; border-radius: 999px; border: 1px solid var(--border2); background: none; color: var(--muted); cursor: pointer; }
 .td-tier.on { background: color-mix(in srgb, var(--ac) 18%, var(--surface)); border-color: var(--ac); color: var(--text); font-weight: 500; }
 .td-foot { text-align: center; font-size: 12px; color: var(--muted); margin: 18px 0 6px; line-height: 1.5; }
 
@@ -648,7 +648,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
 .habit-info-btn, .td-info { min-width: 44px; min-height: 44px; }
 .cat-back { min-height: 44px; }
 .mode-opt { min-height: 40px; }
-.td-tier { min-height: 40px; }
+.td-tier { min-height: 32px; }
 .toast-close { min-width: 36px; min-height: 36px; }
 @keyframes nh-draw { from { stroke-dashoffset: 18; } to { stroke-dashoffset: 0; } }
 @keyframes nh-pop { 0% { transform: scale(.82); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
@@ -1378,6 +1378,10 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
   .page-container, .coach-page-inner { max-width: 680px; margin-left: auto; margin-right: auto; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
+
+/* BUILD 88: session pills on category pages sit under the name */
+.cat-tiers { padding: 0; margin-top: 8px; gap: 6px; }
+.habit-row .habit-body .habit-label { overflow-wrap: anywhere; }
 
 /* BUILD 87: Premium */
 .premium-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 600; letter-spacing: .3px; color: var(--gold-ink, #3a2a00); background: var(--gold); border-radius: 99px; padding: 2px 8px 2px 6px; margin-left: 6px; vertical-align: middle; white-space: nowrap; }
@@ -3729,7 +3733,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 87;
+const APP_BUILD   = 88;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4157,14 +4161,15 @@ function renderSection(type) {
     /* BUILD 79: the tick is a real button (no button nested inside a checkbox) */
 
     let flexCtrlHTML = '';
-    if (isMulti) {
-      /* BUILD 76: plain wording — "How much?" until a level is picked */
-      const tierLabel = tierIdx === 0 ? 'How much?' : h.flex.tiers[tierIdx-1].label;
-      flexCtrlHTML = '<div class="session-flex-ctrl">' +
-        '<button class="session-tier-btn" data-dir="-1" aria-label="Less">‹</button>' +
-        '<span class="session-tier-label">' + tierLabel + '</span>' +
-        '<button class="session-tier-btn" data-dir="1" aria-label="More">›</button>' +
-        '</div>';
+    /* BUILD 88: session levels are small pills under the name, shown once the
+       habit is ticked, the same as Today (the side stepper squeezed the name) */
+    let tiersHTML = '';
+    if (isMulti && isDone) {
+      tiersHTML = '<div class="td-tiers cat-tiers" role="group" aria-label="How much">' + h.flex.tiers.map(function (t, n) {
+        return '<button type="button" class="td-tier' + (tierIdx === n + 1 ? ' on' : '') + '" data-tier="' + (n + 1) + '" aria-pressed="' + (tierIdx === n + 1) + '">' + todayEsc(t.label) + '</button>';
+      }).join('') + '</div>';
+    } else if (isMulti) {
+      /* not ticked yet: nothing beside the name */
     } else if (h.flex) {
       /* No habit currently uses a single on/off flex; kept working, with a clearer name */
       const isFl = h.flex && !!appState[today][type + '_' + i + '_flex'];
@@ -4184,13 +4189,14 @@ function renderSection(type) {
         '<div class="habit-meta">' +
           '<span class="habit-type-tag">' + typeMap[h.type] + '</span>' +
         '</div>' +
+        tiersHTML +
       '</div>' +
       (flexCtrlHTML ? '<div class="habit-right">' + flexCtrlHTML + '</div>' : '') +
       '<button class="habit-info-btn" aria-label="How ' + displayLabel + ' works">' + TODAY_INFO + '</button>';
 
     row.addEventListener('click', function(e) {
       if (e.target.closest('.habit-info-btn') || e.target.closest('.flex-toggle-btn') ||
-          e.target.closest('.session-flex-ctrl')) return;
+          e.target.closest('.session-flex-ctrl') || e.target.closest('.cat-tiers')) return;
       todayTick(type, i);   // BUILD 77: same as Today — session habits start at their first level
     });
 
@@ -4202,6 +4208,12 @@ function renderSection(type) {
       toggleFlex(type + '_' + i + '_flex', type, i);
     });
 
+    row.querySelectorAll('.cat-tiers .td-tier').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        todayTick(type, i, parseInt(btn.dataset.tier, 10));
+      });
+    });
     row.querySelectorAll('.session-tier-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
