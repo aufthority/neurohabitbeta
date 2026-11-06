@@ -9,7 +9,8 @@
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by Aufthority">
 <link rel="manifest" href="/neurohabitbeta/manifest.json">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23232417'/><g transform='translate(40 40) scale(4.17)' fill='none' stroke='%23f2ab0e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 18V5' /> <path d='M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4' /> <path d='M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294' /> <path d='M17.996 5.125a4 4 0 012.526 5.77' /> <path d='M18 18a4 4 0 002-7.465' /> <path d='M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517' /> <path d='M6 18a4 4 0 01-2-7.465' /> <path d='M6.004 5.125a4 4 0 00-2.526 5.77' /></g></svg>">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><rect width='180' height='180' rx='40' fill='%23232417'/><g transform='translate(40 40) scale(4.17)' fill='none' stroke='%23f2ab0e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 18V5' /> <path d='M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4' /> <path d='M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294' /> <path d='M17.996 5.125a4 4 0 012.526 5.77' /> <path d='M18 18a4 4 0 002-7.465' /> <path d='M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517' /> <path d='M6 18a4 4 0 01-2-7.465' /> <path d='M6.004 5.125a4 4 0 00-2.526 5.77' /></g></svg>">
 <title>NeuroHabit</title>
 <script>
 /* Theme flash prevention — runs before CSS renders */
@@ -3622,7 +3623,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 83;
+const APP_BUILD   = 84;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4415,83 +4416,50 @@ const BRAIN_SUBS   = [
   'Every core habit complete. A rare and exceptional day.'
 ];
 
+/* BUILD 84: the brain-phase avatar is a neuron whose branches light up as the
+   day builds, joining into a network at Enlightened. Small sizes (the Today
+   card, the phase guide) drop the fine side twigs and use thicker lines. */
+function neuronSvg(phase, compact, opts) {
+  opts = opts || {};
+  var GOLD = '#f2ab0e', TXT = '#f6efdd', MUT = '#bdb79f', DIM = '#67634b';
+  var LIT = [0, 1, 2, 4, 5, 6];
+  var BR = [[-90, 0], [-30, 1], [30, 1], [90, 0], [150, 1], [210, 1]];
+  var n = opts.allLit ? 6 : LIT[phase];
+  var k = compact ? 1.35 : 1;
+  function P(a, r) { var t = a * Math.PI / 180; return [48 + r * Math.cos(t), 48 + r * Math.sin(t)]; }
+  function xy(p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }
+  function sparkle(x, y, r, c, o) {
+    return '<path d="M' + x + ' ' + (y - r) + ' Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + ' Q' + x + ' ' + y + ' ' + x + ' ' + (y + r) + ' Q' + x + ' ' + y + ' ' + (x - r) + ' ' + y + ' Q' + x + ' ' + y + ' ' + x + ' ' + (y - r) + 'Z" fill="' + c + '" opacity="' + o + '"/>';
+  }
+  var out = '', tips = [];
+  if (!opts.noGlow && phase >= 4) out += '<circle cx="48" cy="48" r="' + (phase === 5 ? 44 : 30) + '" fill="' + GOLD + '" opacity="' + (phase === 5 ? .14 : .08) + '"/>';
+  BR.forEach(function (b, i) {
+    var lit = i < n, col = lit ? GOLD : DIM, a = b[0];
+    var m = P(a, 22), e = P(a + (b[1] ? 12 : -12), 36), f = P(a - 26, 33);
+    tips.push(e);
+    out += '<path d="M' + xy(P(a, 11)) + ' Q' + xy(P(a + 6, 18)) + ' ' + xy(m) + ' L' + xy(e) + '" fill="none" stroke="' + col + '" stroke-width="' + ((lit ? 2.4 : 2) * k).toFixed(2) + '" stroke-linecap="round"/>';
+    if (!compact) {
+      out += '<path d="M' + xy(m) + ' L' + xy(f) + '" fill="none" stroke="' + col + '" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>';
+      out += '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="1.8" fill="' + col + '" opacity=".85"/>';
+      if (lit && phase >= 2) out += '<circle cx="' + m[0].toFixed(1) + '" cy="' + m[1].toFixed(1) + '" r="1.7" fill="' + TXT + '" opacity=".9"/>';
+    }
+    out += '<circle cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="' + ((lit ? 3.6 : 2.8) * (compact ? 1.25 : 1)).toFixed(2) + '" fill="' + col + '"/>';
+  });
+  if (phase === 5 || opts.network) {
+    out += '<path d="' + tips.map(function (t, i) { return (i ? 'L' : 'M') + xy(t); }).join(' ') + 'Z" fill="none" stroke="' + GOLD + '" stroke-width="' + (compact ? 1.4 : 1) + '" stroke-dasharray="2 3" opacity=".6"/>';
+    if (!opts.noSparkles) out += sparkle(84, 16, 4.5, TXT, .9) + sparkle(12, 80, 3.5, GOLD, .9);
+  }
+  var hot = phase >= 3 || opts.allLit;
+  var soma = hot ? GOLD : ['#2e2e20', '#3a3a28', '#7a5a14'][phase];
+  out += '<circle cx="48" cy="48" r="' + (compact ? 12 : 11) + '" fill="' + soma + '" stroke="' + (hot ? '#fff3cf' : (phase ? MUT : DIM)) + '" stroke-width="2"/>';
+  out += '<circle cx="48" cy="48" r="' + (compact ? 4.5 : 4) + '" fill="' + (hot ? '#fff6dc' : (phase ? MUT : DIM)) + '" opacity="' + (phase || hot ? .9 : .7) + '"/>';
+  return out;
+}
+
 function drawBrainSvg(svgEl, phase) {
   if (!svgEl) return;
-  /* The brainvatar card is now always the dark anchor panel
-     regardless of app theme (proto v4), so the SVG always uses
-     its dark-background palette rather than switching on
-     light-theme. */
-  const isLight = false;
-  const COLS_DARK  = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
-  const COLS_LIGHT = ['#b0a898','#8a8278','#c8712a','#b85070','#4a9e82','#7c6ab8'];
-  const EYE_DARK   = ['#2e2b24','#3d3a33','#7a3800','#7a3800','#085041','#3b2d6e'];
-  const EYE_LIGHT  = ['#6b6256','#504840','#7a3800','#7a3800','#085041','#3b2d6e'];
-  const c  = (isLight ? COLS_LIGHT : COLS_DARK)[phase];
-  const ey = (isLight ? EYE_LIGHT  : EYE_DARK)[phase];
-  const zzzCol = isLight ? '#8a8070' : '#504c45';
-  const glow = phase >= 2
-    ? '<ellipse cx="48" cy="54" rx="34" ry="26" fill="' + c + '28"/>'
-    : '';
-  const outerGlow = phase === 5
-    ? '<ellipse cx="48" cy="48" rx="44" ry="44" fill="none" stroke="' + c + '" stroke-width="1.5" opacity=".25"/>'
-      + '<ellipse cx="48" cy="48" rx="40" ry="40" fill="' + c + '" opacity=".06"/>'
-    : '';
-  let deco = '';
-  if (phase === 3) {
-    deco = '<path d="M72 18 Q74 22 70 24" fill="none" stroke="' + c + '" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>'
-         + '<path d="M16 26 Q14 30 18 31" fill="none" stroke="' + c + '" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>';
-  } else if (phase === 4) {
-    deco = '<circle cx="74" cy="17" r="2.5" fill="' + c + '" opacity=".85"/>'
-         + '<circle cx="15" cy="25" r="2" fill="' + c + '" opacity=".75"/>'
-         + '<circle cx="52" cy="8" r="1.8" fill="' + c + '" opacity=".7"/>'
-         + '<path d="M76 34 L72 41 L75 41 L71 50 L78 41 L74 41 Z" fill="#c8712a" opacity=".85"/>';
-  } else if (phase === 5) {
-    // Sparkle constellation around the brain for Enlightened
-    deco = '<circle cx="76" cy="16" r="3" fill="' + c + '" opacity=".9"/>'
-         + '<circle cx="14" cy="22" r="2.2" fill="' + c + '" opacity=".8"/>'
-         + '<circle cx="52" cy="6" r="2" fill="' + c + '" opacity=".75"/>'
-         + '<circle cx="82" cy="44" r="1.8" fill="' + c + '" opacity=".65"/>'
-         + '<circle cx="8" cy="50" r="1.5" fill="' + c + '" opacity=".6"/>'
-         + '<path d="M72 10 L73.5 14 L77.5 14 L74.5 16.5 L75.5 20.5 L72 18 L68.5 20.5 L69.5 16.5 L66.5 14 L70.5 14 Z" fill="' + c + '" opacity=".9"/>'
-         + '<path d="M18 12 L19 15 L22 15 L19.8 17 L20.5 20 L18 18.5 L15.5 20 L16.2 17 L14 15 L17 15 Z" fill="' + c + '" opacity=".7"/>';
-  }
-  const zzz = phase === 0 ? '<text x="60" y="26" font-size="9" fill="' + zzzCol + '" font-family="sans-serif" opacity=".6">z</text><text x="66" y="18" font-size="11" fill="' + zzzCol + '" font-family="sans-serif" opacity=".4">z</text>' : '';
-  let lEye, rEye;
-  if (phase === 0) {
-    lEye = '<path d="M30 51 Q32 54 34 51" fill="none" stroke="' + ey + '" stroke-width="1.5" stroke-linecap="round"/>';
-    rEye = '<path d="M58 51 Q60 54 62 51" fill="none" stroke="' + ey + '" stroke-width="1.5" stroke-linecap="round"/>';
-  } else if (phase === 1) {
-    lEye = '<ellipse cx="32" cy="51" rx="2.5" ry="1.5" fill="' + ey + '" opacity=".7"/>';
-    rEye = '<ellipse cx="60" cy="51" rx="2.5" ry="1.5" fill="' + ey + '" opacity=".7"/>';
-  } else {
-    lEye = '<ellipse cx="32" cy="51" rx="3" ry="3.5" fill="' + ey + '"/>';
-    rEye = '<ellipse cx="60" cy="51" rx="3" ry="3.5" fill="' + ey + '"/>';
-  }
-  const shine = phase >= 4
-    ? '<circle cx="33.5" cy="49.5" r="1" fill="white" opacity=".7"/><circle cx="61.5" cy="49.5" r="1" fill="white" opacity=".7"/>'
-    : '';
-  let mouth;
-  if (phase === 0)      mouth = '<path d="M38 62 Q48 60 58 62" fill="none" stroke="' + ey + '" stroke-width="1.2" stroke-linecap="round" opacity=".4"/>';
-  else if (phase === 1) mouth = '<path d="M40 62 Q48 63 56 62" fill="none" stroke="' + ey + '" stroke-width="1.3" stroke-linecap="round" opacity=".55"/>';
-  else if (phase <= 3)  mouth = '<path d="M40 61 Q48 66 56 61" fill="none" stroke="' + ey + '" stroke-width="1.5" stroke-linecap="round"/>';
-  else if (phase === 4) mouth = '<path d="M39 60 Q48 68 57 60" fill="none" stroke="' + ey + '" stroke-width="1.8" stroke-linecap="round"/>';
-  else                  mouth = '<path d="M38 59 Q48 70 58 59" fill="none" stroke="' + ey + '" stroke-width="2" stroke-linecap="round"/>';
-  const highlight = phase >= 3 ? '<ellipse cx="38" cy="33" rx="7" ry="5" fill="white" opacity=".1"/>' : '';
-  // Stroke: fixed dark for light mode phases 0-1 (low-saturation fills need guaranteed contrast);
-  // colour-mixed darker shade for coloured phases in both modes.
-  const strokeCol = isLight
-    ? (phase <= 1 ? '#5a5550' : 'color-mix(in srgb, ' + c + ' 50%, #1c1a17)')
-    : 'color-mix(in srgb, ' + c + ' 55%, #000)';
-  // Internal sheen lines: white on dark, dark tint on light
-  const sheenStroke = isLight ? '#1c1a17' : 'white';
-  const sheenOpacity1 = isLight ? '.07' : '.18';
-  const sheenOpacity2 = isLight ? '.06' : '.15';
-  svgEl.innerHTML = outerGlow + glow + deco + zzz
-    + '<path d="M48 22 C34 22 22 31 22 45 C22 53 26 59 32 63 L32 72 L64 72 L64 63 C70 59 74 53 74 45 C74 31 62 22 48 22 Z" fill="' + c + '" stroke="' + strokeCol + '" stroke-width="1.5"/>'
-    + '<path d="M32 63 L64 63 L64 69 Q48 75 32 69 Z" fill="' + c + '" stroke="' + strokeCol + '" stroke-width="1" opacity=".7"/>'
-    + '<path d="M29 33 Q25 41 27 51" fill="none" stroke="' + sheenStroke + '" stroke-width="1.2" stroke-linecap="round" opacity="' + sheenOpacity1 + '"/>'
-    + '<path d="M53 23 Q59 29 57 37" fill="none" stroke="' + sheenStroke + '" stroke-width="1.2" stroke-linecap="round" opacity="' + sheenOpacity2 + '"/>'
-    + highlight + lEye + rEye + shine + mouth;
+  var w = parseFloat(svgEl.getAttribute('width')) || 0;
+  svgEl.innerHTML = neuronSvg(phase, w < 80);   // no width set (Today card, 64px) or small tiles: compact
 }
 
 function updateHeader() {
