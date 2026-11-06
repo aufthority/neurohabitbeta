@@ -91,7 +91,7 @@
   --anchor-mut:    #bdb79f;
   --anchor-border: rgba(246,239,221,0.14);
 
-  --header-h:  80px;
+  --header-h:  0px;   /* BUILD 83: no top bar */
   --nav-h:     64px;
   --safe-t:    env(safe-area-inset-top, 0px);
   --safe-b:    env(safe-area-inset-bottom, 0px);
@@ -668,7 +668,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
 .insight-toast-body { font-size: 12.5px; color: var(--muted); line-height: 1.45; margin-top: 3px; }
 .insight-toast-more { background: none; border: 0; font-family: 'Geist', sans-serif; font-size: 12.5px; font-weight: 600; color: var(--ac, var(--coach)); padding: 6px 6px; min-height: 40px; cursor: pointer; align-self: center; white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .insight-toast { transition: none; } }
-#toast-container { position: fixed; top: calc(var(--safe-t) + 90px); left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; width: 90%; max-width: 360px; }
+#toast-container { position: fixed; top: calc(var(--safe-t) + 16px); left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; width: 90%; max-width: 360px; }
 .toast { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 11px 15px; font-size: 13px; color: var(--text); box-shadow: 0 6px 24px rgba(0,0,0,0.4); display: flex; align-items: center; gap: 9px; pointer-events: auto; animation: toastIn 0.22s cubic-bezier(.4,0,.2,1); width: 100%; }
 .toast.toast-error  { border-left: 3px solid #b85070; }
 .toast.toast-success { border-left: 3px solid #4a9e82; }
@@ -1378,6 +1378,24 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
 
+/* ═══ BUILD 83: NO TOP BAR ════════════════════════════════════
+   Date and streak live in the Today card; Coach and Profile have a
+   page title; laptops show the name at the top of the left menu. */
+.app-header { display: none !important; }
+.td-hero-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: -4px -6px 8px 0; min-height: 36px; }
+.td-date { font-size: 12px; font-weight: 500; letter-spacing: .3px; color: var(--anchor-mut); }
+.td-hero .streak-badge { color: var(--anchor-txt); font-size: 13px; background: var(--anchor-2); padding: 0 10px; border-radius: 99px; gap: 5px; }
+.td-hero .grace-badge { margin-left: 2px; }
+.page-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 26px; font-weight: 400; letter-spacing: -0.4px; color: var(--text); margin: 4px 0 14px; line-height: 1.15; }
+.rail-brand { display: none; }
+.page-container { top: calc(var(--safe-t) + 4px); }
+@media (min-width: 1024px) {
+  .rail-brand { display: block; font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 20px; color: var(--text); padding: 6px 14px 18px; }
+  .bottom-nav { top: 0; padding-top: calc(var(--safe-t) + 20px); flex-direction: column; align-items: stretch; }
+  .bottom-nav .nav-tabs { width: 100%; }
+  #screen-history { top: 0; }
+}
+
 /* BUILD 82: no popup is taller than the screen. Long ones (habit info, privacy)
    keep their title and footer fixed and scroll only the middle. × closes. */
 .modal-card { max-height: calc(100vh - var(--safe-t) - var(--safe-b) - 24px); max-height: calc(100dvh - var(--safe-t) - var(--safe-b) - 24px); overflow-y: auto; overscroll-behavior: contain; }
@@ -1832,6 +1850,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
     <!-- COACH PAGE -->
     <div class="page" id="page-coach">
       <div class="coach-page-inner">
+        <h1 class="page-title">Coach</h1>
 
         <!-- BUILD 78: Journey entry leads the Coach page -->
         <div class="history-entry-row" style="margin-bottom:16px" onclick="showHistoryScreen()">
@@ -2015,6 +2034,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
     <!-- PROFILE / ACCOUNT PAGE -->
     <div class="page" id="page-profile">
       <div class="profile-page-inner">
+        <h1 class="page-title">Profile</h1>
 
         <!-- Guest sign-up banner — shown only for guest sessions -->
         <div class="guest-signup-banner" id="guestSignupBanner" style="display:none">
@@ -2376,6 +2396,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
      BOTTOM NAV
      ══════════════════════════════════════════════════════════ -->
 <nav class="bottom-nav" id="bottomNav" style="display:none">
+  <div class="rail-brand">NeuroHabit</div>
   <div class="nav-tabs">
     <button class="nav-tab active" data-tab="today"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="3"/><polyline points="6.5,10 9,12.5 13.5,7.5"/></svg></span><span class="tab-label">Today</span><span class="tab-pip"></span></button>
     <button class="nav-tab" data-tab="coach"><span class="tab-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="1" x2="10" y2="3.5"/><line x1="10" y1="16.5" x2="10" y2="19"/><line x1="1" y1="10" x2="3.5" y2="10"/><line x1="16.5" y1="10" x2="19" y2="10"/></svg></span><span class="tab-label">Coach</span><span class="tab-pip"></span></button>
@@ -3601,7 +3622,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 82;
+const APP_BUILD   = 83;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4867,6 +4888,12 @@ const TODAY_CHECK = '<svg width="12" height="10" viewBox="0 0 13 10" fill="none"
 const TODAY_INFO  = '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><line x1="10" y1="9" x2="10" y2="14"/><circle cx="10" cy="6.3" r=".6" fill="currentColor"/></svg>';
 const TODAY_CHEV  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>';
 
+function todayDateLabel() {
+  var p = today.split('-').map(Number), d = new Date(p[0], p[1] - 1, p[2]);
+  return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()] + ', ' + d.getDate() + ' ' +
+    ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+}
+
 function renderToday() {
   var root = document.getElementById('todayContent');
   if (!root || !appState[today]) return;
@@ -4878,9 +4905,10 @@ function renderToday() {
   if (phase > 0 && phase < 3 && cf.done * 2 >= cf.total) sub = 'Going longer on a session habit, like Exercise, moves you over the line.';
   var pct = Math.round(cf.rate * 100);
   var html = '<div class="td-side">' +
-    '<section class="td-hero" aria-live="polite">' +
+    '<section class="td-hero">' +
+      '<div class="td-hero-meta"><span class="td-date">' + todayDateLabel() + '</span><span class="td-streak-slot"></span></div>' +
       '<div class="td-hero-top"><svg class="td-hero-brain" id="todayBrainSvg" viewBox="0 0 96 96" aria-hidden="true"></svg>' +
-        '<div><div class="td-phase">' + BRAIN_LABELS[phase] + '</div><div class="td-phase-sub">' + todayEsc(sub) + '</div></div></div>' +
+        '<div aria-live="polite"><div class="td-phase">' + BRAIN_LABELS[phase] + '</div><div class="td-phase-sub">' + todayEsc(sub) + '</div></div></div>' +
       '<div class="td-goal"><div class="td-goal-track" role="progressbar" aria-label="Core habit progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '">' +
         '<div class="td-goal-fill" style="width:' + pct + '%"></div><div class="td-goal-mark"></div></div>' +
         '<div class="td-goal-meta"><span>' + cf.done + ' of ' + cf.total + ' core habits done</span><span><b>Daily goal</b> at the line</span></div></div>' +
@@ -4929,7 +4957,10 @@ function renderToday() {
     '</section>';
   });
   html += '</div><p class="td-foot">Tap a category name to learn about its habits, or to add and swap them.</p></div>';
+  var streakBadge = document.querySelector('.streak-badge');   // BUILD 83: lives in the Today card now
+  if (streakBadge) streakBadge.remove();
   root.innerHTML = html;
+  if (streakBadge) root.querySelector('.td-streak-slot').appendChild(streakBadge);
   drawBrainSvg(document.getElementById('todayBrainSvg'), phase);
   todayBind();
   todayRestoreCard();
