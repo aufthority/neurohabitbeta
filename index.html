@@ -175,7 +175,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 }
 .header-brand-date { font-size: 11px; color: var(--muted); margin-top: 1px; display: block; }
 .header-right { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
-.streak-badge { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 500; color: var(--muted); }
+.streak-badge { display: flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; min-height: 36px; padding: 0 4px; border-radius: 8px; }
 
 /* Score pill */
 .score-pill { display: flex; align-items: center; gap: 9px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 40px; padding: 6px 13px 6px 9px; cursor: pointer; }
@@ -1385,6 +1385,20 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
 
+/* BUILD 81: privacy notice, consent and backup */
+.privacy-link { display: block; margin: 14px auto 0; background: none; border: 0; color: var(--muted); font-family: 'Geist', sans-serif; font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 40px; padding: 0 10px; }
+.privacy-card { max-height: 88vh; overflow-y: auto; }
+.privacy-body { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin: 6px 0 14px; }
+.privacy-body p { margin: 0 0 10px; }
+.privacy-body strong { color: var(--text); font-weight: 600; }
+.privacy-body ul { margin: 0 0 10px; padding-left: 20px; }
+.privacy-body li { margin-bottom: 3px; }
+.privacy-date { font-size: 11.5px; }
+.consent-list { margin: 0 0 12px; padding-left: 18px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.consent-list li { margin-bottom: 4px; }
+.consent-more { background: none; border: 0; padding: 0; color: var(--text); font-family: 'Geist', sans-serif; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 36px; margin-bottom: 8px; }
+.app-sheet-actions.stack { flex-direction: column-reverse; }
+
 /* ═══ BUILD 80: SIDE-SCROLLING CHEMICAL CARDS (phone, tablet) ═══ */
 .td-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
 .td-chip { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 52px; padding: 8px 9px 7px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-family: 'Geist', sans-serif; text-align: left; cursor: pointer; min-width: 0; }
@@ -1559,11 +1573,11 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
     <div class="onboard-header">
       <img src="icon-192.png" alt="NeuroHabit" style="width:64px;height:64px;border-radius:16px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
       <div class="onboard-title">Build your NeuroHabit set</div>
-      <div class="onboard-sub">Choose at least one core habit per category. You can add more anytime — but your choices are locked for 28 days so the science can work.</div>
+      <div class="onboard-sub">Choose at least one core habit per category. You can change anything in your first 48 hours.</div>
     </div>
     <div id="onboard-steps"></div>
     <div class="onboard-lock-note">
-      <strong>28-day habit lock</strong> — Research shows 28 days is the minimum needed to know if a habit works for you (Lally et al. 2010, Keller et al. 2021). You can <em>add</em> habits at any time, but <em>removals</em> open after day 28. The recommended wait is 42 days.
+      <strong>Committed mode</strong> — after your first 48 hours, your core habits stay for 28 days so each one gets a fair trial; habits take weeks to settle (Lally et al. 2010, Keller et al. 2021). You can still drop extras, and after day 28 you can add habits and swap any of them. To change habits freely, switch to Flexible mode in Profile.
     </div>
     <div class="onboard-cta">
       <button class="onboard-cta-btn" id="onboardDoneBtn" onclick="proceedToAvatarStep()" disabled>Next — Choose your avatar →</button>
@@ -1771,6 +1785,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
       Try without an account
     </button>
   </div>
+  <button class="privacy-link" onclick="openPrivacyNotice()">Privacy and your data</button>
   <div id="loginSyncMsg" role="status" aria-live="polite" style="display:none;margin-top:16px;font-size:13px;color:var(--muted)"></div>
   <div id="loginVersionBadge" style="margin-top:20px;font-size:10px;color:var(--muted);letter-spacing:0.3px"></div>
 
@@ -1785,7 +1800,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
     <span class="header-brand-date" id="headerDate"></span>
   </div>
   <div class="header-right">
-    <div class="streak-badge"><svg width="13" height="15" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg><span id="streakNum">0</span></div>
+    <div class="streak-badge" role="button" tabindex="0" aria-label="Streak: how it counts" onclick="explainStreak()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();explainStreak()}"><svg width="13" height="15" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg><span id="streakNum">0</span></div>
     <div class="brain-state-chip" id="brainStateChip">
       <svg id="headerBrainSvg" width="28" height="28" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
       <span id="headerBrainLabel">Ready</span>
@@ -1860,14 +1875,14 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
         <!-- Premium Insights (collapsed) -->
         <div class="premium-collapse-wrap">
           <button class="premium-collapse-btn" id="premiumToggleBtn" onclick="togglePremiumPanel()">
-            <span style="display:inline-flex;align-items:center;gap:5px"><svg width="13" height="13" color="var(--warning)"><use href="#icon-star"/></svg> Premium Insights</span>
+            <span style="display:inline-flex;align-items:center;gap:5px">More insights</span>
             <span class="premium-collapse-chevron" id="premiumChevron">▾</span>
           </button>
           <div class="premium-collapse-body" id="premiumCollapseBody" style="display:none">
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /></svg> This Week</span>
-                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
+                
               </div>
               <div class="week-section" style="border:none;margin:0;padding:8px 2px 0">
                 <div class="week-grid" id="weekGrid"></div>
@@ -1877,7 +1892,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title"><svg width="12" height="14" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>Category Streaks</span>
-                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
+                
               </div>
               <div class="premium-cat-streaks" id="catStreaksPanel"></div>
               <p class="premium-preview-desc">Consecutive days you activated each neurochemical system.</p>
@@ -1886,7 +1901,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" /> <path d="M4 6h.01" /> <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" /> <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" /> <path d="M12 18h.01" /> <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" /> <circle cx="12" cy="12" r="2" /> <path d="m13.41 10.59 5.66-5.66" /></svg> Brain Balance Radar</span>
-                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
+                
               </div>
               <div class="premium-radar-wrap">
                 <svg id="radarChart" viewBox="0 0 280 240" width="100%" style="max-width:280px"></svg>
@@ -1897,7 +1912,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /> <path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /> <path d="M17.996 5.125a4 4 0 012.526 5.77" /> <path d="M18 18a4 4 0 002-7.465" /> <path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /> <path d="M6 18a4 4 0 01-2-7.465" /> <path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></svg> Advanced NeuroCoach</span>
-                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
+                
               </div>
               <div class="premium-adv-insights" id="advInsightsPanel"></div>
               <p class="premium-preview-desc">Pattern analysis and proactive nudges based on your actual data.</p>
@@ -2013,7 +2028,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
             <div class="profile-email" id="profileEmail">Not signed in</div>
             <div class="profile-sync" id="syncStatus" role="status" aria-live="polite" style="display:none"></div>
           </div>
-          <div class="profile-badge" id="profilePlanBadge">Free</div>
+          <div class="profile-badge" id="profilePlanBadge" style="display:none">Guest</div>
         </div>
 
 
@@ -2053,14 +2068,6 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
             <div class="profile-row-body">
               <strong>Change Avatar</strong>
               <span>Pick a character that represents you</span>
-            </div>
-            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-          <div class="profile-row" onclick="changePassword()">
-            <div class="profile-row-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="4"/><line x1="10.5" y1="10.5" x2="16" y2="16"/><line x1="14" y1="14" x2="16" y2="12"/></svg></div>
-            <div class="profile-row-body">
-              <strong>Change Password</strong>
-              <span>Update your account password</span>
             </div>
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
@@ -2110,6 +2117,44 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
           </div>
         </div>
 
+        <!-- BUILD 81: backup, privacy, delete synced data -->
+        <div class="profile-section-label">Your data</div>
+        <div class="profile-rows">
+          <div class="profile-row" role="button" tabindex="0" onclick="exportBackup()" onkeydown="if(event.key==='Enter'){exportBackup()}">
+            <div class="profile-row-icon"><svg class="lc" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg></div>
+            <div class="profile-row-body">
+              <strong>Download a backup</strong>
+              <span>Save your habits and history to a file</span>
+            </div>
+            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="profile-row" role="button" tabindex="0" onclick="pickBackupFile()" onkeydown="if(event.key==='Enter'){pickBackupFile()}">
+            <div class="profile-row-icon"><svg class="lc" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg></div>
+            <div class="profile-row-body">
+              <strong>Restore from a backup</strong>
+              <span>Bring back habits from a backup file</span>
+            </div>
+            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="profile-row" role="button" tabindex="0" onclick="openPrivacyNotice()" onkeydown="if(event.key==='Enter'){openPrivacyNotice()}">
+            <div class="profile-row-icon"><svg class="lc" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+            <div class="profile-row-body">
+              <strong>Privacy and your data</strong>
+              <span>What is stored, where, and your choices</span>
+            </div>
+            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="profile-row danger" id="deleteSyncedRow" style="display:none" role="button" tabindex="0" onclick="deleteSyncedData()" onkeydown="if(event.key==='Enter'){deleteSyncedData()}">
+            <div class="profile-row-icon"><svg class="lc" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></div>
+            <div class="profile-row-body">
+              <strong>Delete synced data</strong>
+              <span>Remove your habits from your account in the cloud</span>
+            </div>
+            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <input type="file" id="backupFileInput" accept="application/json,.json" style="display:none" onchange="importBackupFile(this)">
+
         <!-- Danger section -->
         <div class="profile-section-label">Session</div>
         <div class="profile-rows">
@@ -2147,6 +2192,31 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
 <!-- ══════════════════════════════════════════════════════════
      CHANGELOG MODAL — shown once on first launch of a new build
      ══════════════════════════════════════════════════════════ -->
+<!-- BUILD 81: privacy notice -->
+<div class="modal-overlay" id="privacyModal" onclick="if(event.target===this)closeModal('privacyModal')">
+  <div class="modal-card privacy-card" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="privacyTitle">Privacy and your data</div>
+    <div class="privacy-body">
+      <p><strong>Guest mode.</strong> If you use NeuroHabit without signing in, your habits stay on this device only.</p>
+      <p><strong>If you sign in with Google</strong>, NeuroHabit stores these in your own account on Google Firebase, on servers in Singapore, so your phone, tablet and laptop stay in step:</p>
+      <ul>
+        <li>the habits you tick each day, and how long or how much</li>
+        <li>your habit set, names you give habits, your mode and lock dates</li>
+        <li>your avatar and the name you add under “Who are you doing this for?”</li>
+        <li>your name, email and photo from your Google account</li>
+      </ul>
+      <p>Some habits, such as Solat, can show your religion. That is why the app asks before it syncs.</p>
+      <p><strong>How it is used.</strong> Only to sync your devices and show you your own progress. Your data is not sold, shared or used for advertising, and the database only lets your own account read it.</p>
+      <p><strong>Usage statistics.</strong> The app uses Google Analytics to count how it is used, such as which chemical a habit belongs to when it is ticked. It never records which habit, or your name.</p>
+      <p><strong>Your choices.</strong> In Profile, under Your data, you can download a backup, or delete your synced data at any time. You can also sign out and keep using the app as a guest.</p>
+      <p><strong>Questions or requests.</strong> Use Share Your Feedback in Profile.</p>
+      <p class="privacy-date">Last updated 6 November 2026</p>
+    </div>
+    <button class="modal-close" onclick="closeModal('privacyModal')">Close</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="changelogModal" onclick="closeChangelogModal(event)">
   <div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
@@ -2953,6 +3023,149 @@ function cloudStart(uid) {
   });
 }
 
+/* ═══════════════════════════════════════════════════════════
+   BUILD 81: PRIVACY CONSENT, BACKUP, DELETE SYNCED DATA
+   ═══════════════════════════════════════════════════════════ */
+var CONSENT_KEY = 'nh_sync_consent';          // { uid: 'YYYY-MM-DD' } on this device
+var CONSENT_VERSION = 1;                        // bump when the privacy notice changes materially
+
+function openPrivacyNotice() {
+  var m = document.getElementById('privacyModal');
+  document.body.appendChild(m);   // on top of any open sheet, and first for Escape / Tab
+  openModal('privacyModal');
+}
+
+function consentSheet() {
+  return new Promise(function (resolve) {
+    var back = document.activeElement;
+    var ov = document.createElement('div');
+    ov.className = 'modal-overlay show app-sheet consent-sheet';
+    ov.innerHTML = '<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="consentTitle">' +
+      '<div class="modal-handle"></div>' +
+      '<div class="app-sheet-title" id="consentTitle">Before your habits sync</div>' +
+      '<p class="app-sheet-body" style="margin-bottom:8px">To keep your devices in step, NeuroHabit stores your data in your own account on Google Firebase (servers in Singapore):</p>' +
+      '<ul class="consent-list"><li>the habits you tick each day, including any religious practice such as Solat</li>' +
+      '<li>your habit set and settings</li><li>your name, email and photo from Google</li></ul>' +
+      '<p class="app-sheet-body" style="margin-bottom:6px">It is only used to sync your devices. It is not sold or shared. You can delete it any time in Profile.</p>' +
+      '<button class="consent-more" data-consent-more>Read the full privacy notice</button>' +
+      '<div class="app-sheet-actions stack"><button class="app-sheet-btn" data-consent-no>Use without syncing</button>' +
+      '<button class="app-sheet-btn primary" data-sheet-ok>Agree and sync</button></div></div>';
+    document.body.appendChild(ov);
+    function done(v) { ov.remove(); if (back && back.focus && document.contains(back)) back.focus({ preventScroll: true }); resolve(v); }
+    ov.querySelector('[data-sheet-ok]').addEventListener('click', function () { done(true); });
+    ov.querySelector('[data-consent-no]').addEventListener('click', function () { done(false); });
+    ov.querySelector('[data-consent-more]').addEventListener('click', openPrivacyNotice);
+    setTimeout(function () { ov.querySelector('[data-sheet-ok]').focus(); }, 30);
+  });
+}
+
+/* Resolves true when this account may sync. Asks once per account: a consent
+   given on another device is read from the account and remembered here. */
+async function syncConsentGate(uid) {
+  var local = ld(CONSENT_KEY) || {};
+  if (local[uid]) return true;
+  var userRef = db.collection('users').doc(uid);
+  try {
+    var snap = await cloudWithTimeout(userRef.get(), 6000);
+    var c = snap.exists ? snap.data().consent : null;
+    if (c && c.version >= CONSENT_VERSION) { local[uid] = today; localStorage.setItem(CONSENT_KEY, JSON.stringify(local)); return true; }
+  } catch (e) { /* offline: ask; the record is written when the connection returns */ }
+  if (await consentSheet()) {
+    local[uid] = today; localStorage.setItem(CONSENT_KEY, JSON.stringify(local));
+    userRef.set({ consent: { version: CONSENT_VERSION, at: firebase.firestore.FieldValue.serverTimestamp() } }, { merge: true }).catch(function () {});
+    return true;
+  }
+  await continueAsGuest();
+  showToast('Not syncing. Your habits stay on this device only. You can sign in again from Profile.', 'info');
+  return false;
+}
+
+/* Sign out of Google but keep everything on this device, as a guest */
+async function continueAsGuest() {
+  cloudStop();
+  try { localStorage.removeItem(SYNC_META_KEY); } catch (e) {}
+  userData.skipAuth = true;
+  sv(UK, userData);
+  try { await auth.signOut(); } catch (e) {}
+  if (!appLaunched) launchApp(); else renderProfile();
+}
+
+/* ── Backup ── */
+function exportBackup() {
+  var data = {};
+  [SK, WK, HCK, HLK, HBL, AVK, STK].forEach(function (k) { data[k] = ld(k); });
+  data.nh_big_why = localStorage.getItem('nh_big_why');
+  data.nh_change_mode = localStorage.getItem(MODE_KEY);
+  var file = { app: 'NeuroHabit', kind: 'backup', version: 1, build: APP_BUILD, exportedAt: new Date().toISOString(), name: userData && userData.name || null, data: data };
+  var blob = new Blob([JSON.stringify(file, null, 1)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'neurohabit-backup-' + today + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  showToast('Backup saved as ' + a.download + '. Keep it somewhere safe, like your email or Drive.', 'success');
+}
+function pickBackupFile() { var i = document.getElementById('backupFileInput'); i.value = ''; i.click(); }
+
+async function importBackupFile(input) {
+  var f = input.files && input.files[0];
+  if (!f) return;
+  var file;
+  try { file = JSON.parse(await f.text()); } catch (e) { file = null; }
+  if (!file || file.app !== 'NeuroHabit' || file.kind !== 'backup' || !file.data || typeof file.data !== 'object') {
+    showToast('That file is not a NeuroHabit backup.', 'error'); return;
+  }
+  var d = file.data;
+  var days = Object.keys(d[SK] || {}).filter(function (k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); });
+  var when = file.exportedAt ? new Date(file.exportedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'an earlier date';
+  var ok = await appConfirm('Restore this backup?', 'From ' + when + ', with ' + days.length + ' day' + (days.length === 1 ? '' : 's') + ' of habits. Your habit set and settings will be replaced, and the days in the backup will replace the same days here. Other days stay as they are.' + (cloudUid ? ' Your other devices will update too.' : ''), 'Restore');
+  if (!ok) return;
+  days.forEach(function (day) { appState[day] = d[SK][day]; });
+  Object.keys(d[WK] || {}).forEach(function (day) { if (/^\d{4}-\d{2}-\d{2}$/.test(day) && typeof d[WK][day] === 'number') weekData[day] = d[WK][day]; });
+  [HCK, HLK, HBL, AVK].forEach(function (k) { if (d[k] !== undefined && d[k] !== null) localStorage.setItem(k, JSON.stringify(d[k])); });
+  if (d.nh_big_why) localStorage.setItem('nh_big_why', d.nh_big_why);
+  if (d.nh_change_mode === 'casual' || d.nh_change_mode === 'science') localStorage.setItem(MODE_KEY, d.nh_change_mode);
+  cloudAfterRemoteChange();   // reload into the app, redraw, and upload when signed in
+  if (typeof renderToday === 'function') renderToday();
+  renderModeUI && renderModeUI();
+  showToast('Backup restored.', 'success');
+}
+
+/* ── Delete synced data (PDPA: withdraw consent) ── */
+async function deleteSyncedData() {
+  if (!cloudUid) { showToast('You are not signed in, so nothing is synced.', 'info'); return; }
+  var ok = await appConfirm('Delete your synced data?', 'This removes your habits and settings from your NeuroHabit account in the cloud, and signs you out. This device keeps its copy as a guest. If you are signed in on other devices, sign out there too, or they will upload their copy again. This cannot be undone.', 'Delete', true);
+  if (!ok) return;
+  var uid = cloudUid;
+  var userRef = db.collection('users').doc(uid);
+  setSyncStatus('saving');
+  cloudStop();
+  try {
+    var snap = await cloudWithTimeout(userRef.collection('days').get(), 10000);
+    var refs = [];
+    snap.forEach(function (doc) { refs.push(userRef.collection('days').doc(doc.id)); });
+    for (var i = 0; i < refs.length; i += 400) {
+      var b = db.batch();
+      refs.slice(i, i + 400).forEach(function (r) { b.delete(r); });
+      await cloudWithTimeout(b.commit(), 10000);
+    }
+    var b2 = db.batch(); b2.delete(userRef); await cloudWithTimeout(b2.commit(), 10000);
+  } catch (e) {
+    showToast('Could not delete right now. Check your connection and try again.', 'error');
+    cloudStart(uid);
+    return;
+  }
+  var local = ld(CONSENT_KEY) || {}; delete local[uid]; localStorage.setItem(CONSENT_KEY, JSON.stringify(local));
+  await continueAsGuest();
+  showToast('Your synced data is deleted. This device keeps a copy as a guest.', 'success');
+}
+
+window.openPrivacyNotice = openPrivacyNotice;
+window.exportBackup = exportBackup;
+window.pickBackupFile = pickBackupFile;
+window.importBackupFile = importBackupFile;
+window.deleteSyncedData = deleteSyncedData;
+
 function setLoginSyncMsg(text) {
   var el = document.getElementById('loginSyncMsg');
   if (el) { el.textContent = text; el.style.display = text ? 'block' : 'none'; }
@@ -3312,6 +3525,7 @@ const HABITS = {
    lucide-animated.com (MIT), written in plain CSS with no React/Motion.
    ═══════════════════════════════════════════════════════════ */
 const LUCIDE = {
+  'download': '<path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" />',
   'laptop': '<path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" />',
   'info': '<circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" />',
   'heart-handshake': '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762" />',
@@ -3367,7 +3581,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 80;
+const APP_BUILD   = 81;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3522,7 +3736,7 @@ function getSelectedFoundationals(type) {
   return getSelectedHabits(type).filter(h => h.foundational);
 }
 
-/* ── Habit lock helpers (28-day minimum, 42-day recommendation) ─────── */
+/* ── Habit lock helpers (Committed mode: 48-hour window, then 28 days) ─ */
 const LOCK_MIN_DAYS  = 28;
 const LOCK_REC_DAYS  = 42;
 
@@ -3557,8 +3771,8 @@ function hoursUntilGraceEnd() {
 }
 
 /* BUILD 77: two ways to manage the habit set (Profile → Habit changes).
-   Committed (default; stored as 'science'): core habits stay for 28 days so you can see what works;
-     habits can be added, and extras removed, any time; after day 28, changes are swaps.
+   Committed (default; stored as 'science'): change anything in the first 48 hours; then for 28 days
+     core habits stay and nothing is added (extras can be removed); after day 28, add freely and swap.
    Flexible (stored as 'casual'): add or remove any habit any time (each category keeps one core habit).
    BUILD 78: renamed from Science / Casual. */
 const MODE_KEY = 'nh_change_mode';
@@ -4094,12 +4308,13 @@ function updateCatUI(type) {
  *   Tier 1 of 1 = 1.0 (single-tier flex habits treated as binary)
  * This gives a smooth 0–1 value reflecting both completion and session depth.
  */
-function coreHabitContribution(type, h, i) {
-  var done = !!appState[today][type + '_' + i];
+function coreHabitContribution(type, h, i, st) {
+  st = st || appState[today] || {};
+  var done = !!st[type + '_' + i];
   if (!done) return 0;
   if (h.flex && h.flex.multiSession && h.flex.tiers && h.flex.tiers.length > 1) {
     var tierKey = type + '_' + i + '_tier';
-    var tierIdx = appState[today][tierKey] || 0;
+    var tierIdx = st[tierKey] || 0;
     var maxTiers = h.flex.tiers.length;
     // If habit is marked done but no tier set, count as tier 1
     var effectiveTier = tierIdx > 0 ? tierIdx : 1;
@@ -4108,7 +4323,8 @@ function coreHabitContribution(type, h, i) {
   return 1;  // binary or single-tier: done = full contribution
 }
 
-function countFoundationals() {
+function countFoundationals(st) {
+  st = st || appState[today] || {};
   var contributions = [];
   var done = 0, total = 0;
   Object.keys(HABITS).forEach(function(type) {
@@ -4116,9 +4332,9 @@ function countFoundationals() {
     total += selFdns.length;
     selFdns.forEach(function(h) {
       var i = HABITS[type].habits.indexOf(h);
-      var contrib = coreHabitContribution(type, h, i);
+      var contrib = coreHabitContribution(type, h, i, st);
       contributions.push(contrib);
-      if (!!appState[today][type + '_' + i]) done++;
+      if (!!st[type + '_' + i]) done++;
     });
   });
   var rate = contributions.length > 0
@@ -4127,10 +4343,14 @@ function countFoundationals() {
   return { done: done, total: total, rate: rate };
 }
 
-function brainPhase() {
-  var totalHabits = Object.values(appState[today] || {}).filter(function(v) { return v === true; }).length;
+/* BUILD 81: only habit ticks count (type_index keys), not Flex toggles or
+   other flags; takes any day's state so past days can be judged the same way. */
+var HABIT_KEY_RE = /^(dopamine|serotonin|oxytocin|endorphin)_\d+$/;
+function brainPhase(st) {
+  st = st || appState[today] || {};
+  var totalHabits = Object.keys(st).filter(function(k) { return st[k] === true && HABIT_KEY_RE.test(k); }).length;
   if (totalHabits === 0) return 0;
-  var cf = countFoundationals();
+  var cf = countFoundationals(st);
   var rate = cf.rate;
   if (rate >= 1.0) return 5;  // Enlightened — all core habits at max session tier
   if (rate >= 0.75) return 4; // Thriving — 75% weighted completion
@@ -5670,7 +5890,7 @@ function renderAdvInsights() {
     insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h14"/><path d="M5 13A4 4 0 0113 13"/><line x1="9" y1="3" x2="9" y2="5"/><line x1="3.5" y1="6.5" x2="5" y2="8"/><line x1="14.5" y1="6.5" x2="13" y2="8"/></svg>', text: `Nothing logged yet today. Pick whichever category feels easiest right now — one habit is one pathway activated, and that is enough to start.` });
   } else if (score >= 80) {
     insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h8v6a4 4 0 01-8 0V2z"/><path d="M5 5H3a2 2 0 000 4h2"/><path d="M13 5h2a2 2 0 010 4h-2"/><line x1="9" y1="12" x2="9" y2="15"/><line x1="6" y1="15" x2="12" y2="15"/></svg>', text: `A genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
-  } else if (score >= 50) {
+  } else if (brainPhase() >= 3) {
     insights.push({ icon: lucide('trending-up', 15), text: `Today already counts toward your streak. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
   } else {
     insights.push({ icon: lucide('triangle-alert', 15), text: `Today doesn\'t count toward your streak yet. One thing can change that: your top ${catNames[weakest[0]]} habit. It is the highest-leverage move you have right now.` });
@@ -6308,31 +6528,56 @@ function renderWeek() {
 /* ═══════════════════════════════════════════════════════════
    STREAK — with 1-day grace period
    ═══════════════════════════════════════════════════════════ */
-/* BUILD 71: the streak is calculated from the daily scores (synced per day),
-   so every device shows the same number. Same rules as before: a day counts
-   at a score of 50+, and a single missed day between two counted days is
-   bridged (grace). A streak whose last counted day is more than two days
-   ago has ended and shows 0. */
+/* BUILD 71: the streak is calculated from synced day data, so every device
+   shows the same number. BUILD 81 rules are in deriveStreak(). */
 function streakDayDiff(a, b) {
   var pa = a.split('-').map(Number), pb = b.split('-').map(Number);
   return Math.round((Date.UTC(pb[0], pb[1] - 1, pb[2]) - Date.UTC(pa[0], pa[1] - 1, pa[2])) / 86400000);
 }
+function streakAddDays(d, n) {
+  var p = d.split('-').map(Number), t = new Date(Date.UTC(p[0], p[1] - 1, p[2] + n));
+  return t.getUTCFullYear() + '-' + String(t.getUTCMonth() + 1).padStart(2, '0') + '-' + String(t.getUTCDate()).padStart(2, '0');
+}
 
+/* BUILD 81: a good day is Foundation Active (Phase 3) or higher, the same
+   goal Today shows. One missed day is forgiven per 7 days; a second miss
+   inside that week, or two missed days in a row, ends the streak.
+   Days with no stored ticks fall back to the old score rule. */
+var GRACE_EVERY_DAYS = 7;
+function isGoodDay(d) {
+  var st = appState[d];
+  if (st && Object.keys(st).some(function (k) { return st[k] === true; })) return brainPhase(st) >= 3;
+  return typeof weekData[d] === 'number' && weekData[d] >= 50;
+}
 function deriveStreak() {
-  var days = Object.keys(weekData || {}).filter(function (d) {
-    return /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= today && weekData[d] >= 50;
+  var seen = {};
+  Object.keys(appState || {}).concat(Object.keys(weekData || {})).forEach(function (d) { seen[d] = 1; });
+  var days = Object.keys(seen).filter(function (d) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= today && isGoodDay(d);
   }).sort();
-  var count = 0, last = null, graceUsed = false;
+  var count = 0, last = null, graceDay = null;
+  function graceFree(missed) { return !graceDay || streakDayDiff(graceDay, missed) >= GRACE_EVERY_DAYS; }
   days.forEach(function (d) {
     var gap = last ? streakDayDiff(last, d) : null;
-    if (gap === 1)      { count += 1; graceUsed = false; }
-    else if (gap === 2) { count += 1; graceUsed = true; }
-    else                { count = 1;  graceUsed = false; }
+    var missed = gap === 2 ? streakAddDays(last, 1) : null;
+    if (gap === 1) count += 1;
+    else if (gap === 2 && graceFree(missed)) { count += 1; graceDay = missed; }
+    else { count = 1; graceDay = null; }
     last = d;
   });
-  if (last && streakDayDiff(last, today) > 2) { count = 0; graceUsed = false; }
+  if (last) {
+    var since = streakDayDiff(last, today);
+    if (since === 2 && graceFree(streakAddDays(last, 1))) graceDay = streakAddDays(last, 1);   // yesterday missed: forgiven, today still open
+    else if (since >= 2) { count = 0; graceDay = null; }
+  }
+  var graceUsed = !!graceDay && streakDayDiff(graceDay, today) < GRACE_EVERY_DAYS;
   return { count: count, lastDate: last, graceUsed: graceUsed };
 }
+
+function explainStreak() {
+  showToast('Your streak counts days you reach Foundation active (Phase 3), the daily goal on Today. One missed day a week is forgiven.' + (streak && streak.graceUsed ? ' You have used this week\'s.' : ''), 'info');
+}
+window.explainStreak = explainStreak;
 
 function checkStreak() {
   const score = Math.round(heroScore());
@@ -6355,6 +6600,7 @@ function checkStreak() {
     const badge = document.createElement('span');
     badge.className = 'grace-badge';
     badge.textContent = 'grace';
+    badge.title = 'A missed day was forgiven this week';
     streakEl.parentNode.appendChild(badge);
   }
 }
@@ -7100,14 +7346,12 @@ async function addHabitToSet(type, hid) {
   if (userHabitConfig[type].selected.includes(hid)) return;
   // BUILD 42: block addition during lock period — floor stays honest
   if (isLockActive()) {
-    showToast('Habit set is locked for ' + daysUntilUnlock() + ' more days. You can remove secondary or bonus habits, but no new ones can be added until the lock ends.', 'info');
+    showToast('In Committed mode, new habits can be added after day ' + LOCK_MIN_DAYS + ' (' + daysUntilUnlock() + ' days from now). You can still remove extras, or switch to Flexible mode in Profile.', 'info');
     return;
   }
   var h = HABITS[type].habits.find(function(x) { return x.id === hid; });
   if (!h) return;
   var catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
-  var lockNote = 'You can remove it at any time after adding.';
-  var msgLine2 = lockNote;
   if (!(await appConfirm('Add ' + h.label + '?', 'It joins your ' + type.charAt(0).toUpperCase() + type.slice(1) + ' habits from today.', 'Add habit'))) return;
   userHabitConfig[type].selected.push(hid);
   sv(HCK, userHabitConfig);
@@ -7269,7 +7513,7 @@ function removeHabitFromSet(type, hid) {
   // secondary and bonus habits may be removed (floor stays honest, users not trapped)
   if (isLockActive()) {
     if (h.foundational) {
-      showToast('Core habits are locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you. To change them now, switch to Flexible mode in Profile.', 'info');
+      showToast('Core habits are locked for ' + daysUntilUnlock() + ' more days, so each one gets a fair trial. To change them now, switch to Flexible mode in Profile.', 'info');
       return;
     }
     // Secondary or bonus — allow removal during lock
@@ -7299,9 +7543,12 @@ auth.onAuthStateChanged((user) => {
     userData.photo    = user.photoURL || null;
     userData.skipAuth = false;
     sv(UK, userData);
-    cloudStart(user.uid).then(function (changed) {
-      if (!appLaunched) launchApp();
-      else if (changed) location.reload();
+    syncConsentGate(user.uid).then(function (ok) {
+      if (!ok) return;   // declined: signed out, carries on as a guest
+      cloudStart(user.uid).then(function (changed) {
+        if (!appLaunched) launchApp();
+        else if (changed) location.reload();
+      });
     });
   } else if (userData.skipAuth) {
     if (!appLaunched) launchApp(); // guest session continues as before
@@ -7379,6 +7626,8 @@ function setChangeMode(mode) {
 }
 
 function renderProfile() {
+  var delRow = document.getElementById('deleteSyncedRow');
+  if (delRow) delRow.style.display = cloudUid ? '' : 'none';
   renderModeUI();
   const name   = userData.name || 'Guest';
   const email  = userData.skipAuth ? 'No account — guest session' : (userData.email || userData.name || '—');
@@ -7396,7 +7645,7 @@ function renderProfile() {
     profileNameEl.innerHTML = greeting + '<strong>' + firstName + '</strong>';
   }
   document.getElementById('profileEmail').textContent  = email;
-  document.getElementById('profilePlanBadge').textContent = userData.skipAuth ? 'Guest' : 'Free';
+  document.getElementById('profilePlanBadge').style.display = userData.skipAuth ? '' : 'none';
   // Show guest sign-up banner only for guest sessions
   var guestBanner = document.getElementById('guestSignupBanner');
   if (guestBanner) guestBanner.style.display = userData.skipAuth ? 'block' : 'none';
@@ -7417,13 +7666,6 @@ async function editProfile() {
   sv(UK, userData);
   renderProfile();
   renderCoach(); // update greeting
-}
-
-function changePassword() {
-  if (!auth.currentUser) { showToast('No signed-in account.', 'error'); return; }
-  auth.sendPasswordResetEmail(auth.currentUser.email)
-    .then(() => showToast('Password reset email sent to ' + auth.currentUser.email, 'success'))
-    .catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
 async function handleSignOut() {
@@ -7529,7 +7771,7 @@ const CHANGELOG_BUILD_KEY = 'nh_last_seen_build';
 /* BUILD 78: "What's new" shows once per device when its list changes, never to new
    installs. Bump CHANGELOG_VERSION only when you rewrite the list in showChangelog();
    ordinary builds don't trigger it. */
-const CHANGELOG_VERSION = 80;
+const CHANGELOG_VERSION = 81;
 
 function maybeShowChangelog() {
   try {
@@ -7542,11 +7784,11 @@ function maybeShowChangelog() {
 
 function showChangelog() {
   var items = [
+    { icon: lucide('flame', 16), title: 'A clearer streak', desc: 'Your streak now counts days you reach Foundation active, the daily goal on Today. One missed day a week is forgiven. Tap the flame to see how it works.' },
+    { icon: lucide('download', 16), title: 'Back up your habits', desc: 'Profile, then Your data: download a backup file, or restore one on a new phone.' },
     { icon: lucide('arrow-left-right', 16), title: 'Swipe between chemicals', desc: 'On Today, swipe sideways between Dopamine, Serotonin, Oxytocin and Endorphin, or tap a name at the top to jump.' },
     { icon: lucide('laptop', 16), title: 'Made for laptops', desc: 'On a wider screen, the menu sits on the left and all four chemicals show side by side.' },
-    { icon: lucide('sparkles', 16), title: 'A calmer look', desc: 'Clean line icons in place of emoji, and in-app prompts instead of browser pop-ups.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="9" height="7" rx="1.2"/><rect x="11.5" y="7" width="4.5" height="8" rx="1"/><line x1="4.5" y1="13.5" x2="8.5" y2="13.5"/></svg>', title: 'Sync across your devices', desc: 'Sign in with Google and your habits stay in step on your phone, tablet and laptop.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg>', title: 'Committed or Flexible', desc: 'Choose in Profile: keep your habit set for 28 days, or change any habit at any time.' }
+    { icon: lucide('sparkles', 16), title: 'A calmer look', desc: 'Clean line icons in place of emoji, and in-app prompts instead of browser pop-ups.' }
   ];
 
   var list = document.getElementById('changelogList');
@@ -7731,7 +7973,6 @@ window.signUpFromGuest    = signUpFromGuest;
 window.handleSignOut      = handleSignOut;
 window.closeModal         = closeModal;
 window.editProfile        = editProfile;
-window.changePassword     = changePassword;
 window.confirmNewDay      = confirmNewDay;
 window.dismissInstall     = dismissInstall;
 window.dismissIosSheet    = dismissIosSheet;
