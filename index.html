@@ -1379,6 +1379,14 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
 
+/* BUILD 86: the Coach phase card uses the same dark card as Today */
+.brain-phase-block { background: var(--anchor); color: var(--anchor-txt); border: 1px solid var(--anchor-border); border-radius: var(--radius-lg); padding: 22px 18px 20px; margin-bottom: 14px; }
+.light-theme .brain-phase-block { border-color: transparent; }
+.brain-phase-block .brain-phase-label { color: var(--anchor-txt); }
+.brain-phase-block .brain-phase-sub { color: var(--anchor-mut); }
+.brain-phase-block .phase-info-btn { background: var(--anchor-2); border-color: color-mix(in srgb, var(--anchor-mut) 40%, transparent); color: var(--anchor-mut); }
+.brain-phase-block .phase-info-btn:hover, .brain-phase-block .phase-info-btn:focus-visible { color: var(--anchor-txt); border-color: var(--anchor-mut); background: var(--anchor-2); }
+
 /* ═══ BUILD 83: NO TOP BAR ════════════════════════════════════
    Date and streak live in the Today card; Coach and Profile have a
    page title; laptops show the name at the top of the left menu. */
@@ -3623,7 +3631,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 85;
+const APP_BUILD   = 86;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
