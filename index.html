@@ -1385,6 +1385,68 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
 
+/* ═══ BUILD 80: SIDE-SCROLLING CHEMICAL CARDS (phone, tablet) ═══ */
+.td-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; }
+.td-chip { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 52px; padding: 8px 9px 7px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-family: 'Geist', sans-serif; text-align: left; cursor: pointer; min-width: 0; }
+.td-chip-name { font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.td-chip-meta { font-size: 10.5px; }
+.td-chip-bar { display: block; width: 100%; height: 3px; border-radius: 99px; background: var(--surface3); overflow: hidden; margin-top: 3px; }
+.td-chip-bar i { display: block; height: 100%; background: var(--ac); border-radius: 99px; }
+.td-chip.on { border-color: var(--ac); background: color-mix(in srgb, var(--ac) 10%, var(--surface)); }
+.td-chip.on .td-chip-name { font-weight: 600; }
+.td-grps { display: flex; align-items: flex-start; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 14px; margin: 0 -14px; padding: 0 14px 4px; scrollbar-width: none; overscroll-behavior-x: contain; }
+.td-grps::-webkit-scrollbar { display: none; }
+.td-grps > .td-grp { flex: 0 0 calc(100% - 22px); scroll-snap-align: start; scroll-snap-stop: always; margin-top: 10px; }
+@media (min-width: 720px) and (max-width: 1023px) {
+  .td-grps > .td-grp { flex-basis: calc(50% - 5px); }
+}
+
+/* BUILD 80: the Patterns screen sits between the header and the nav, so its
+   Back button is no longer hidden under the header */
+#screen-history { top: calc(var(--safe-t) + var(--header-h)); bottom: calc(var(--safe-b) + var(--nav-h)); }
+#screen-history .history-back-bar { padding-top: 12px; }
+@media (min-width: 720px) and (max-width: 1023px) {
+  .app-header, .bottom-nav { right: auto; width: min(680px, 100%); }
+}
+
+/* ═══ BUILD 80: LAPTOP LAYOUT (1024 px and wider) ═══════════════ */
+@media (min-width: 1024px) {
+  :root { --rail-w: 216px; }
+  /* Header spans the top; navigation becomes a rail on the left */
+  .app-header { max-width: none; left: 0; right: 0; transform: none; border-left: 0; border-right: 0; padding-left: 24px; padding-right: 24px; }
+  .bottom-nav { top: calc(var(--safe-t) + var(--header-h)); bottom: 0; left: 0; right: auto; width: var(--rail-w); height: auto; max-width: none; transform: none; border-top: 0; border-left: 0; border-right: 1px solid var(--border); padding: 16px 12px; }
+  .nav-tabs { flex-direction: column; height: auto; gap: 4px; }
+  .nav-tab { flex: 0 0 auto; flex-direction: row; justify-content: flex-start; gap: 12px; padding: 0 14px; min-height: 46px; border-radius: var(--radius-sm); }
+  .nav-tab:hover { background: var(--surface2); }
+  .nav-tab .tab-label { font-size: 14px; }
+  .nav-tab .tab-pip { display: none; }
+  .nav-tab.active { background: var(--surface2); }
+  .nav-tab.active .tab-icon { transform: none; }
+  .page-container { max-width: none; margin: 0; left: var(--rail-w); right: 0; bottom: 0; }
+  /* Reading width for every page except Today */
+  .page { padding-left: max(28px, calc((100% - 760px) / 2)); padding-right: max(28px, calc((100% - 760px) / 2)); }
+  .coach-page-inner { max-width: none; padding-left: 0; padding-right: 0; }
+  /* Today: hero and next habit on the left, the four chemicals beside it */
+  #page-today { padding-left: 0; padding-right: 0; }
+  .td-inner { display: grid; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); gap: 24px; align-items: start; max-width: 1180px; margin: 0 auto; padding: 24px 28px 8px; }
+  .td-side { position: sticky; top: 24px; }
+  .td-chips { display: none; }
+  .td-grps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; overflow: visible; margin: 0; padding: 0; scroll-snap-type: none; }
+  .td-grps > .td-grp { margin-top: 0; }
+  .td-foot { text-align: left; }
+  /* Popups become centred dialogs instead of bottom sheets */
+  .modal-overlay { align-items: center; padding: 24px; }
+  .modal-card { border-radius: var(--radius-lg); }
+  .modal-handle { display: none; }
+  .insight-toast { left: calc(50% + var(--rail-w) / 2); bottom: 24px; }
+  #toast-container { left: calc(50% + var(--rail-w) / 2); }
+  #screen-history { left: var(--rail-w); bottom: 0; }
+  #screen-history .history-back-bar, #screen-history .pr-content { padding-left: max(28px, calc((100% - 860px) / 2)); padding-right: max(28px, calc((100% - 860px) / 2)); }
+}
+@media (min-width: 1280px) {
+  .td-grps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 /* ── Patterns Report (screen-history rebuild, build 38) ─────────────── */
 .pr-content { overflow-y: auto; flex: 1; padding: 20px 18px 100px; }
 .pr-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
@@ -3250,6 +3312,7 @@ const HABITS = {
    lucide-animated.com (MIT), written in plain CSS with no React/Motion.
    ═══════════════════════════════════════════════════════════ */
 const LUCIDE = {
+  'laptop': '<path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" />',
   'info': '<circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" />',
   'heart-handshake': '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762" />',
   'clock-4': '<circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />',
@@ -3304,7 +3367,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 79;
+const APP_BUILD   = 80;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4571,7 +4634,7 @@ function renderToday() {
   var sub = BRAIN_SUBS[phase];
   if (phase > 0 && phase < 3 && cf.done * 2 >= cf.total) sub = 'Going longer on a session habit, like Exercise, moves you over the line.';
   var pct = Math.round(cf.rate * 100);
-  var html =
+  var html = '<div class="td-side">' +
     '<section class="td-hero" aria-live="polite">' +
       '<div class="td-hero-top"><svg class="td-hero-brain" id="todayBrainSvg" viewBox="0 0 96 96" aria-hidden="true"></svg>' +
         '<div><div class="td-phase">' + BRAIN_LABELS[phase] + '</div><div class="td-phase-sub">' + todayEsc(sub) + '</div></div></div>' +
@@ -4595,6 +4658,18 @@ function renderToday() {
       (nc.list.length > 1 ? '<button class="td-skip" data-td="skip">Not now — show another</button>' : '') +
     '</section>';
   }
+  html += '</div><div class="td-main">';
+
+  /* BUILD 80: on phones and tablets the four chemical cards sit side by side
+     and swipe sideways; the strip above shows where you are and jumps to a card.
+     On laptops they show as a grid next to the hero, and the strip is hidden. */
+  html += '<nav class="td-chips" aria-label="Jump to a chemical">' + TODAY_CATS.map(function (c, n) {
+    var l = todayHabitsFor(c.key);
+    var d = l.filter(function (h) { return todayIsDone(c.key, h); }).length;
+    return '<button class="td-chip' + (n === todayCard ? ' on' : '') + '" style="--ac:var(--' + c.key + ')" data-td="chip" data-n="' + n + '"' + (n === todayCard ? ' aria-current="true"' : '') + '>' +
+      '<span class="td-chip-name">' + c.name + '</span><span class="td-chip-meta">' + d + ' of ' + l.length + '</span>' +
+      '<span class="td-chip-bar"><i style="width:' + (l.length ? Math.round(d / l.length * 100) : 0) + '%"></i></span></button>';
+  }).join('') + '</nav><div class="td-grps" id="todayGrps">';
 
   /* Category groups */
   TODAY_CATS.forEach(function (c) {
@@ -4610,10 +4685,60 @@ function renderToday() {
       '<div class="td-rows">' + list.map(function (h) { return todayRowHTML(c.key, h); }).join('') + '</div>' +
     '</section>';
   });
-  html += '<p class="td-foot">Tap a category to learn about its habits, or to add and swap them.</p>';
+  html += '</div><p class="td-foot">Tap a category name to learn about its habits, or to add and swap them.</p></div>';
   root.innerHTML = html;
   drawBrainSvg(document.getElementById('todayBrainSvg'), phase);
   todayBind();
+  todayRestoreCard();
+}
+
+/* BUILD 80: side-scrolling chemical cards */
+var todayCard = 0;
+var todayScrollRaf = 0;
+function todayCarouselOn() {
+  var g = document.getElementById('todayGrps');
+  return !!g && getComputedStyle(g).overflowX !== 'visible' && g.scrollWidth > g.clientWidth + 4;
+}
+function todayCardEls() { var g = document.getElementById('todayGrps'); return g ? g.querySelectorAll('.td-grp') : []; }
+function todayRestoreCard() {
+  var g = document.getElementById('todayGrps');
+  if (!g) return;
+  if (todayCarouselOn()) {
+    var el = todayCardEls()[todayCard];
+    if (el) g.scrollLeft = el.offsetLeft - g.offsetLeft - parseFloat(getComputedStyle(g).scrollPaddingLeft || 0);
+  }
+  if (!g.dataset.bound) {
+    g.dataset.bound = '1';
+    g.addEventListener('scroll', function () {
+      if (todayScrollRaf) return;
+      todayScrollRaf = requestAnimationFrame(function () { todayScrollRaf = 0; todaySyncChips(); });
+    }, { passive: true });
+  }
+}
+function todaySyncChips() {
+  var g = document.getElementById('todayGrps');
+  if (!g || !todayCarouselOn()) return;
+  var best = 0, bestD = Infinity, left = g.getBoundingClientRect().left;
+  todayCardEls().forEach(function (el, n) {
+    var d = Math.abs(el.getBoundingClientRect().left - left);
+    if (d < bestD) { bestD = d; best = n; }
+  });
+  if (g.scrollLeft + g.clientWidth >= g.scrollWidth - 4) best = todayCardEls().length - 1;
+  todayCard = best;
+  document.querySelectorAll('#todayContent .td-chip').forEach(function (b, n) {
+    b.classList.toggle('on', n === best);
+    if (n === best) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+  });
+}
+function todayGoCard(n) {
+  var g = document.getElementById('todayGrps');
+  var el = todayCardEls()[n];
+  if (!g || !el) return;
+  todayCard = n;
+  if (!todayCarouselOn()) { el.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  g.scrollTo({ left: el.offsetLeft - g.offsetLeft - parseFloat(getComputedStyle(g).scrollPaddingLeft || 0), behavior: reduce ? 'auto' : 'smooth' });
+  todaySyncChips();
 }
 
 function todayRowHTML(type, h) {
@@ -4652,6 +4777,7 @@ function todayBind() {
     else if (act === 'info') showHabitInfo(HABITS[type].habits[idx]);
     else if (act === 'cat') openCategory(type);
     else if (act === 'skip') { todaySkip++; renderToday(); }
+    else if (act === 'chip') todayGoCard(parseInt(b.dataset.n, 10));
   });
 }
 
@@ -6612,7 +6738,7 @@ function renderProfileAvatar() {
   }
   // Update profile mini icon
   const mini = document.getElementById('profileAvatarMini');
-  if (mini) mini.innerHTML = userAvatar ? avatarIcon(userAvatar, 16) : '';
+  if (mini) mini.innerHTML = userAvatar ? avatarIcon(userAvatar, 16) : lucide('user', 16);
 }
 
 const CAT_META = [
@@ -7403,7 +7529,7 @@ const CHANGELOG_BUILD_KEY = 'nh_last_seen_build';
 /* BUILD 78: "What's new" shows once per device when its list changes, never to new
    installs. Bump CHANGELOG_VERSION only when you rewrite the list in showChangelog();
    ordinary builds don't trigger it. */
-const CHANGELOG_VERSION = 78;
+const CHANGELOG_VERSION = 80;
 
 function maybeShowChangelog() {
   try {
@@ -7416,11 +7542,11 @@ function maybeShowChangelog() {
 
 function showChangelog() {
   var items = [
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="12" height="12" rx="2.5"/><polyline points="6,9 8,11 12,6.5"/></svg>', title: 'Today screen', desc: 'Every habit on one screen. Tick from Today; tap a category to learn about its habits or change them.' },
+    { icon: lucide('arrow-left-right', 16), title: 'Swipe between chemicals', desc: 'On Today, swipe sideways between Dopamine, Serotonin, Oxytocin and Endorphin, or tap a name at the top to jump.' },
+    { icon: lucide('laptop', 16), title: 'Made for laptops', desc: 'On a wider screen, the menu sits on the left and all four chemicals show side by side.' },
+    { icon: lucide('sparkles', 16), title: 'A calmer look', desc: 'Clean line icons in place of emoji, and in-app prompts instead of browser pop-ups.' },
     { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="9" height="7" rx="1.2"/><rect x="11.5" y="7" width="4.5" height="8" rx="1"/><line x1="4.5" y1="13.5" x2="8.5" y2="13.5"/></svg>', title: 'Sync across your devices', desc: 'Sign in with Google and your habits stay in step on your phone, tablet and laptop.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a5 5 0 0 1 10 0c0 3.5 1.5 5 1.5 5h-13S4 10.5 4 7z"/><path d="M7.5 14.5a1.6 1.6 0 0 0 3 0"/></svg>', title: 'Quieter ticking', desc: 'A habit\'s insight shows once, the first time you tick it. After that, ticking is silent.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg>', title: 'Committed or Flexible', desc: 'Choose in Profile: keep your habit set for 28 days, or change any habit at any time.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="5" x2="15" y2="5"/><line x1="3" y1="9" x2="15" y2="9"/><line x1="3" y1="13" x2="10" y2="13"/></svg>', title: 'Simpler pages', desc: 'One progress bar per category and tidier habit rows. Points, your own name for a habit, and remove are in each habit\'s info button.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg>', title: 'Committed or Flexible', desc: 'Choose in Profile: keep your habit set for 28 days, or change any habit at any time.' }
   ];
 
   var list = document.getElementById('changelogList');
