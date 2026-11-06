@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by Aufthority">
-<link rel="manifest" href="/neurohabitbeta/manifest.json">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><rect width='180' height='180' rx='40' fill='%23232417'/><g transform='translate(40 40) scale(4.17)' fill='none' stroke='%23f2ab0e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 18V5' /> <path d='M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4' /> <path d='M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294' /> <path d='M17.996 5.125a4 4 0 012.526 5.77' /> <path d='M18 18a4 4 0 002-7.465' /> <path d='M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517' /> <path d='M6 18a4 4 0 01-2-7.465' /> <path d='M6.004 5.125a4 4 0 00-2.526 5.77' /></g></svg>">
 <title>NeuroHabit</title>
@@ -37,7 +37,7 @@
 <!-- ============================================================
      NEUROHABIT PWA — by Aufthority  v3
      Changes:
-       · All paths → /neurohabitbeta/
+       · All paths relative (works at any address)
        · Habit masterlist fully revised (D/S/O/E)
        · OR-gates: Dopamine, Oxytocin, Endorphin
        · sleepOrPrayer gate for Serotonin
@@ -3717,10 +3717,10 @@ const AVATAR_ICONS = {
 function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'user', size || 24); }
 
 /* The address printed on the share card and Profile — change here when NeuroHabit gets its own domain */
-const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
+const APP_URL_DISPLAY = location.host + location.pathname.replace(/\/(index\.html)?$/, '');
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 89;
+const APP_BUILD   = 90;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -7789,7 +7789,7 @@ async function confirmNewDay() {
    PWA installability criteria on this page load
    ═══════════════════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/neurohabitbeta/sw.js', { scope: '/neurohabitbeta/' })
+  navigator.serviceWorker.register('sw.js', { scope: './' })
     .then(r => console.log('[SW] registered', r.scope))
     .catch(e => console.warn('[SW] registration failed', e));
 }

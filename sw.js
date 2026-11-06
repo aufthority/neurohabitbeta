@@ -5,12 +5,15 @@
    — Firebase/Fonts cached for offline use
    ═══════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'neurohabit-v89';
+const CACHE_NAME = 'neurohabit-v90';
+
+/* The app's own folder, e.g. https://host/ or https://host/neurohabitbeta/ */
+const BASE = self.registration.scope;
 
 const PRECACHE = [
-  '/neurohabitbeta/manifest.json',
-  '/neurohabitbeta/icon-192.png',
-  '/neurohabitbeta/icon-512.png',
+  'manifest.json',
+  'icon-192.png',
+  'icon-512.png',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js',
@@ -47,9 +50,9 @@ self.addEventListener('fetch', event => {
      a real network round-trip instead of letting the browser's
      ordinary HTTP cache silently answer the fetch() call —
      that gap was why deployed changes weren't showing up. */
-  if (url.includes('/neurohabitbeta/index.html') || url.endsWith('/neurohabitbeta/') || url.endsWith('/neurohabitbeta')) {
+  if (url.startsWith(BASE + 'index.html') || url === BASE) {
     event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match('/neurohabitbeta/index.html'))
+      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(BASE + 'index.html'))
     );
     return;
   }
@@ -72,7 +75,7 @@ self.addEventListener('fetch', event => {
   /* Navigate requests — network-first, same no-store guarantee */
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match('/neurohabitbeta/index.html'))
+      fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(BASE + 'index.html'))
     );
     return;
   }
