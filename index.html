@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by Aufthority">
 <link rel="manifest" href="/neurohabitbeta/manifest.json">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23232417'/><text y='128' x='90' text-anchor='middle' font-size='100'>🧠</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23232417'/><g transform='translate(40 40) scale(4.17)' fill='none' stroke='%23f2ab0e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 18V5' /> <path d='M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4' /> <path d='M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294' /> <path d='M17.996 5.125a4 4 0 012.526 5.77' /> <path d='M18 18a4 4 0 002-7.465' /> <path d='M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517' /> <path d='M6 18a4 4 0 01-2-7.465' /> <path d='M6.004 5.125a4 4 0 00-2.526 5.77' /></g></svg>">
 <title>NeuroHabit</title>
 <script>
 /* Theme flash prevention — runs before CSS renders */
@@ -538,7 +538,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .coach-feed-card.card-reinforce { border-left-color: var(--serotonin); background: color-mix(in srgb, var(--serotonin) 6%, var(--surface)); }
 .coach-feed-card.card-personalise { border-left-color: var(--coach); background: color-mix(in srgb, var(--coach) 6%, var(--surface)); }
 .coach-feed-card.card-personalise .coach-feed-eyebrow { color: var(--coach); }
-.personalise-btn { display: inline-block; margin-top: 10px; padding: 7px 14px; border-radius: 20px; background: var(--coach); color: var(--text); font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: opacity 0.2s; }
+.personalise-btn { display: inline-block; margin-top: 10px; padding: 7px 14px; border-radius: 20px; background: var(--gold); color: var(--gold-ink); font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: opacity 0.2s; }
 .personalise-btn:active { opacity: 0.8; }
 .coach-feed-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 5px; }
 .card-reflect .coach-feed-eyebrow { color: var(--serotonin); }
@@ -619,7 +619,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .install-banner-text { flex: 1; }
 .install-banner-text strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 1px; }
 .install-banner-text span { font-size: 11px; color: var(--muted); }
-.install-btn { padding: 8px 13px; border-radius: 8px; background: var(--coach); border: none; color: var(--text); font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.install-btn { padding: 8px 13px; border-radius: 8px; background: var(--gold); border: none; color: var(--gold-ink); font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
 .install-dismiss { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 4px; }
 
 /* iOS install instruction sheet */
@@ -631,9 +631,43 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .ios-step { display: flex; align-items: flex-start; gap: 12px; font-size: 13.5px; color: var(--text); line-height: 1.5; }
 .ios-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--coach); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
 .ios-share-icon { display: inline-block; background: var(--surface2); border: 1px solid var(--border2); border-radius: 5px; padding: 1px 5px; font-size: 12px; margin: 0 2px; }
-.ios-install-close { width: 100%; padding: 13px; border-radius: var(--radius-sm); background: var(--coach); border: none; color: var(--text); font-family: 'Geist', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
+.ios-install-close { width: 100%; padding: 13px; border-radius: var(--radius-sm); background: var(--gold); border: none; color: var(--gold-ink); font-family: 'Geist', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }
 
 /* ═══ TOAST NOTIFICATIONS ════════════════════════════════════ */
+/* BUILD 79: Lucide icons, app sheets, motion, tap targets */
+.lc { display: inline-block; vertical-align: -0.18em; flex-shrink: 0; }
+.premium-preview-title .lc, .max-note .lc, .core-day-badge .lc { margin-right: 3px; }
+.avatar-option-emoji { color: var(--coach); display: flex; justify-content: center; }
+.profile-avatar-emoji { color: #fff; }
+#profileAvatarMini .lc { vertical-align: middle; }
+.app-sheet .modal-card { max-width: 420px; }
+.app-sheet-title { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 19px; color: var(--text); margin: 4px 0 6px; }
+.app-sheet-body { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin: 0 0 14px; }
+.app-sheet-input { width: 100%; margin-bottom: 14px; }
+.app-sheet-actions { display: flex; gap: 10px; }
+.app-sheet-btn { flex: 1; min-height: 46px; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface2); color: var(--text); font-family: 'Geist', sans-serif; font-size: 14px; cursor: pointer; }
+.app-sheet-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--gold-ink); font-weight: 600; }
+.app-sheet-btn.primary.danger { background: var(--oxytocin); border-color: var(--oxytocin); color: #fff; }
+button.habit-check { padding: 0; font: inherit; cursor: pointer; }
+.habit-check:focus-visible, .td-row-main:focus-visible, .habit-info-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.session-tier-btn { min-width: 36px; min-height: 36px; }
+.habit-info-btn, .td-info { min-width: 44px; min-height: 44px; }
+.cat-back { min-height: 44px; }
+.mode-opt { min-height: 40px; }
+.td-tier { min-height: 40px; }
+.toast-close { min-width: 36px; min-height: 36px; }
+@keyframes nh-draw { from { stroke-dashoffset: 18; } to { stroke-dashoffset: 0; } }
+@keyframes nh-pop { 0% { transform: scale(.82); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes nh-flame { 0% { transform: translateY(0) scale(1); } 35% { transform: translateY(-3px) scale(1.25) rotate(-6deg); } 70% { transform: translateY(-1px) scale(1.1) rotate(4deg); } 100% { transform: none; } }
+@keyframes nh-spin { to { transform: rotate(360deg); } }
+.td-row.just .td-chk, .habit-row.just .habit-check { animation: nh-pop .32s ease-out; }
+.td-row.just .td-chk path, .habit-row.just .habit-check path { stroke-dasharray: 18; animation: nh-draw .35s .05s ease-out both; }
+.streak-badge.bump svg { animation: nh-flame .6s ease-out; transform-origin: 50% 90%; }
+.lc.spin { animation: nh-spin 1s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .td-row.just .td-chk, .habit-row.just .habit-check, .td-row.just .td-chk path, .habit-row.just .habit-check path,
+  .streak-badge.bump svg, .lc.spin { animation: none !important; }
+}
 /* BUILD 75: a habit's insight shows once, as a quiet message above the nav — not a pop-up */
 .insight-toast { position: fixed; left: 50%; bottom: calc(var(--safe-b) + var(--nav-h) + 12px); transform: translate(-50%, 16px); width: min(440px, calc(100% - 28px)); background: var(--surface); border: 1px solid var(--border2); border-left: 4px solid var(--ac, var(--coach)); border-radius: var(--radius); padding: 12px 10px 12px 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25); display: flex; gap: 10px; align-items: flex-start; opacity: 0; pointer-events: none; transition: opacity .22s, transform .22s; z-index: 400; }
 .insight-toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
@@ -1686,8 +1720,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 <header class="app-header" id="appHeader" style="display:none">
   <div class="header-brand">
     <h1>NeuroHabit</h1>
-    <!-- REVISION 1 -->
-    <span class="header-brand-sub">By Aufthority</span>
     <span class="header-brand-date" id="headerDate"></span>
   </div>
   <div class="header-right">
@@ -1740,7 +1772,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         </div>
 
         <!-- Core Day Badge / Nudge / Pips -->
-        <div id="coreDayBadge" class="core-day-badge" style="display:none">✦ Core Day</div>
+        <div id="coreDayBadge" class="core-day-badge" style="display:none"><svg class="lc" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /></svg> Core Day</div>
         <div id="coreNudge" class="core-nudge-text" style="display:none"></div>
         <div class="core-pips-row" id="corePipsRow"></div>
 
@@ -1749,7 +1781,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
         <!-- Recovery Banner -->
         <div class="recovery-bonus-banner" id="recoveryBonusBanner">
-          <div class="recovery-bonus-icon">🔄</div>
+          <div class="recovery-bonus-icon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></svg></div>
           <div class="recovery-bonus-body">
             <strong>Welcome back — no shame, just action.</strong>
             <span id="recoveryBonusMsg">Every streak starts with returning. The brain rewards re-engagement just as much as consistency.</span>
@@ -1772,7 +1804,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           <div class="premium-collapse-body" id="premiumCollapseBody" style="display:none">
             <div class="premium-preview-block">
               <div class="premium-preview-header">
-                <span class="premium-preview-title">📅 This Week</span>
+                <span class="premium-preview-title"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /></svg> This Week</span>
                 <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="week-section" style="border:none;margin:0;padding:8px 2px 0">
@@ -1791,7 +1823,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
             <div class="premium-preview-block">
               <div class="premium-preview-header">
-                <span class="premium-preview-title">🕸 Brain Balance Radar</span>
+                <span class="premium-preview-title"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" /> <path d="M4 6h.01" /> <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" /> <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" /> <path d="M12 18h.01" /> <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" /> <circle cx="12" cy="12" r="2" /> <path d="m13.41 10.59 5.66-5.66" /></svg> Brain Balance Radar</span>
                 <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="premium-radar-wrap">
@@ -1802,7 +1834,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             </div>
             <div class="premium-preview-block">
               <div class="premium-preview-header">
-                <span class="premium-preview-title">🧠 Advanced NeuroCoach</span>
+                <span class="premium-preview-title"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /> <path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /> <path d="M17.996 5.125a4 4 0 012.526 5.77" /> <path d="M18 18a4 4 0 002-7.465" /> <path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /> <path d="M6 18a4 4 0 01-2-7.465" /> <path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></svg> Advanced NeuroCoach</span>
                 <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="premium-adv-insights" id="advInsightsPanel"></div>
@@ -1829,7 +1861,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           </div>
         </div>
       </div>
-      <div class="max-note" id="mn-dopamine">✅ Dopamine maxed out!</div>
+      <div class="max-note" id="mn-dopamine"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Dopamine maxed out!</div>
       <div class="habit-list" id="list-dopamine"></div>
     </div>
 
@@ -1849,7 +1881,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           </div>
         </div>
       </div>
-      <div class="max-note" id="mn-serotonin">✅ Serotonin maxed out!</div>
+      <div class="max-note" id="mn-serotonin"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Serotonin maxed out!</div>
       <div class="habit-list" id="list-serotonin"></div>
     </div>
 
@@ -1869,7 +1901,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           </div>
         </div>
       </div>
-      <div class="max-note" id="mn-oxytocin">✅ Oxytocin maxed out!</div>
+      <div class="max-note" id="mn-oxytocin"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Oxytocin maxed out!</div>
       <div class="habit-list" id="list-oxytocin"></div>
     </div>
 
@@ -1889,7 +1921,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           </div>
         </div>
       </div>
-      <div class="max-note" id="mn-endorphin">✅ Endorphin maxed out!</div>
+      <div class="max-note" id="mn-endorphin"><svg class="lc" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg> Endorphin maxed out!</div>
       <div class="habit-list" id="list-endorphin"></div>
     </div>
 
@@ -1900,7 +1932,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <!-- Guest sign-up banner — shown only for guest sessions -->
         <div class="guest-signup-banner" id="guestSignupBanner" style="display:none">
           <div class="guest-signup-top">
-            <span class="guest-signup-icon">🔒</span>
+            <span class="guest-signup-icon"><svg class="lc" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg></span>
             <div>
               <div class="guest-signup-title">You're in guest mode</div>
               <div class="guest-signup-sub">Your habits are saved on this device only. Sign in to sync them across your phone, tablet and laptop.</div>
@@ -2041,7 +2073,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="profile-app-footer">
           <div>NeuroHabit</div>
           <div>By Aufthority</div>
-          <div style="margin-top:4px;font-size:10px" id="appVersionFooter">v1.0.0 (19) · neurohabit.app</div>
+          <div style="margin-top:4px;font-size:10px" id="appVersionFooter"></div>
         </div>
 
       </div>
@@ -2054,10 +2086,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      CHANGELOG MODAL — shown once on first launch of a new build
      ══════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="changelogModal" onclick="closeChangelogModal(event)">
-  <div class="modal-card" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto">
+  <div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <span class="modal-icon">✨</span>
+      <span class="modal-icon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></svg></span>
       <div class="modal-title">What's new in NeuroHabit</div>
     </div>
     <div style="font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">In this update</div>
@@ -2072,16 +2104,16 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
      PHASE INFO MODAL — bottom sheet triggered by ⓘ on Coach page
      ══════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="phaseInfoModal" onclick="closePhaseModal(event)">
-  <div class="modal-card" onclick="event.stopPropagation()" style="max-height:82vh;overflow-y:auto">
+  <div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-height:82vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <span class="modal-icon">🧠</span>
+      <span class="modal-icon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /> <path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /> <path d="M17.996 5.125a4 4 0 012.526 5.77" /> <path d="M18 18a4 4 0 002-7.465" /> <path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /> <path d="M6 18a4 4 0 01-2-7.465" /> <path d="M6.004 5.125a4 4 0 00-2.526 5.77" /></svg></span>
       <div class="modal-title">Your Brain Phases</div>
     </div>
     <div class="modal-body" style="margin-bottom:10px">Your phase reflects how much of your core foundation is active today. It is not a grade — it is a mirror. Every phase is valid.</div>
     <!-- Layer 2: goal callout — updated by renderPhaseModal() -->
     <div id="phaseModalGoalCallout" class="grade-goal-callout not-yet" style="margin-bottom:14px">
-      <span class="grade-goal-icon">🎯</span>
+      <span class="grade-goal-icon"><svg class="lc" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg></span>
       <div id="phaseModalGoalText">Your daily goal is <strong>Phase 3 — Foundation Active</strong>. Everything above that is a bonus. The science says reaching Phase 3 is a genuinely good day for your brain.</div>
     </div>
     <div id="phaseModalGuideEl"></div>
@@ -2211,10 +2243,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 <!-- Neuro tooltip (long-press) -->
 <div class="modal-overlay" id="tooltipOverlay" onclick="closeModal('tooltipOverlay')">
-  <div class="modal-card" onclick="event.stopPropagation()">
+  <div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-icon" id="tooltipIcon">⚡</div>
+      <div class="modal-icon" id="tooltipIcon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></svg></div>
       <div class="modal-title" id="tooltipTitle">Habit Insight</div>
     </div>
     <div class="modal-body" id="tooltipBody"></div>
@@ -2224,10 +2256,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 <!-- REVISION 5: How It Works modal — What counts + Trigger + Tips -->
 <div class="modal-overlay" id="infoOverlay" onclick="closeModal('infoOverlay')">
-  <div class="modal-card" onclick="event.stopPropagation()">
+  <div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-icon" id="infoIcon">ℹ️</div>
+      <div class="modal-icon" id="infoIcon"></div>
       <div class="modal-title" id="infoTitle">Habit Info</div>
     </div>
     <div class="modal-body" id="infoBody"></div>
@@ -2241,7 +2273,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 <!-- REVISION 6: Share modal -->
 <div class="modal-overlay" id="shareOverlay" onclick="closeModal('shareOverlay')">
-  <div class="modal-card" onclick="event.stopPropagation()" style="max-width:440px;max-height:85vh;overflow-y:auto">
+  <div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-width:440px;max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div class="share-card-inner" id="shareCardInner">
       <div class="share-card-top">
@@ -2280,10 +2312,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         </div>
       </div>
 
-      <div class="share-tagline">neurohabit.app · by Aufthority</div>
+      <div class="share-tagline">aufthority.github.io/neurohabitbeta · by Aufthority</div>
     </div>
     <div class="share-actions">
-      <button class="share-action-btn primary" onclick="generateShareImage()">🖼 Save &amp; Share</button>
+      <button class="share-action-btn primary" onclick="generateShareImage()"><svg class="lc" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /> <circle cx="9" cy="9" r="2" /> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg> Save &amp; Share</button>
     </div>
   </div>
 </div>
@@ -2297,7 +2329,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 <!-- Install Banner — shown for Android (native prompt) or iOS (manual instructions) -->
 <div class="install-banner" id="installBanner">
-  <div class="install-banner-icon">📲</div>
+  <div class="install-banner-icon"><svg class="lc" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></svg></div>
   <div class="install-banner-text">
     <strong>Install NeuroHabit</strong>
     <span id="installBannerSub">Add to home screen for offline access</span>
@@ -2312,7 +2344,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     <div class="ios-install-handle"></div>
     <div class="ios-install-title">Add to Home Screen</div>
     <div class="ios-install-steps">
-      <div class="ios-step"><span class="ios-step-num">1</span><span>Tap the <strong>Share</strong> button <span class="ios-share-icon">⬆</span> in your browser toolbar</span></div>
+      <div class="ios-step"><span class="ios-step-num">1</span><span>Tap the <strong>Share</strong> button <span class="ios-share-icon"><svg class="lc" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v13" /> <path d="m16 6-4-4-4 4" /> <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /></svg></span> in your browser toolbar</span></div>
       <div class="ios-step"><span class="ios-step-num">2</span><span>Scroll down and tap <strong>"Add to Home Screen"</strong></span></div>
       <div class="ios-step"><span class="ios-step-num">3</span><span>Tap <strong>Add</strong> — NeuroHabit will appear on your home screen</span></div>
     </div>
@@ -2507,6 +2539,7 @@ function setSyncStatus(state) {
     offline: 'Offline — changes will upload when you reconnect',
     error:   'Couldn’t reach your account. Will retry on your next change.'
   }[state];
+  if (state === 'saving' || state === 'loading') { el.innerHTML = lucide('loader', 11, 'spin') + ' '; el.appendChild(document.createTextNode(text)); el.dataset.state = state; el.style.display = 'block'; return; }
   if (state === 'saved') {
     var t = cloudLastSaved || new Date();
     text = 'Saved to your account · ' + t.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -2602,7 +2635,7 @@ function cloudAskPairChoice(accountDays, deviceDays) {
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'syncChoiceTitle');
     overlay.innerHTML =
-      '<div class="modal-card" style="max-width:420px">' +
+      '<div class="modal-card" role="dialog" aria-modal="true" style="max-width:420px">' +
         '<div class="modal-handle"></div>' +
         '<div class="modal-header"><div class="modal-title" id="syncChoiceTitle">This device has its own habits</div></div>' +
         '<div class="modal-body" style="margin-bottom:12px">' +
@@ -2870,7 +2903,7 @@ async function cloudSignOutAndClear() {
     cloudFlush();
     try { await cloudWithTimeout(db.waitForPendingWrites(), 5000); }
     catch (e) {
-      if (!confirm('Some changes haven’t uploaded yet (you may be offline). Sign out anyway? Those changes will be lost.')) return false;
+      if (!(await appConfirm('Sign out anyway?', 'Some changes haven’t uploaded yet — you may be offline. If you sign out now, those changes will be lost.', 'Sign out', true))) return false;
     }
   }
   [SK, WK, STK, HCK, HLK, AVK, HBL, RBK, SYNC_META_KEY, 'nh_big_why', 'nh_show_personalise_prompt'].forEach(function (k) {
@@ -3211,8 +3244,67 @@ const HABITS = {
    APP VERSION — update APP_BUILD to match sw.js cache version
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
+/* ═══ ICONS — BUILD 79 ═════════════════════════════════════
+   Lucide icons (lucide.dev, ISC licence), inlined so they work offline.
+   Small CSS animations for the tick, streak and sync are in the spirit of
+   lucide-animated.com (MIT), written in plain CSS with no React/Motion.
+   ═══════════════════════════════════════════════════════════ */
+const LUCIDE = {
+  'info': '<circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" />',
+  'heart-handshake': '<path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762" />',
+  'clock-4': '<circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" />',
+  'brain-circuit': '<path d="M12 13h4" /> <path d="M12 18h6a2 2 0 012 2v1" /> <path d="M12 8h8" /> <path d="M12 9a4.17 4.17 0 01-3 4" /> <path d="M16 8V5a2 2 0 012-2" /> <path d="M6 18a4 4 0 01-2-7.465" /> <path d="M6.004 5.125a4 4 0 00-2.526 5.77" /> <path d="M6.294 6.294A3 3 0 1112 5v13a4 4 0 11-7.967-.518" /> <circle cx="16" cy="13" r="0.5" fill="currentColor" /> <circle cx="18" cy="3" r="0.5" fill="currentColor" /> <circle cx="20" cy="21" r="0.5" fill="currentColor" /> <circle cx="20" cy="8" r="0.5" fill="currentColor" />',
+  'graduation-cap': '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /> <path d="M22 10v6" /> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />',
+  'gamepad-2': '<line x1="6" x2="10" y1="11" y2="11" /> <line x1="8" x2="8" y1="9" y2="13" /> <line x1="15" x2="15.01" y1="12" y2="12" /> <line x1="18" x2="18.01" y1="10" y2="10" /> <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" />',
+  'mountain': '<path d="m8 3 4 8 5-5 5 15H2L8 3z" />',
+  'briefcase': '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> <rect width="20" height="14" x="2" y="6" rx="2" />',
+  'rocket': '<path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" />',
+  'brain-cog': '<path d="m10.852 14.772-.383.923" /> <path d="m10.852 9.228-.383-.923" /> <path d="m13.148 14.772.382.924" /> <path d="m13.53 8.305-.382.923" /> <path d="m14.772 10.852.923-.383" /> <path d="m14.772 13.148.923.383" /> <path d="M17.997 5.125a4 4 0 012.526 5.77" /> <path d="M18 18a4 4 0 002-7.464" /> <path d="M4.033 17.483A4 4 0 0011.46 20c.184-.31.896-.31 1.076 0a4 4 0 007.43-2.517" /> <path d="M6 18a4 4 0 01-2-7.464" /> <path d="M6.002 5.125a4 4 0 00-2.525 5.77" /> <path d="M6.293 6.294a3 3 0 01-.287-1.098l-.004-.07a3 3 0 015.968-.543c.05.02.057.01.059 0a3 3 0 015.968.542l-.004.071a3 3 0 01-.287 1.098" /> <path d="m9.228 10.852-.923-.383" /> <path d="m9.228 13.148-.923.383" /> <circle cx="12" cy="12" r="3" />',
+  'book-open': '<path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" />',
+  'dumbbell': '<path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z" /> <path d="m2.5 21.5 1.4-1.4" /> <path d="m20.1 3.9 1.4-1.4" /> <path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z" /> <path d="m9.6 14.4 4.8-4.8" />',
+  'footprints': '<path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" /> <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z" /> <path d="M16 17h4" /> <path d="M4 13h4" />',
+  'party-popper': '<path d="M5.8 11.3 2 22l10.7-3.79" /> <path d="M4 3h.01" /> <path d="M22 8h.01" /> <path d="M15 2h.01" /> <path d="M22 20h.01" /> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" />',
+  'house': '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />',
+  'palette': '<path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" /> <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /> <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /> <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /> <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />',
+  'sparkle': '<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />',
+  'refresh-cw': '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" />',
+  'arrow-left-right': '<path d="M8 3 4 7l4 4" /> <path d="M4 7h16" /> <path d="m16 21 4-4-4-4" /> <path d="M20 17H4" />',
+  'calendar': '<path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" />',
+  'radar': '<path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" /> <path d="M4 6h.01" /> <path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" /> <path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" /> <path d="M12 18h.01" /> <path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" /> <circle cx="12" cy="12" r="2" /> <path d="m13.41 10.59 5.66-5.66" />',
+  'brain': '<path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4" /> <path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294" /> <path d="M17.996 5.125a4 4 0 012.526 5.77" /> <path d="M18 18a4 4 0 002-7.465" /> <path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517" /> <path d="M6 18a4 4 0 01-2-7.465" /> <path d="M6.004 5.125a4 4 0 00-2.526 5.77" />',
+  'circle-check': '<circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" />',
+  'lock': '<rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" />',
+  'sparkles': '<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" />',
+  'target': '<circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" />',
+  'check': '<path d="M20 6 9 17l-5-5" />',
+  'image': '<rect width="18" height="18" x="3" y="3" rx="2" ry="2" /> <circle cx="9" cy="9" r="2" /> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />',
+  'smartphone': '<rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" />',
+  'trending-up': '<path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" />',
+  'triangle-alert': '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" />',
+  'scale': '<path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" />',
+  'flower-2': '<path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" /> <circle cx="12" cy="8" r="2" /> <path d="M12 10v12" /> <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" /> <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" />',
+  'handshake': '<path d="m11 17 2 2a1 1 0 1 0 3-3" /> <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /> <path d="m21 3 1 11h-2" /> <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /> <path d="M3 4h8" />',
+  'zap': '<path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" />',
+  'message-circle': '<path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />',
+  'user': '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" />',
+  'flame': '<path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" />',
+  'loader': '<path d="M12 2v4" /> <path d="m16.2 7.8 2.9-2.9" /> <path d="M18 12h4" /> <path d="m16.2 16.2 2.9 2.9" /> <path d="M12 18v4" /> <path d="m4.9 19.1 2.9-2.9" /> <path d="M2 12h4" /> <path d="m4.9 4.9 2.9 2.9" />'
+};
+function lucide(name, size, cls) {
+  return '<svg class="lc' + (cls ? ' ' + cls : '') + '" width="' + (size || 18) + '" height="' + (size || 18) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (LUCIDE[name] || '') + '</svg>';
+}
+const AVATAR_ICONS = {
+  'tired-carer': 'heart-handshake', 'shift-worker': 'clock-4', 'neurodivergent': 'brain-circuit', 'busy-student': 'graduation-cap',
+  'gamer': 'gamepad-2', 'outdoor-junkie': 'mountain', 'corp-survivor': 'briefcase', 'overachiever': 'rocket', 'overthinker': 'brain-cog',
+  'introvert': 'book-open', 'gym-devotee': 'dumbbell', 'runner': 'footprints', 'extrovert': 'party-popper', 'homemaker': 'house', 'creative': 'palette'
+};
+function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'user', size || 24); }
+
+/* The address printed on the share card and Profile — change here when NeuroHabit gets its own domain */
+const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
+
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 78;
+const APP_BUILD   = 79;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3633,16 +3725,11 @@ function renderSection(type) {
       'habit-row',
       h.foundational ? 'foundational' : '',
       isDone ? 'done' : '',
+      isDone && nhJustTicked === key ? 'just' : '',
       isFlex ? 'flex-active' : ''
     ].filter(Boolean).join(' ');
     row.style.setProperty('--ac', 'var(--' + type + ')');
-    row.setAttribute('role', 'checkbox');
-    row.setAttribute('aria-checked', isDone ? 'true' : 'false');
-    row.setAttribute('aria-label', displayLabel);
-    row.setAttribute('tabindex', '0');
-    row.addEventListener('keydown', function(e) {
-      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); todayTick(type, i); }
-    });
+    /* BUILD 79: the tick is a real button (no button nested inside a checkbox) */
 
     let flexCtrlHTML = '';
     if (isMulti) {
@@ -3661,11 +3748,11 @@ function renderSection(type) {
     const ownLabel = habitLabels[key];
 
     row.innerHTML =
-      '<div class="habit-check">' +
+      '<button type="button" class="habit-check" aria-pressed="' + isDone + '" aria-label="' + (isDone ? 'Untick ' : 'Tick ') + displayLabel + '">' +
         '<svg width="12" height="10" viewBox="0 0 13 10" fill="none">' +
           '<path d="M1.5 5l3.5 3.5L11.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
         '</svg>' +
-      '</div>' +
+      '</button>' +
       '<div class="habit-body">' +
         '<span class="habit-label">' + displayLabel + '</span>' +
         (ownLabel ? '<span class="habit-own-label">' + todayEsc(ownLabel) + '</span>' : '') +
@@ -3736,7 +3823,7 @@ function renderSection(type) {
    REVISION 4: HABIT INFO MODAL
    ═══════════════════════════════════════════════════════════ */
 function showHabitInfo(h) {
-  document.getElementById('infoIcon').textContent = h.tooltip?.icon || 'ℹ️';
+  document.getElementById('infoIcon').innerHTML = lucide('info', 22);
   document.getElementById('infoTitle').textContent = h.label;
   document.getElementById('infoBody').textContent  = h.info?.body || '';
   const ex = document.getElementById('infoExamples');
@@ -3834,6 +3921,9 @@ function renderInfoExtras(h) {
 /* ═══════════════════════════════════════════════════════════
    TOGGLE
    ═══════════════════════════════════════════════════════════ */
+let nhJustTicked = null;   // BUILD 79: the row that animates its tick
+function markJustTicked(key) { nhJustTicked = key; setTimeout(function () { if (nhJustTicked === key) nhJustTicked = null; }, 700); }
+
 function toggleHabit(key, type, idx) {
   if (isHabitLocked(type, idx)) return;
   appState[today][key] = !appState[today][key];
@@ -3854,7 +3944,8 @@ function toggleHabit(key, type, idx) {
   if (appState[today][key] && HABITS[type].habits[idx].foundational) {
     haptic('heavy');
     maybeShowInsight(type, idx);
-  } else if (appState[today][key]) { haptic('light'); }
+    markJustTicked(key);
+  } else if (appState[today][key]) { haptic('light'); markJustTicked(key); }
   renderSection(type);
   updateHeader();
   renderCoach();
@@ -3902,6 +3993,7 @@ function cycleTier(tierKey, type, idx, dir) {
   sv(WK, weekData);
   haptic('light');
   if (!wasDone && next > 0 && h.foundational) maybeShowInsight(type, idx);
+  if (!wasDone && next > 0) markJustTicked(key);
   renderSection(type);
   updateHeader();
   renderCoach();
@@ -4537,7 +4629,7 @@ function todayRowHTML(type, h) {
       return '<button class="td-tier' + (cur === n + 1 ? ' on' : '') + '" data-td="tier" data-type="' + type + '" data-idx="' + i + '" data-tier="' + (n + 1) + '">' + todayEsc(t.label) + '</button>';
     }).join('') + '</div>';
   }
-  return '<div class="td-row-wrap"><div class="td-row' + (done ? ' done' : '') + '">' +
+  return '<div class="td-row-wrap"><div class="td-row' + (done ? ' done' : '') + (done && nhJustTicked === key ? ' just' : '') + '">' +
       '<button class="td-row-main" data-td="tick" data-type="' + type + '" data-idx="' + i + '" aria-pressed="' + done + '">' +
         '<span class="td-chk">' + TODAY_CHECK + '</span>' +
         '<span class="td-row-body"><span class="td-row-label">' + todayEsc(h.label) + '</span>' +
@@ -4579,11 +4671,11 @@ function renderCoach() {
     } else if (phase >= 3) {
       strip.style.display = 'flex';
       strip.className = 'ontrack-strip reached';
-      strip.innerHTML = '<span class="ontrack-icon">✓</span><div class="ontrack-text">Foundation reached — you\'re on track today.<span>Every habit you add from here deepens the signal.</span></div>';
+      strip.innerHTML = '<span class="ontrack-icon">' + lucide('check', 16) + '</span><div class="ontrack-text">Foundation reached — you\'re on track today.<span>Every habit you add from here deepens the signal.</span></div>';
     } else {
       strip.style.display = 'flex';
       strip.className = 'ontrack-strip not-yet';
-      strip.innerHTML = '<span class="ontrack-icon">🎯</span><div class="ontrack-text">Today\'s goal: Foundation Active (Phase 3)<span>Log one core habit per category to get there.</span></div>';
+      strip.innerHTML = '<span class="ontrack-icon">' + lucide('target', 16) + '</span><div class="ontrack-text">Today\'s goal: Foundation Active (Phase 3)<span>Log one core habit per category to get there.</span></div>';
     }
   }
 
@@ -4615,7 +4707,7 @@ function renderCoach() {
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
   const name = userData.name ? ', ' + userData.name.split(' ')[0] : '';
   const greetEl = document.getElementById('coachGreeting');
-  if (greetEl) greetEl.textContent = greeting + name + ' 🧠';
+  if (greetEl) greetEl.textContent = greeting + name;
 
   // Always render the weekly trend chart (inline, not premium-gated)
   renderWeeklyTrend();
@@ -5453,14 +5545,14 @@ function renderAdvInsights() {
   } else if (score >= 80) {
     insights.push({ icon:'<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h8v6a4 4 0 01-8 0V2z"/><path d="M5 5H3a2 2 0 000 4h2"/><path d="M13 5h2a2 2 0 010 4h-2"/><line x1="9" y1="12" x2="9" y2="15"/><line x1="6" y1="15" x2="12" y2="15"/></svg>', text: `A genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
   } else if (score >= 50) {
-    insights.push({ icon:'📈', text: `Today already counts toward your streak. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
+    insights.push({ icon: lucide('trending-up', 15), text: `Today already counts toward your streak. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
   } else {
-    insights.push({ icon:'⚠️', text: `Today doesn\'t count toward your streak yet. One thing can change that: your top ${catNames[weakest[0]]} habit. It is the highest-leverage move you have right now.` });
+    insights.push({ icon: lucide('triangle-alert', 15), text: `Today doesn\'t count toward your streak yet. One thing can change that: your top ${catNames[weakest[0]]} habit. It is the highest-leverage move you have right now.` });
   }
 
   // 2. Imbalance insight
   if (strongest[1] - weakest[1] > 35) {
-    insights.push({ icon:'⚖️', text: `You are strong on ${catNames[strongest[0]]} today but ${catNames[weakest[0]]} is barely active. That gap is worth closing — even one small win there shifts your whole neurochemical balance.` });
+    insights.push({ icon: lucide('scale', 15), text: `You are strong on ${catNames[strongest[0]]} today but ${catNames[weakest[0]]} is barely active. That gap is worth closing — even one small win there shifts your whole neurochemical balance.` });
   }
 
   // 3. Streak insight
@@ -5472,13 +5564,13 @@ function renderAdvInsights() {
 
   // 4. Specific category nudge
   if (cats.serotonin < 40) {
-    insights.push({ icon:'🌸', text: `Your Serotonin is low today — that is your mood and steadiness system. Sleep is almost always the reason. Protect tonight and tomorrow will feel different.` });
+    insights.push({ icon: lucide('flower-2', 15), text: `Your Serotonin is low today — that is your mood and steadiness system. Sleep is almost always the reason. Protect tonight and tomorrow will feel different.` });
   }
   if (cats.oxytocin < 30) {
-    insights.push({ icon:'🤝', text: `Oxytocin is low — connection has been missing today. Your body genuinely needs this. One real conversation before you sleep is enough to move the needle.` });
+    insights.push({ icon: lucide('handshake', 15), text: `Oxytocin is low — connection has been missing today. Your body genuinely needs this. One real conversation before you sleep is enough to move the needle.` });
   }
   if (cats.dopamine === 0) {
-    insights.push({ icon:'⚡', text: `No Dopamine activity yet today. Your drive and reward system has nothing to run on. Twenty minutes on your most important task — that is all it takes to get it firing again.` });
+    insights.push({ icon: lucide('zap', 15), text: `No Dopamine activity yet today. Your drive and reward system has nothing to run on. Twenty minutes on your most important task — that is all it takes to get it firing again.` });
   }
 
   // 5. Historical pattern (if data available)
@@ -5659,7 +5751,7 @@ function openShareModal() {
     var phaseColors = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
     var badge = document.getElementById('shareRadarPhaseBadge');
     badge.style.cssText = 'background:' + phaseColors[phase] + '22;border:1px solid ' + phaseColors[phase] + '55;color:' + phaseColors[phase] + ';border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;letter-spacing:0.3px';
-    badge.textContent = '🧠 ' + BRAIN_LABELS[phase];
+    badge.innerHTML = lucide('brain', 13) + ' ' + BRAIN_LABELS[phase];
 
     // Performance summary row
     var cf = countFoundationals();
@@ -5817,7 +5909,7 @@ async function generateShareImage() {
     /* Phase label */
     ctx.textAlign = 'center';
     ctx.fillStyle = phaseCol; ctx.font = '600 40px system-ui, sans-serif';
-    ctx.fillText('🧠 ' + BRAIN_LABELS[phase].toUpperCase(), W / 2, 215);
+    ctx.fillText(BRAIN_LABELS[phase].toUpperCase(), W / 2, 215);
 
     /* Performance summary — 3 cells */
     var cf = countFoundationals();
@@ -5999,7 +6091,8 @@ async function generateShareImage() {
     ctx.fillStyle = '#2e2b24'; ctx.fill();
     ctx.strokeStyle = '#4a4640'; ctx.lineWidth = 2; ctx.stroke();
     ctx.font = '26px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(userAvatar ? userAvatar.emoji : '🧠', photoX, photoY + 1);
+    ctx.fillStyle = '#e8e3d8'; ctx.font = '600 26px system-ui';
+    ctx.fillText(((userData && userData.name) || 'N').trim().charAt(0).toUpperCase(), photoX, photoY + 1);
     ctx.textBaseline = 'alphabetic';
   }
   var txX = PAD + photoR * 2 + 16;
@@ -6012,9 +6105,9 @@ async function generateShareImage() {
   }
   ctx.textAlign = 'right';
   ctx.fillStyle = '#7c6ab8'; ctx.font = '600 15px system-ui, sans-serif';
-  ctx.fillText('🧠 Try NeuroHabit free', W - PAD, identityY + 28);
+  ctx.fillText('Try NeuroHabit', W - PAD, identityY + 28);
   ctx.fillStyle = '#504c45'; ctx.font = '400 14px system-ui, sans-serif';
-  ctx.fillText('neurohabit.app', W - PAD, identityY + 50);
+  ctx.fillText(APP_URL_DISPLAY, W - PAD, identityY + 50);
   ctx.textAlign = 'left';
 
   /* Export */
@@ -6122,7 +6215,12 @@ function checkStreak() {
   if (JSON.stringify(derived) !== JSON.stringify(streak)) { streak = derived; sv(STK, streak); }
 
   const streakEl = document.getElementById('streakNum');
+  const shownBefore = parseInt(streakEl.textContent, 10) || 0;
   streakEl.textContent = streak.count || 0;
+  if ((streak.count || 0) > shownBefore && appLaunched) {   // BUILD 79: the flame lifts when the streak grows
+    const badgeEl = streakEl.parentNode;
+    badgeEl.classList.remove('bump'); void badgeEl.offsetWidth; badgeEl.classList.add('bump');
+  }
 
   // Show grace badge only when grace day was used on this exact streak run
   const existingGrace = document.querySelector('.grace-badge');
@@ -6138,8 +6236,75 @@ function checkStreak() {
 /* ═══════════════════════════════════════════════════════════
    MODALS
    ═══════════════════════════════════════════════════════════ */
-function openModal(id)  { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+/* BUILD 79: modals remember what had focus, move focus inside, and give it back on close */
+let modalReturnFocus = [];
+function openModal(id) {
+  const ov = document.getElementById(id);
+  modalReturnFocus.push(document.activeElement);
+  ov.classList.add('show');
+  setTimeout(function () { const f = modalFocusables(ov)[0]; if (f) f.focus({ preventScroll: true }); }, 30);
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  const back = modalReturnFocus.pop();
+  if (back && back.focus && document.contains(back)) back.focus({ preventScroll: true });
+}
+function modalFocusables(root) {
+  return Array.from(root.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+    .filter(function (el) { return !el.disabled && el.offsetParent !== null; });
+}
+function topOverlay() {
+  const open = Array.from(document.querySelectorAll('.modal-overlay')).filter(function (o) { return o.offsetParent !== null || getComputedStyle(o).display !== 'none'; });
+  return open[open.length - 1] || null;
+}
+/* Keyboard: Tab stays inside the open dialog; Escape closes it */
+document.addEventListener('keydown', function (e) {
+  const ov = topOverlay();
+  if (!ov) return;
+  if (e.key === 'Escape') {
+    const cancel = ov.querySelector('[data-sheet-cancel]');
+    if (cancel) { e.preventDefault(); cancel.click(); return; }
+    if (ov.id && ov.classList.contains('show')) { e.preventDefault(); closeModal(ov.id); }
+    return;
+  }
+  if (e.key !== 'Tab') return;
+  const f = modalFocusables(ov);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (!ov.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+
+/* BUILD 79: the app's own confirm / prompt sheet (replaces the browser's popups) */
+function appSheet(opts) {
+  return new Promise(function (resolve) {
+    const back = document.activeElement;
+    const ov = document.createElement('div');
+    ov.className = 'modal-overlay show app-sheet';
+    ov.innerHTML = '<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="appSheetTitle">' +
+      '<div class="modal-handle"></div>' +
+      '<div class="app-sheet-title" id="appSheetTitle"></div>' +
+      (opts.body ? '<p class="app-sheet-body"></p>' : '') +
+      (opts.input ? '<input class="info-own-input app-sheet-input" maxlength="' + (opts.maxLength || 60) + '">' : '') +
+      '<div class="app-sheet-actions"><button class="app-sheet-btn" data-sheet-cancel>Cancel</button>' +
+      '<button class="app-sheet-btn primary' + (opts.danger ? ' danger' : '') + '" data-sheet-ok></button></div></div>';
+    ov.querySelector('#appSheetTitle').textContent = opts.title;
+    if (opts.body) ov.querySelector('.app-sheet-body').textContent = opts.body;
+    ov.querySelector('[data-sheet-ok]').textContent = opts.ok || 'OK';
+    const inp = ov.querySelector('.app-sheet-input');
+    if (inp) { inp.value = opts.value || ''; inp.placeholder = opts.placeholder || ''; }
+    document.body.appendChild(ov);
+    function done(v) { ov.remove(); if (back && back.focus && document.contains(back)) back.focus({ preventScroll: true }); resolve(v); }
+    ov.querySelector('[data-sheet-ok]').addEventListener('click', function () { done(inp ? inp.value : true); });
+    ov.querySelector('[data-sheet-cancel]').addEventListener('click', function () { done(inp ? null : false); });
+    ov.addEventListener('click', function (e) { if (e.target === ov) done(inp ? null : false); });
+    if (inp) inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); done(inp.value); } });
+    setTimeout(function () { (inp || ov.querySelector('[data-sheet-ok]')).focus(); }, 30);
+  });
+}
+function appConfirm(title, body, ok, danger) { return appSheet({ title: title, body: body, ok: ok, danger: danger }); }
+function appPrompt(title, value, placeholder) { return appSheet({ title: title, input: true, value: value, placeholder: placeholder, ok: 'Save' }); }
 /* BUILD 75: the first time a core habit is ticked on this device, its science
    insight appears as a short message (6 s) with "More" for the full details.
    Every later tick is silent apart from the haptic. */
@@ -6179,7 +6344,7 @@ document.addEventListener('click', function (e) {
 
 function showTooltip(tip) {
   if (!tip) return;
-  document.getElementById('tooltipIcon').textContent = tip.icon;
+  document.getElementById('tooltipIcon').innerHTML = lucide('zap', 20);
   document.getElementById('tooltipTitle').textContent = tip.title;
   document.getElementById('tooltipBody').textContent  = tip.body;
   openModal('tooltipOverlay');
@@ -6194,6 +6359,7 @@ function maybeCelebrate() {
   else if (score >= 50 && Math.round(score) % 25 === 0) burst(25);
 }
 function burst(n) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;   // BUILD 79
   const wrap = document.createElement('div');
   wrap.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999';
   document.body.appendChild(wrap);
@@ -6265,13 +6431,13 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
    ═══════════════════════════════════════════════════════════ */
 function showToast(msg, type = 'info', duration = 3500) {
   const container = document.getElementById('toast-container');
-  const icons = { error: '⚠️', success: '✓', info: '💬' };
+  const icons = { error: lucide('triangle-alert', 15), success: lucide('check', 15), info: lucide('message-circle', 15) };
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.innerHTML = `
     <span class="toast-icon">${icons[type] || icons.info}</span>
     <span class="toast-msg">${msg}</span>
-    <button class="toast-close" onclick="this.parentElement.remove()">✕</button>`;
+    <button class="toast-close" aria-label="Dismiss" onclick="this.parentElement.remove()">✕</button>`;
   container.appendChild(toast);
   setTimeout(() => {
     toast.style.animation = 'toastOut 0.2s ease forwards';
@@ -6297,9 +6463,9 @@ function showAvatarPicker() {
   overlay.className = 'modal-overlay';
   overlay.style.display = 'flex';
   overlay.innerHTML =
-    '<div class="modal-card" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto">' +
+    '<div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto">' +
       '<div class="modal-handle"></div>' +
-      '<div class="modal-header"><div class="modal-icon">👤</div><div class="modal-title">Choose Your Avatar</div></div>' +
+      '<div class="modal-header"><div class="modal-icon">' + lucide('user', 20) + '</div><div class="modal-title">Choose Your Avatar</div></div>' +
       '<div class="avatar-grid" id="avatarPickerGrid" style="padding:0 4px 8px"></div>' +
       '<button class="modal-close" id="avatarPickerClose">Done</button>' +
     '</div>';
@@ -6320,14 +6486,14 @@ function showAvatarPicker() {
     const el = document.createElement('div');
     el.className = 'avatar-option' + (isSelected ? ' selected' : '');
     el.innerHTML =
-      '<div class="avatar-option-emoji">' + av.emoji + '</div>' +
+      '<div class="avatar-option-emoji">' + avatarIcon(av, 28) + '</div>' +
       '<div class="avatar-option-label">' + av.label + '<br><span style="font-size:9px;opacity:0.7">' + av.desc + '</span></div>';
     el.addEventListener('click', function() {
       userAvatar = { id: av.id, emoji: av.emoji, label: av.label };
       sv(AVK, userAvatar);
       renderProfileAvatar();
       const mini = document.getElementById('profileAvatarMini');
-      if (mini) mini.textContent = av.emoji;
+      if (mini) mini.innerHTML = avatarIcon(av, 16);
       grid.querySelectorAll('.avatar-option').forEach(function(opt) { opt.classList.remove('selected'); });
       el.classList.add('selected');
     });
@@ -6422,7 +6588,7 @@ function renderProfileAvatar() {
       // Fallback to emoji or initials if photo fails to load
       el.innerHTML = '';
       if (userAvatar) {
-        el.innerHTML = '<span class="profile-avatar-emoji">' + userAvatar.emoji + '</span>';
+        el.innerHTML = '<span class="profile-avatar-emoji">' + avatarIcon(userAvatar, 30) + '</span>';
       } else {
         el.textContent = userData.name ? userData.name.slice(0, 2).toUpperCase() : '?';
       }
@@ -6430,8 +6596,7 @@ function renderProfileAvatar() {
     el.innerHTML = '';
     el.appendChild(img);
   } else if (userAvatar) {
-    el.innerHTML = '<span class="profile-avatar-emoji">' + userAvatar.emoji + '</span>';
-    el.style.fontSize = '32px';
+    el.innerHTML = '<span class="profile-avatar-emoji">' + avatarIcon(userAvatar, 30) + '</span>';
   } else {
     el.textContent = userData && userData.name ? userData.name.slice(0, 2).toUpperCase() : '?';
   }
@@ -6439,7 +6604,7 @@ function renderProfileAvatar() {
   const lbl = document.getElementById('profileAvatarLabel');
   if (lbl) {
     if (userAvatar && userAvatar.label) {
-      lbl.textContent = userAvatar.emoji + ' ' + userAvatar.label;
+      lbl.textContent = userAvatar.label;
       lbl.style.display = 'block';
     } else {
       lbl.style.display = 'none';
@@ -6447,7 +6612,7 @@ function renderProfileAvatar() {
   }
   // Update profile mini icon
   const mini = document.getElementById('profileAvatarMini');
-  if (mini) mini.textContent = userAvatar ? userAvatar.emoji : '';
+  if (mini) mini.innerHTML = userAvatar ? avatarIcon(userAvatar, 16) : '';
 }
 
 const CAT_META = [
@@ -6500,7 +6665,7 @@ function renderOnboardAvatarGrid() {
     const el = document.createElement('div');
     el.className = 'avatar-option' + (isSelected ? ' selected' : '');
     el.innerHTML =
-      '<div class="avatar-option-emoji">' + av.emoji + '</div>' +
+      '<div class="avatar-option-emoji">' + avatarIcon(av, 28) + '</div>' +
       '<div class="avatar-option-label">' + av.label + '<br><span style="font-size:9px;opacity:0.7">' + av.desc + '</span></div>';
     el.addEventListener('click', function() {
       userAvatar = { id: av.id, emoji: av.emoji, label: av.label };
@@ -6701,11 +6866,11 @@ function renderPhaseGuide() {
   if (callout && calloutText) {
     if (currentPhase >= 3) {
       callout.className = 'grade-goal-callout reached';
-      callout.querySelector('.grade-goal-icon').textContent = '✓';
+      callout.querySelector('.grade-goal-icon').innerHTML = lucide('check', 16);
       calloutText.innerHTML = 'You have reached <strong>Phase 3 — Foundation Active</strong>, today\'s goal. Everything from here is a bonus for your brain.';
     } else {
       callout.className = 'grade-goal-callout not-yet';
-      callout.querySelector('.grade-goal-icon').textContent = '🎯';
+      callout.querySelector('.grade-goal-icon').innerHTML = lucide('target', 16);
       calloutText.innerHTML = 'Your daily goal is <strong>Phase 3 — Foundation Active</strong>. Everything above that is a bonus. The science says reaching Phase 3 is a genuinely good day for your brain.';
     }
   }
@@ -6756,11 +6921,11 @@ function openPhaseModal() {
   if (callout && calloutText) {
     if (currentPhase >= 3) {
       callout.className = 'grade-goal-callout reached';
-      callout.querySelector('.grade-goal-icon').textContent = '✓';
+      callout.querySelector('.grade-goal-icon').innerHTML = lucide('check', 16);
       calloutText.innerHTML = 'You have reached <strong>Phase 3 — Foundation Active</strong>, today\'s goal. Everything from here is a bonus for your brain.';
     } else {
       callout.className = 'grade-goal-callout not-yet';
-      callout.querySelector('.grade-goal-icon').textContent = '🎯';
+      callout.querySelector('.grade-goal-icon').innerHTML = lucide('target', 16);
       calloutText.innerHTML = 'Your daily goal is <strong>Phase 3 — Foundation Active</strong>. Everything above that is a bonus. The science says reaching Phase 3 is a genuinely good day for your brain.';
     }
   }
@@ -6804,7 +6969,7 @@ function closePhaseModal(e) {
     document.getElementById('phaseInfoModal').classList.remove('show');
   }
 }
-function addHabitToSet(type, hid) {
+async function addHabitToSet(type, hid) {
   if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
   if (userHabitConfig[type].selected.includes(hid)) return;
   // BUILD 42: block addition during lock period — floor stays honest
@@ -6817,7 +6982,7 @@ function addHabitToSet(type, hid) {
   var catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
   var lockNote = 'You can remove it at any time after adding.';
   var msgLine2 = lockNote;
-  if (!confirm('Add "' + h.label + '" to your habit set?')) return;
+  if (!(await appConfirm('Add ' + h.label + '?', 'It joins your ' + type.charAt(0).toUpperCase() + type.slice(1) + ' habits from today.', 'Add habit'))) return;
   userHabitConfig[type].selected.push(hid);
   sv(HCK, userHabitConfig);
   renderSection(type);
@@ -6849,9 +7014,9 @@ function showCoreReplaceModal(type, hid) {
   overlay.className = 'modal-overlay';
   overlay.style.display = 'flex';
   overlay.innerHTML =
-    '<div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px">' +
+    '<div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-width:420px">' +
       '<div class="modal-handle"></div>' +
-      '<div class="modal-header"><div class="modal-icon">🔄</div><div class="modal-title">Swap core habit</div></div>' +
+      '<div class="modal-header"><div class="modal-icon">' + lucide('arrow-left-right', 20) + '</div><div class="modal-title">Swap core habit</div></div>' +
       '<div class="modal-body" style="margin-bottom:10px">' +
         '<p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">' + bodyMsg + '</p>' +
         subMsg + noAlt +
@@ -6898,9 +7063,9 @@ function showSecondarySwapModal(type, hid) {
   overlay.className = 'modal-overlay';
   overlay.style.display = 'flex';
   overlay.innerHTML =
-    '<div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px">' +
+    '<div class="modal-card" role="dialog" aria-modal="true" onclick="event.stopPropagation()" style="max-width:420px">' +
       '<div class="modal-handle"></div>' +
-      '<div class="modal-header"><div class="modal-icon">🔄</div><div class="modal-title">Swap ' + typeLabel + ' habit</div></div>' +
+      '<div class="modal-header"><div class="modal-icon">' + lucide('arrow-left-right', 20) + '</div><div class="modal-title">Swap ' + typeLabel + ' habit</div></div>' +
       '<div class="modal-body" style="margin-bottom:10px">' +
         '<p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">Habits must be swapped, not removed. Pick a replacement for <strong>' + curL + '</strong>.</p>' +
         subMsg + noAlt +
@@ -6978,7 +7143,7 @@ function removeHabitFromSet(type, hid) {
   // secondary and bonus habits may be removed (floor stays honest, users not trapped)
   if (isLockActive()) {
     if (h.foundational) {
-      showToast('Core habits are locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you.', 'info');
+      showToast('Core habits are locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you. To change them now, switch to Flexible mode in Profile.', 'info');
       return;
     }
     // Secondary or bonus — allow removal during lock
@@ -6986,7 +7151,7 @@ function removeHabitFromSet(type, hid) {
     userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
     sv(HCK, userHabitConfig);
     renderSection(type); updateCatUI(type); renderCoach();
-    showToast(h.label + ' removed. You can add it back any time.', 'success');
+    showToast(h.label + ' removed. You can add it back after day ' + LOCK_MIN_DAYS + ' (' + daysUntilUnlock() + ' days from now), or any time in Flexible mode.', 'success');
     return;
   }
 
@@ -7068,7 +7233,7 @@ function renderModeUI() {
   var d = document.getElementById('modeDesc');
   if (d) d.textContent = casual
     ? 'Flexible: add and remove any habit, any time.'
-    : 'Committed: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works.';
+    : 'Committed: your habit set stays for ' + LOCK_MIN_DAYS + ' days so you can see what works.';
 }
 
 function setChangeMode(mode) {
@@ -7077,7 +7242,7 @@ function setChangeMode(mode) {
   cloudNoteChange(MODE_KEY);
   if (mode === 'science') {
     initHabitLock(JSON.parse(JSON.stringify(getConfig())));   // a fresh 28 days from today
-    showToast('Committed mode on. Your core habits stay for the next ' + LOCK_MIN_DAYS + ' days.', 'success');
+    showToast('Committed mode on. Your habit set stays as it is for the next ' + LOCK_MIN_DAYS + ' days.', 'success');
   } else {
     showToast('Flexible mode on. Add and remove habits any time.', 'success');
   }
@@ -7113,12 +7278,12 @@ function renderProfile() {
   renderProfileAvatar();
   /* Update version string from constant */
   var vEl = document.getElementById('appVersionFooter');
-  if (vEl) vEl.textContent = APP_VERSION_STRING + ' · neurohabit.app';
+  if (vEl) vEl.textContent = APP_VERSION_STRING + ' · ' + APP_URL_DISPLAY;
 }
 
-function editProfile() {
+async function editProfile() {
   const current = userData.name || '';
-  const newName = prompt('Enter your display name:', current);
+  const newName = await appPrompt('Your display name', current, 'Your name');
   if (newName === null) return; // cancelled
   const trimmed = newName.trim();
   if (!trimmed) { showToast('Name cannot be empty.', 'error'); return; }
@@ -7137,14 +7302,14 @@ function changePassword() {
 
 async function handleSignOut() {
   if (cloudUid) {
-    if (!confirm('Sign out of NeuroHabit? Your habits stay in your account and are removed from this device.')) return;
+    if (!(await appConfirm('Sign out of NeuroHabit?', 'Your habits stay in your account and are removed from this device.', 'Sign out', true))) return;
     if (!(await cloudSignOutAndClear())) return;
     userData = { name: null, email: null, skipAuth: false };
     sv(UK, userData);
     location.reload();
     return;
   }
-  if (!confirm('Sign out of NeuroHabit?')) return;
+  if (!(await appConfirm('Sign out of NeuroHabit?', 'You’re using NeuroHabit as a guest, so your habits stay on this device.', 'Sign out', true))) return;
   userData = { name: null, email: null, skipAuth: false };
   sv(UK, userData);
   appLaunched = false; // allow launchApp() to fire again after next sign-in
@@ -7223,7 +7388,7 @@ function initApp() {
   var lv = document.getElementById('loginVersionBadge');
   if (lv) lv.textContent = APP_VERSION_STRING;
   var fv = document.getElementById('appVersionFooter');
-  if (fv) fv.textContent = APP_VERSION_STRING + ' · neurohabit.app';
+  if (fv) fv.textContent = APP_VERSION_STRING + ' · ' + APP_URL_DISPLAY;
   updateThemeUI();        // sync toggle pill state with current theme
   updateThemeMetaTag();   // sync iOS PWA status bar colour
   renderLockStatusBars();
@@ -7254,7 +7419,7 @@ function showChangelog() {
     { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="12" height="12" rx="2.5"/><polyline points="6,9 8,11 12,6.5"/></svg>', title: 'Today screen', desc: 'Every habit on one screen. Tick from Today; tap a category to learn about its habits or change them.' },
     { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="9" height="7" rx="1.2"/><rect x="11.5" y="7" width="4.5" height="8" rx="1"/><line x1="4.5" y1="13.5" x2="8.5" y2="13.5"/></svg>', title: 'Sync across your devices', desc: 'Sign in with Google and your habits stay in step on your phone, tablet and laptop.' },
     { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a5 5 0 0 1 10 0c0 3.5 1.5 5 1.5 5h-13S4 10.5 4 7z"/><path d="M7.5 14.5a1.6 1.6 0 0 0 3 0"/></svg>', title: 'Quieter ticking', desc: 'A habit\'s insight shows once, the first time you tick it. After that, ticking is silent.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg>', title: 'Committed or Flexible', desc: 'Choose in Profile: keep your core habits for 28 days, or change any habit at any time.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="12" height="8" rx="2"/><path d="M6 8V5.5a3 3 0 016 0V8"/></svg>', title: 'Committed or Flexible', desc: 'Choose in Profile: keep your habit set for 28 days, or change any habit at any time.' },
     { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="5" x2="15" y2="5"/><line x1="3" y1="9" x2="15" y2="9"/><line x1="3" y1="13" x2="10" y2="13"/></svg>', title: 'Simpler pages', desc: 'One progress bar per category and tidier habit rows. Points, your own name for a habit, and remove are in each habit\'s info button.' },
   ];
 
@@ -7287,13 +7452,13 @@ function renderLockStatusBars() {
     bar.id = 'lockbar-' + type;
     bar.className = 'lock-status-bar';
     const d = Math.min(LOCK_MIN_DAYS, daysIntoLock() + 1);
-    bar.innerHTML = '<strong>Day ' + d + ' of ' + LOCK_MIN_DAYS + '</strong> — Committed mode: core habits stay for ' + LOCK_MIN_DAYS + ' days so you can see what works. You can add habits, and remove extras, any time.';
+    bar.innerHTML = '<strong>Day ' + d + ' of ' + LOCK_MIN_DAYS + '</strong> — Committed mode: your habit set stays as it is for ' + LOCK_MIN_DAYS + ' days so you can see what works. You can still remove extras.';
     listEl.parentNode.insertBefore(bar, listEl);
   });
 }
 
-function confirmNewDay() {
-  if (!confirm('Clear today\'s ticks? This unticks everything logged today, on all your devices.')) return;
+async function confirmNewDay() {
+  if (!(await appConfirm('Clear today’s ticks?', 'This unticks everything logged today, on all your devices.', 'Clear', true))) return;
   appState[today] = {}; weekData[today] = 0;
   sv(SK, appState); sv(WK, weekData);
   Object.keys(HABITS).forEach(t => { renderSection(t); });
@@ -7541,7 +7706,7 @@ function quizFinish() {
              'display:inline-block;margin:3px 2px">' + t + '</span>';
     }).join('');
     card.innerHTML =
-      '<div style="font-size:52px;line-height:1;margin-bottom:12px">' + matched.emoji + '</div>' +
+      '<div style="width:72px;height:72px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:var(--surface2);border:1px solid var(--border);color:var(--coach)">' + avatarIcon(matched, 34) + '</div>' +
       '<div style="font-family:\'Bricolage Grotesque\',\'Geist\',sans-serif;font-size:24px;font-weight:400;' +
            'color:var(--text);margin-bottom:5px">' + matched.label + '</div>' +
       '<div style="font-size:13px;color:var(--muted);margin-bottom:14px">' + matched.desc + '</div>' +
