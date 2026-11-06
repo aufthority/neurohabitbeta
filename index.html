@@ -1379,6 +1379,19 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
 
+/* BUILD 87: Premium */
+.premium-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 600; letter-spacing: .3px; color: var(--gold-ink, #3a2a00); background: var(--gold); border-radius: 99px; padding: 2px 8px 2px 6px; margin-left: 6px; vertical-align: middle; white-space: nowrap; }
+.premium-price { font-family: 'Bricolage Grotesque', 'Geist', sans-serif; font-size: 26px; margin: 4px 0 10px; color: var(--text); }
+.premium-price span { font-family: 'Geist', sans-serif; font-size: 13px; color: var(--muted); }
+.premium-list { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: var(--text); }
+.premium-list li { display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+.premium-list li svg { color: var(--gold); flex-shrink: 0; margin-top: 1px; }
+.premium-free { font-size: 12px; color: var(--muted); line-height: 1.5; margin: 0 0 14px; }
+.app-sheet-btn[disabled] { opacity: .55; cursor: not-allowed; }
+a.app-sheet-btn { text-decoration: none; display: flex; align-items: center; justify-content: center; }
+.coach-feed-locked { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 4px; cursor: pointer; border-style: dashed; font-family: inherit; color: var(--text); background: var(--surface); }
+.coach-feed-locked .coach-feed-eyebrow { display: inline-flex; align-items: center; gap: 5px; color: var(--gold-ink, var(--muted)); }
+
 /* BUILD 86: the Coach phase card uses the same dark card as Today */
 .brain-phase-block { background: var(--anchor); color: var(--anchor-txt); border: 1px solid var(--anchor-border); border-radius: var(--radius-lg); padding: 22px 18px 20px; margin-bottom: 14px; }
 .light-theme .brain-phase-block { border-color: transparent; }
@@ -1867,6 +1880,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
             <span class="history-entry-label">What your habits are showing</span>
             <span class="history-entry-sub">Patterns, insights, and your journey so far</span>
           </div>
+          <span id="historyEntryChip"></span>
           <span class="history-entry-chevron">›</span>
         </div>
 
@@ -1913,7 +1927,7 @@ button.habit-check { padding: 0; font: inherit; cursor: pointer; }
         <!-- Premium Insights (collapsed) -->
         <div class="premium-collapse-wrap">
           <button class="premium-collapse-btn" id="premiumToggleBtn" onclick="togglePremiumPanel()">
-            <span style="display:inline-flex;align-items:center;gap:5px">More insights</span>
+            <span style="display:inline-flex;align-items:center;gap:5px">More insights <span id="insightsEntryChip"></span></span>
             <span class="premium-collapse-chevron" id="premiumChevron">▾</span>
           </button>
           <div class="premium-collapse-body" id="premiumCollapseBody" style="display:none">
@@ -2913,6 +2927,7 @@ function cloudUnlisten() {
 
 function cloudListen(uid) {
   cloudUnlisten();
+  cloudUnsubs.push(listenEntitlement(uid));
   var userRef = db.collection('users').doc(uid);
   var since = cloudMeta().pulledAt || 0;
   var daysRef = userRef.collection('days');
@@ -3073,6 +3088,88 @@ function cloudStart(uid) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   BUILD 87: FREE AND PREMIUM
+   Off until FREEMIUM_START is set to a date ('YYYY-MM-DD'). Then:
+   - Premium = a purchase recorded by the server in entitlements/{uid}
+     (the app can only read it), or grandfathered: any device or account
+     with habits logged before FREEMIUM_START keeps everything.
+   - Free keeps the daily loop, sync, modes, backup and all data rights.
+   ═══════════════════════════════════════════════════════════ */
+var FREEMIUM_START = null;        // e.g. '2026-12-01' turns the split on
+var PREMIUM_PRICE = 'RM9.90';
+var PREMIUM_BUY_URL = null;       // set when a checkout exists; null shows "Coming soon"
+var accountPremium = false;
+
+function isGrandfathered() {
+  if (!FREEMIUM_START) return true;
+  return Object.keys(appState || {}).some(function (d) {
+    var st = appState[d];
+    return /^\d{4}-\d{2}-\d{2}$/.test(d) && d < FREEMIUM_START && st && Object.keys(st).some(function (k) { return st[k] === true && HABIT_KEY_RE.test(k); });
+  });
+}
+function isPremium() {
+  if (!FREEMIUM_START) return true;
+  if (accountPremium) return true;
+  try { if (cloudUid && localStorage.getItem('nh_premium_uid') === cloudUid) return true; } catch (e) {}
+  return isGrandfathered();
+}
+function premiumChip() {
+  return isPremium() ? '' : '<span class="premium-chip">' + lucide('lock', 11) + ' Premium</span>';
+}
+
+function openPremium(reason) {
+  var back = document.activeElement;
+  var ov = document.createElement('div');
+  ov.className = 'modal-overlay show app-sheet premium-sheet';
+  var lead = { bonus: 'Bonus habits are part of Premium.', feed: 'The full Coach feed is part of Premium.', patterns: 'Patterns and your full history are part of Premium.', insights: 'More insights are part of Premium.' }[reason] || '';
+  var buy = PREMIUM_BUY_URL
+    ? '<a class="app-sheet-btn primary" href="' + PREMIUM_BUY_URL + '" target="_blank" rel="noopener" data-sheet-ok>Unlock for ' + PREMIUM_PRICE + '</a>'
+    : '<button class="app-sheet-btn primary" disabled aria-disabled="true">Coming soon</button>';
+  ov.innerHTML = '<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="premiumTitle">' +
+    '<div class="modal-handle"></div>' +
+    '<div class="app-sheet-title" id="premiumTitle">NeuroHabit Premium</div>' +
+    (lead ? '<p class="app-sheet-body" style="margin-bottom:8px">' + lead + '</p>' : '') +
+    '<p class="premium-price">' + PREMIUM_PRICE + ' <span>once, no subscription</span></p>' +
+    '<ul class="premium-list">' +
+      '<li>' + lucide('check', 15) + 'Add more bonus habits to your set</li>' +
+      '<li>' + lucide('check', 15) + 'Your full Coach feed every day</li>' +
+      '<li>' + lucide('check', 15) + 'Patterns and your full history</li>' +
+      '<li>' + lucide('check', 15) + 'More insights: the week grid and a streak for each chemical</li>' +
+    '</ul>' +
+    '<p class="premium-free">Always free: Today, ticking, your brain phase and streak, sync across devices, both modes, backup and every data right.</p>' +
+    '<div class="app-sheet-actions stack"><button class="app-sheet-btn" data-sheet-cancel>Not now</button>' + buy + '</div></div>';
+  document.body.appendChild(ov);
+  function done() { ov.remove(); if (back && back.focus && document.contains(back)) back.focus({ preventScroll: true }); }
+  ov.querySelector('[data-sheet-cancel]').addEventListener('click', done);
+  ov.addEventListener('click', function (e) { if (e.target === ov) done(); });
+  setTimeout(function () { ov.querySelector('[data-sheet-cancel]').focus(); }, 30);
+}
+window.openPremium = openPremium;
+
+/* The purchase record: written only by the server, read here */
+function listenEntitlement(uid) {
+  try {
+    return db.collection('entitlements').doc(uid).onSnapshot(function (doc) {
+      var on = !!(doc && doc.exists && doc.data().premium === true);
+      var was = isPremium();
+      accountPremium = on;
+      try { if (on) localStorage.setItem('nh_premium_uid', uid); else if (localStorage.getItem('nh_premium_uid') === uid) localStorage.removeItem('nh_premium_uid'); } catch (e) {}
+      if (was !== isPremium()) refreshPremiumUI();
+    }, function () { /* no access yet (rules not published) or offline: stay as is */ });
+  } catch (e) { return function () {}; }
+}
+function refreshPremiumUI() {
+  try { renderCoach(); } catch (e) {}
+  try { Object.keys(HABITS).forEach(function (t) { renderSection(t); }); } catch (e) {}
+  try { updatePremiumEntryChips(); } catch (e) {}
+}
+function updatePremiumEntryChips() {
+  ['historyEntryChip', 'insightsEntryChip'].forEach(function (id) {
+    var el = document.getElementById(id); if (el) el.innerHTML = premiumChip();
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
    BUILD 81: PRIVACY CONSENT, BACKUP, DELETE SYNCED DATA
    ═══════════════════════════════════════════════════════════ */
 var CONSENT_KEY = 'nh_sync_consent';          // { uid: 'YYYY-MM-DD' } on this device
@@ -3132,6 +3229,7 @@ async function syncConsentGate(uid) {
 /* Sign out of Google but keep everything on this device, as a guest */
 async function continueAsGuest() {
   cloudStop();
+  accountPremium = false;
   try { localStorage.removeItem(SYNC_META_KEY); } catch (e) {}
   userData.skipAuth = true;
   sv(UK, userData);
@@ -3631,7 +3729,7 @@ function avatarIcon(av, size) { return lucide((av && AVATAR_ICONS[av.id]) || 'us
 const APP_URL_DISPLAY = 'aufthority.github.io/neurohabitbeta';
 
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 86;
+const APP_BUILD   = 87;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4029,7 +4127,7 @@ function renderSection(type) {
           '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">How it works</button>' +
         '</div>' +
         '<div class="habit-right" style="gap:5px;">' +
-          (canAdd ? '<button class="habit-add-btn" data-type="' + type + '" data-id="' + h.id + '">+ Add</button>' : '') +
+          (canAdd ? '<button class="habit-add-btn" data-type="' + type + '" data-id="' + h.id + '">' + (h.type === 'bonus' && !isPremium() ? lucide('lock', 12) + ' Add' : '+ Add') + '</button>' : '') +
         '</div>';
 
       const infoBtn = discRow.querySelector('.habit-learn-btn');
@@ -4607,7 +4705,7 @@ function buildCoachFeed() {
   const catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
   const gatesDone  = Object.keys(HABITS).filter(t => foundationDone(t));
   const gatesQuiet = Object.keys(HABITS).filter(t => !foundationDone(t));
-  const cards = [];
+  let cards = [];
 
   // Card 1: Today's reflection — personalised to user's selected habits
   let reflectBody;
@@ -4705,6 +4803,12 @@ function buildCoachFeed() {
     // Do not dismiss yet — user must tap one of the buttons
   }
 
+  /* BUILD 87: free shows today's reflection; the rest of the feed is Premium */
+  var lockedCards = 0;
+  if (!isPremium()) {
+    lockedCards = cards.filter(function (c) { return c.type !== 'reflect'; }).length;
+    cards = cards.filter(function (c) { return c.type === 'reflect'; });
+  }
   cards.forEach(function(card) {
     const el = document.createElement('div');
     el.className = 'coach-feed-card card-' + card.type;
@@ -4713,6 +4817,14 @@ function buildCoachFeed() {
       + (card.attr ? '<div class="coach-feed-attr">— ' + card.attr + '</div>' : '');
     feed.appendChild(el);
   });
+  if (lockedCards) {
+    const lk = document.createElement('button');
+    lk.className = 'coach-feed-card coach-feed-locked';
+    lk.innerHTML = '<span class="coach-feed-eyebrow">' + lucide('lock', 12) + ' Premium</span>' +
+      '<span class="coach-feed-body">' + lockedCards + ' more ' + (lockedCards === 1 ? 'insight' : 'insights') + ' from your coach today, like what is still quiet and how your week is going.</span>';
+    lk.addEventListener('click', function () { openPremium('feed'); });
+    feed.appendChild(lk);
+  }
 }
 
 /* Interleaved category rotation — tap cycles neuro → nutrition → stoic */
@@ -5032,6 +5144,7 @@ function todayBind() {
 }
 
 function renderCoach() {
+  updatePremiumEntryChips();
   renderToday();
   // Brain phase
   const phase = brainPhase();
@@ -5726,6 +5839,7 @@ function prSetRange(days, btn) {
 
 /* Entry point — called by showHistoryScreen */
 function showHistoryScreen() {
+  if (!isPremium()) { openPremium('patterns'); return; }
   showScreen('screen-history');
   var defaultRange = prSmartDefaultRange();
   /* Sync range buttons */
@@ -7377,6 +7491,8 @@ function closePhaseModal(e) {
   }
 }
 async function addHabitToSet(type, hid) {
+  var _ph = HABITS[type].habits.find(function (x) { return x.id === hid; });
+  if (_ph && _ph.type === 'bonus' && !isPremium()) { openPremium('bonus'); return; }
   if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
   if (userHabitConfig[type].selected.includes(hid)) return;
   // BUILD 42: block addition during lock period — floor stays honest
@@ -7970,6 +8086,7 @@ function _hideInstallBanner() {
    ═══════════════════════════════════════════════════════════ */
 
 function togglePremiumPanel() {
+  if (!isPremium()) { openPremium('insights'); return; }
   const body = document.getElementById('premiumCollapseBody');
   const btn  = document.getElementById('premiumToggleBtn');
   const isOpen = body.style.display !== 'none';
